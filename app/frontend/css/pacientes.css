@@ -1,0 +1,108 @@
+.section-pacientes {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* BUSQUEDA Y ALTA DE PACIENTES */
+
+.opciones-paciente {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    height: 7rem;
+    background-color: var(--secondary-color);
+}
+
+.relleno {
+    height: 100%rem;
+    width: 7rem;
+}
+
+.opciones-paciente form {
+    display: flex;
+}
+
+.search-box {
+    height: 2.3rem;
+    width: 12rem;
+
+    padding: 0 .4rem;
+
+    background-color: var(--background-color);
+    border: 1px solid #000;
+    border-right: none;
+    border-radius: 1.2rem 0 0 1.2rem;
+}
+
+.search-box:focus{
+    outline: none;
+    border: 1px solid var(--focus-color);
+}
+
+.search-button {
+    height: 2.3rem;
+    width: 2.3rem;
+
+    background-color: var(--primary-color);
+    border: 1px solid #000;
+    border-radius: 0 50% 50% 0;
+
+    font-size: 1rem;
+    transition: all ease .1s
+}
+
+.search-button i {
+    margin-right: 10%;
+}
+
+.search-button:hover {
+    cursor: pointer;
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.search-button:active {
+    background-color: var(--primary-color);
+    columns: #000;
+    border: 1px solid var(--focus-color);
+}
+
+/* DATOS DE LOS PACIENTES */
+.info-pacientes {
+    margin: 1rem 1rem 0 1rem;
+    border-collapse: collapse;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+
+.info-pacientes thead {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.info-pacientes td {
+    margin: 0;
+    border: 1px solid #000;
+    border-bottom:none;
+    text-align: center;
+
+    padding: .5rem 0;
+}
+
+.mostrar-mas-info-cliente {
+    background-color: transparent;
+    border: none;
+    border-radius: none;
+    text-decoration: underline #36d;
+    color: #36d;
+}
+
+.mostrar-mas-info-cliente:hover {
+    cursor: pointer;
+}
+
+.mostrar-mas-info-cliente:active {
+    color: #249;
+}

@@ -1,0 +1,103 @@
+
+:root {
+    --primary-color: #799;
+    --secondary-color: #577;
+    --background-color: #ddd;
+    --focus-color: #1aa;
+}
+
+/* HERO */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--background-color);
+}
+
+.hero {
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .7rem 1.2rem;
+}
+
+.information {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.hero img {
+    height: 10vh;
+}
+
+/* NAV */
+nav {
+    background-color: var(--primary-color);;
+    padding: 1rem 2rem;
+}
+
+.navegation-menu {
+    display: flex;
+    gap: 3.2rem
+}
+
+.navegation-menu li {
+    list-style: none;
+}
+
+.navegation-menu li a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.navegation-menu li a:hover {
+    cursor: pointer;
+    color: #fff;
+    text-shadow: 0 0 10px var(--focus-color);
+}
+
+
+.navegation-menu .active {
+    color: #fff;
+    text-shadow: 0 0 10px var(--focus-color);
+}
+
+.add-button  {
+    height: 7rem;
+    width: 7rem;
+    font-size: 6rem;
+
+    display: grid;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: none;
+    background-color: #e33;
+    padding: 0 1rem;
+
+    transition: all ease .1s;
+}
+
+.add-button:hover {
+    cursor: pointer;
+    background-color: #a22;
+    color: #ccc;
+}
+
+.add-button:active {
+    background-color: #711;
+    border: 2px solid #e33;
+    border-right: none;
+}
