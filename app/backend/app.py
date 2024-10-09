@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from webbrowser import open
-import database_manager
+import turnos
 
 app = Flask(__name__)
 CORS(app)
@@ -14,16 +14,17 @@ def data_get():
 
 @app.post('/api/enviar')
 def env():
-    name = request.form['user']
-    password = request.form['password']
+    fecha_turno = request.form['fecha_turno']
+    #password = request.form['password']
 
-    database_manager.agregar_paciente(name, password)
+    soli = turnos.solicitar_info(fecha_turno)
+
 
     return jsonify({
         "status": 200,
-        "message": f"user {name} register with password {password}"
+        "message": soli #esto devuelve los resultados de la busqueda por fecha
     })
 
 if __name__ == '__main__':
-    open('frontend\index.html', 2)
+    open('app/frontend/index.html', 2)
     app.run(debug = True, port = 8000, use_reloader = False)
