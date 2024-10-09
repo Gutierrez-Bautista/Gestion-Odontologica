@@ -7,6 +7,7 @@ def agregar_paciente(name, password):
 
 
 
+
 # el frontend manda una fecha y el backend tiene que devolver los datos 
 
 # id, fecha, hora, nombre, apellido
