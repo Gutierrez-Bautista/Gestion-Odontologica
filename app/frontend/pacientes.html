@@ -1,127 +1,111 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión Odontológica</title>
-    <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/pacientes.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/pacientes.css" />
+  </head>
+  <body>
     <header>
-        <div class="hero">
-            <div class="information">
-                <span>Doctora xxxxxxxxxxx</span>
-                <span>Tel: 12 3456 7890</span>
-                <span>Provincia de Cordoba</span>
-            </div>
-            <h1><span>Programa de</span> Gestión Odontológica</h1>
-            <img src="img/logo-onu.webp" alt="Logo del centro odontologico">
+      <div class="hero">
+        <div class="information">
+          <span>Doctora xxxxxxxxxxx</span>
+          <span>Tel: 12 3456 7890</span>
+          <span>Provincia de Cordoba</span>
         </div>
-        <nav>
-            <ul class="navegation-menu">
-                <li class="nav-item">
-                    <a href="index.html">Turnero</a>
-                </li>
-                <li class="nav-item">
-                    <a href="pacientes.html" class="active">Pacientes</a>
-                </li>
-                <li class="nav-item">
-                    <a href="estadisticas.html">Estadisticas</a>
-                </li>
-                <li class="nav-item">
-                    <a href="manual-de-uso-provisional.pdf" target="_blank">Uso del programa</a>
-                </li>
-                <li class="nav-item">
-                    <a href="configuracion.html">Configuracion</a>
-                </li>
-            </ul>
-        </nav>
+        <h1><span>Programa de</span> Gestión Odontológica</h1>
+        <img src="img/logo-onu.webp" alt="Logo del centro odontologico" />
+      </div>
+      <nav>
+        <ul class="navegation-menu">
+          <li class="nav-item">
+            <a href="index.html">Turnero</a>
+          </li>
+          <li class="nav-item">
+            <a href="pacientes.html" class="active">Pacientes</a>
+          </li>
+          <li class="nav-item">
+            <a href="estadisticas.html">Estadisticas</a>
+          </li>
+          <li class="nav-item">
+            <a href="manual-de-uso-provisional.pdf" target="_blank"
+              >Uso del programa</a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="configuracion.html">Configuracion</a>
+          </li>
+        </ul>
+      </nav>
     </header>
     <main>
-        <section class="section-pacientes">
-            <div class="opciones-paciente">
-                <div class="relleno"></div>
-                <form action="pacientes.html" method="self">
-                    <input type="text" name="busqueda-paciente" placeholder="Nombre o apellido de cliente" class="search-box">
-                    <button class="search-button">
-                        <i class='bx bx-search-alt'></i>
-                    </button>
-                </form>
-                <button class="add-button" title="Agregar paciente">
-                    <i class='bx bx-plus'></i>
-                </button>
-            </div>
-            <table class="info-pacientes">
-                <thead>
-                    <tr>
-                        <td>Apellido y Nombre</td>
-                        <td>Telefono</td>
-                        <td>PAMI</td>
-                        <td>Más</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            Perez Pablo
-                        </td>
-                        <td>
-                            1234 567-890
-                        </td>
-                        <td>
-                            SI
-                        </td>
-                        <td>
-                            <button class="mostrar-mas-info-cliente">Más</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Gutierrez Nicolas
-                        </td>
-                        <td>
-                            1234 567-098
-                        </td>
-                        <td>
-                            NO
-                        </td>
-                        <td>
-                            <button class="mostrar-mas-info-cliente">Más</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Gadban Tomas
-                        </td>
-                        <td>
-                            1234 756-098
-                        </td>
-                        <td>
-                            NO
-                        </td>
-                        <td>
-                            <button class="mostrar-mas-info-cliente">Más</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Matyjaszczyk Lucas
-                        </td>
-                        <td>
-                            1234 658-198
-                        </td>
-                        <td>
-                            SI
-                        </td>
-                        <td>
-                            <button class="mostrar-mas-info-cliente">Más</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+      <section class="section-pacientes">
+        <div class="opciones-paciente">
+          <div class="relleno"></div>
+          <form action="pacientes.html" method="self">
+            <input
+              type="text"
+              name="busqueda-paciente"
+              placeholder="Nombre o apellido de cliente"
+              class="search-box" />
+            <button class="search-button">
+              <i class="bx bx-search-alt"></i>
+            </button>
+          </form>
+          <button class="add-button" title="Agregar paciente">
+            <i class="bx bx-plus"></i>
+          </button>
+        </div>
+        <table class="info-pacientes">
+          <thead>
+            <tr>
+              <td>Apellido y Nombre</td>
+              <td>Telefono</td>
+              <td>PAMI</td>
+              <td>Más</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Perez Pablo</td>
+              <td>1234 567-890</td>
+              <td>SI</td>
+              <td>
+                <button class="mostrar-mas-info-cliente">Más</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Gutierrez Nicolas</td>
+              <td>1234 567-098</td>
+              <td>NO</td>
+              <td>
+                <button class="mostrar-mas-info-cliente">Más</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Gadban Tomas</td>
+              <td>1234 756-098</td>
+              <td>NO</td>
+              <td>
+                <button class="mostrar-mas-info-cliente">Más</button>
+              </td>
+            </tr>
+            <tr>
+              <td>Matyjaszczyk Lucas</td>
+              <td>1234 658-198</td>
+              <td>SI</td>
+              <td>
+                <button class="mostrar-mas-info-cliente">Más</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
     </main>
-</body>
+  </body>
 </html>

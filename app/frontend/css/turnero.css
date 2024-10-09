@@ -1,221 +1,219 @@
 /* GRILLA DE TURNOS */
 .turnero {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(16, 1fr);
-    margin: 1rem 1.2rem;
-    border: 2px solid #000;
-    border-top: none;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: repeat(16, 1fr);
+  margin: 1rem 1.2rem;
+  border: 2px solid #000;
+  border-top: none;
 }
 
 .position-sticky {
-    position: sticky;
-    top: 0;
+  position: sticky;
+  top: 0;
 }
 
 p.position-sticky {
-    top: 7.3rem;
+  top: 7.3rem;
 }
 
-
 .turnero-head {
-    background-color: var(--background-color);
-    border-bottom: 2px solid #000;
-    border-top: 2px solid #000;
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  background-color: var(--background-color);
+  border-bottom: 2px solid #000;
+  border-top: 2px solid #000;
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .turnero-head::after {
-    width: 100%;
-    height: 5vh;
-    background-color: #965757;
+  width: 100%;
+  height: 5vh;
+  background-color: #965757;
 }
 
 .turnero-head .nothing {
-    width: 1rem;
-    height: 1rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .turnero-head .date {
-    text-align: center;
+  text-align: center;
 }
 
 .turnero-head h2 {
-    font-size: 2rem;
-    font-weight: 700;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 .turnero-month {
-    font-size: 1.2rem;
-    margin-top: 0.5rem;
+  font-size: 1.2rem;
+  margin-top: 0.5rem;
 }
 
-
 .turnero-semana {
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
 }
 
 .turnero-hora-lunes {
-    grid-column: 2 / 3;
-    grid-row: 2 / 3;
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
 }
 
 .turnero-hora-martes {
-    grid-column: 3 / 4;
-    grid-row: 2 / 3;
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
 }
 
 .turnero-hora-miercoles {
-    grid-column: 4 / 5;
-    grid-row: 2 / 3;
+  grid-column: 4 / 5;
+  grid-row: 2 / 3;
 }
 
 .turnero-hora-jueves {
-    grid-column: 5 / 6;
-    grid-row: 2 / 3;
+  grid-column: 5 / 6;
+  grid-row: 2 / 3;
 }
 
 .turnero-hora-viernes {
-    grid-column: 6 / 7;
-    grid-row: 2 / 3;
+  grid-column: 6 / 7;
+  grid-row: 2 / 3;
 }
 
 .turnero-hora-8 {
-    grid-column: 1 / 2;
-    grid-row: 3 / 5;
+  grid-column: 1 / 2;
+  grid-row: 3 / 5;
 }
 
 .turnero-hora-9 {
-    grid-column: 1 / 2;
-    grid-row: 5 / 7;
+  grid-column: 1 / 2;
+  grid-row: 5 / 7;
 }
 
 .turnero-hora-10 {
-    grid-column: 1 / 2;
-    grid-row: 7 / 9;
+  grid-column: 1 / 2;
+  grid-row: 7 / 9;
 }
 
 .turnero-hora-11 {
-    grid-column: 1 / 2;
-    grid-row: 9 / 11;
+  grid-column: 1 / 2;
+  grid-row: 9 / 11;
 }
 
 .turnero-hora-12 {
-    grid-column: 1 / 2;
-    grid-row: 11 / 13;
+  grid-column: 1 / 2;
+  grid-row: 11 / 13;
 }
 
 .turnero-hora-13 {
-    grid-column: 1 / 2;
-    grid-row: 13 / 15;
+  grid-column: 1 / 2;
+  grid-row: 13 / 15;
 }
 
 .turnero-hora-14 {
-    grid-column: 1 / 2;
-    grid-row: 15 / 17;
+  grid-column: 1 / 2;
+  grid-row: 15 / 17;
 }
 
 .parte-izquierda {
-    padding: 0 1rem;
-    margin-right: 0.5rem;
-    border-right: 2px solid #000;
-    border-top: 2px solid #000;
+  padding: 0 1rem;
+  margin-right: 0.5rem;
+  border-right: 2px solid #000;
+  border-top: 2px solid #000;
 }
 
 .parte-izquierda.position-sticky {
-    border-top: none;
+  border-top: none;
 }
 
 /* TURNOS */
 
 .turnos {
-    background-color: var(--primary-color);
-    margin-right: 1rem;
-    border: 2.5px solid var(--secondary-color);
-    border-radius: 5px;
-    text-align: center;
-    transition: all 0.1s ease;
+  background-color: var(--primary-color);
+  margin-right: 1rem;
+  border: 2.5px solid var(--secondary-color);
+  border-radius: 5px;
+  text-align: center;
+  transition: all 0.1s ease;
 }
 
 .turnos:hover {
-    cursor: pointer;
-    background-color: var(--secondary-color);
-    box-shadow: 0 0 3px 2px #000;
-    color: #ddd;
+  cursor: pointer;
+  background-color: var(--secondary-color);
+  box-shadow: 0 0 3px 2px #000;
+  color: #ddd;
 }
 
 .turno1 {
-    grid-column: 5 / 6;
-    grid-row: 5 / 6;
+  grid-column: 5 / 6;
+  grid-row: 5 / 6;
 }
 
 .turno2 {
-    grid-column: 6 / 7;
-    grid-row: 3 / 4;
+  grid-column: 6 / 7;
+  grid-row: 3 / 4;
 }
 
 .turno3 {
-    grid-column: 2 / 3;
-    grid-row: 9 / 10;
+  grid-column: 2 / 3;
+  grid-row: 9 / 10;
 }
 
 .turno4 {
-    grid-column: 3 / 4;
-    grid-row: 13 / 15;
+  grid-column: 3 / 4;
+  grid-row: 13 / 15;
 }
 
 /* MODAL AGREGAR TURNO */
 .modal-crear-turno {
-    height: 100vh;
-    width: 100vw;
-    background-color: #68b6;
-    
-    display: grid;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    visibility: hidden;
+  height: 100vh;
+  width: 100vw;
+  background-color: #68b6;
 
-    position: fixed;
-    top: 0;
-    left: 0;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  visibility: hidden;
+
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .modal-crear-turno[open] {
-    visibility: visible;
+  visibility: visible;
 }
 
 .modal-content {
-    width: 50vw;
-    height: 70vh;
-    padding: 1rem;
-    background-color: var(--background-color);
-    border-radius: 2rem;
+  width: 50vw;
+  height: 70vh;
+  padding: 1rem;
+  background-color: var(--background-color);
+  border-radius: 2rem;
 
-    display: flex;
-    justify-content: center;
-    position: relative;
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
 .close-modal {
-    height: fit-content;
-    width: fit-content;
-    font-size: 1.7rem;
+  height: fit-content;
+  width: fit-content;
+  font-size: 1.7rem;
 
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 
-    border: none;
-    background-color: transparent;
-    color: #d55;
+  border: none;
+  background-color: transparent;
+  color: #d55;
 }
 
 .close-modal:hover {
-    cursor: pointer;
-    color: #822;
+  cursor: pointer;
+  color: #822;
 }

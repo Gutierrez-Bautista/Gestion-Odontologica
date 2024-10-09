@@ -1,12 +1,12 @@
 .graficos {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 
-    padding: 0 1rem;
-    margin-top: 1.2rem;
+  padding: 0 1rem;
+  margin-top: 1.2rem;
 }
 
 .graficos img {
-    width: 35rem;
+  width: 35rem;
 }
