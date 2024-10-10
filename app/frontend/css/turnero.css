@@ -136,7 +136,7 @@ p.position-sticky {
   border: 2.5px solid var(--secondary-color);
   border-radius: 5px;
   text-align: center;
-  transition: all 0.1s ease;
+  transition: all 0.2s ease;
 }
 
 .turnos:hover {
@@ -144,6 +144,12 @@ p.position-sticky {
   background-color: var(--secondary-color);
   box-shadow: 0 0 3px 2px #000;
   color: #ddd;
+}
+
+.turnos:active {
+  background-color: var(--dark-color);
+  border-color: var(--dark-color);
+  transform: scale(0.9);
 }
 
 .turno1 {

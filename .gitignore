@@ -2,5 +2,5 @@ testing/
 app/backend/__pycache__/
 venv/
 .venv/
-app/backend/clinica.db
-app/backend/clinica.db
+app/clinica.db
+.vscode/
