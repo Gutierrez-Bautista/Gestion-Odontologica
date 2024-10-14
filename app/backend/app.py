@@ -14,11 +14,10 @@ def data_get():
 
 @app.post('/api/enviar')
 def env():
-    fecha_turno = request.form['fecha_turno']
-    #password = request.form['password']
+    fecha_turno1 = request.form['fecha_turno1']
+    fecha_turno2 = request.form['fecha_turno2']
 
-    soli = turnos.solicitar_info(fecha_turno)
-
+    soli = turnos.solicitar_info(fecha_turno1, fecha_turno2)
 
     return jsonify({
         "status": 200,
