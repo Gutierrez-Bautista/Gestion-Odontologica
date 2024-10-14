@@ -21,7 +21,8 @@ def env():
 
     return jsonify({
         "status": 200,
-        "message": soli #esto devuelve los resultados de la busqueda por fecha
+        "name": soli[1],
+        "message": soli[0] #esto devuelve los resultados de la busqueda por fecha
     })
 
 if __name__ == '__main__':

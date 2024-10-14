@@ -1,7 +1,7 @@
 import sqlite3
 import tablas
 
-DB_NAME = 'clinica.db'
+DB_NAME = 'app/clinica.db'
 
 def solicitar_info(fecha_turno1, fecha_turno2):
     """
@@ -18,12 +18,12 @@ def solicitar_info(fecha_turno1, fecha_turno2):
         cursor.close()
         connection.close()
         if resultados:
-            return resultados
+            return (resultados, 'dataFound')
         else:
             #return f"No se encontraron turnos para la fecha {fecha_turno}."
             pass
     except sqlite3.Error as e:
-        return f"Error al solicitar la información: {e}"
+        return (f"Error al solicitar la información: {e}", "dataBaseError")
 
 
 def agregar_info(nombre, fecha, hora, motivo):
@@ -46,7 +46,7 @@ def agregar_info(nombre, fecha, hora, motivo):
             return "El horario de ese turno ya esta ocupado"
         
     except sqlite3.Error as e:
-        return f"Error al agregar el turno: {e}"
+        return (f"Error al agregar el turno: {e}", "dataBaseError")
 
 
 def eliminar_turno_por_fecha(fecha_turno, t_horario):
@@ -70,7 +70,7 @@ def eliminar_turno_por_fecha(fecha_turno, t_horario):
         cursor.close()
         connection.close()
 
-        return resultado
+        return (resultado, "dataDeleted")
 
     except sqlite3.Error as e:
-        return f"Error al eliminar los turnos: {e}"
+        return (f"Error al eliminar los turnos: {e}", "dataBaseError")
