@@ -12,7 +12,7 @@ async def pacientes(conn):
                 telefono TEXT,
                 email TEXT,
                 edad INTEGER,
-                dni TEXT NOT NULL UNIQUE,
+                dni TEXT UNIQUE,
                 domicilio TEXT,
                 fecha_nacimiento DATE,
                 posee_pami BOOLEAN

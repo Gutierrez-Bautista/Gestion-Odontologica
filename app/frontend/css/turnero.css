@@ -1,9 +1,10 @@
 /* GRILLA DE TURNOS */
 .turnero {
   display: grid;
+  /* height: 80vh; */
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: repeat(16, 1fr);
-  margin: 1rem 1.2rem;
+  margin-top: .2rem;
   border: 2px solid #000;
   border-top: none;
 }
@@ -14,7 +15,7 @@
 }
 
 p.position-sticky {
-  top: 7.3rem;
+  top: 7.23rem;
 }
 
 .turnero-head {
@@ -57,29 +58,12 @@ p.position-sticky {
   grid-row: 2 / 3;
 }
 
-.turnero-hora-lunes {
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
-}
-
-.turnero-hora-martes {
-  grid-column: 3 / 4;
-  grid-row: 2 / 3;
-}
-
-.turnero-hora-miercoles {
-  grid-column: 4 / 5;
-  grid-row: 2 / 3;
-}
-
-.turnero-hora-jueves {
-  grid-column: 5 / 6;
-  grid-row: 2 / 3;
-}
-
-.turnero-hora-viernes {
-  grid-column: 6 / 7;
-  grid-row: 2 / 3;
+.turnero-dia {
+  text-align: center;
+  height: fit-content;
+  background-color: var(--background-color);
+  /* z-index: ; */
+  /* margin-top: -2rem; */
 }
 
 .turnero-hora-8 {
@@ -119,9 +103,13 @@ p.position-sticky {
 
 .parte-izquierda {
   padding: 0 1rem;
-  margin-right: 0.5rem;
+  /* margin-right: 0.5rem; */
   border-right: 2px solid #000;
   border-top: 2px solid #000;
+
+  &:nth-child(2) {
+    border-top: none;
+  }
 }
 
 .parte-izquierda.position-sticky {
@@ -132,9 +120,10 @@ p.position-sticky {
 
 .turnos {
   background-color: var(--primary-color);
-  margin-right: 1rem;
+  margin: 0 .5rem;
   border: 2.5px solid var(--secondary-color);
   border-radius: 5px;
+  text-transform: capitalize;
   text-align: center;
   transition: all 0.2s ease;
 }
@@ -150,26 +139,6 @@ p.position-sticky {
   background-color: var(--dark-color);
   border-color: var(--dark-color);
   transform: scale(0.9);
-}
-
-.turno1 {
-  grid-column: 5 / 6;
-  grid-row: 5 / 6;
-}
-
-.turno2 {
-  grid-column: 6 / 7;
-  grid-row: 3 / 4;
-}
-
-.turno3 {
-  grid-column: 2 / 3;
-  grid-row: 9 / 10;
-}
-
-.turno4 {
-  grid-column: 3 / 4;
-  grid-row: 13 / 15;
 }
 
 /* MODAL AGREGAR TURNO */
@@ -194,32 +163,133 @@ p.position-sticky {
 }
 
 .modal-content {
-  width: 50vw;
-  height: 70vh;
+  width: 550px;
+  height: 390px;
   padding: 1rem;
   background-color: var(--background-color);
   border-radius: 2rem;
 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-header {
+  width: 100%;
+  height: 60px;
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3rem;
+
+  font-size: 1.3rem;
+  text-transform: capitalize;
 }
 
 .close-modal {
-  height: fit-content;
-  width: fit-content;
+  height: 1.85rem;
+  width: 1.85rem;
   font-size: 1.7rem;
 
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 0;
+  right: 0;
 
   border: none;
+  /* border: 1px solid #000; */
+  padding: 0;
   background-color: transparent;
   color: #d55;
+
+  & > i{
+    transition: all .4s ease-out;
+  }
+
 }
 
-.close-modal:hover {
+.close-modal:hover > i {
   cursor: pointer;
   color: #822;
+  transform: rotate(360deg) scale(1.1);
+}
+
+.modal-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & > input {
+    width: 40%;
+    text-transform: uppercase;
+    border: 1px solid #0008;
+    margin-bottom: 1.3rem;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+  }
+  
+  & button {
+    text-transform: capitalize;
+    font-size: 1rem;
+    padding: 0.3rem;
+    margin-bottom: .5rem;
+    background-color: transparent;
+    border: 1px solid #000;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    
+    &:hover, &:focus{
+      outline: none;
+      cursor: pointer;
+      transform: scale(1.2, 1.2);
+      background-color: var(--primary-color);
+    }
+    
+    &:active {
+      transform: scale(0.9, 0.9);
+      background-color: var(--secondary-color);
+    }
+  }
+}
+
+.select-hour-container {
+  display: flex;
+  margin-bottom: 1.3rem;
+
+  & select {
+    background-color: #ffffff;
+    border: none;
+    padding: 0 0.2rem;
+  }
+}
+
+.fullname-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  margin: 1.2rem 0;
+
+  & input {
+    font-size: 1rem;
+    padding: 0.1rem 0.3rem;
+    border: 1px solid #000;
+    border-radius: 10px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+  }
+}
+
+.error {
+  color: rgb(138, 32, 32);
+}
+
+.succes {
+  color: rgb(24, 97, 29);
 }

@@ -61,14 +61,14 @@
 
         <p class="parte-izquierda turnero-semana">Semana <span>1</span></p>
 
-        <p class="turnero-dia-lunes position-sticky">Lunes <span>5</span></p>
-        <p class="turnero-dia-martes position-sticky">Martes <span>6</span></p>
-        <p class="turnero-dia-miercoles position-sticky">
-          Miercoles <span>7</span>
+        <p class="turnero-dia turnero-dia-lunes position-sticky">Lunes <span class="turnero-dia-number">5</span></p>
+        <p class="turnero-dia turnero-dia-martes position-sticky">Martes <span class="turnero-dia-number">6</span></p>
+        <p class="turnero-dia turnero-dia-miercoles position-sticky">
+          Miercoles <span class="turnero-dia-number">7</span>
         </p>
-        <p class="turnero-dia-jueves position-sticky">Jueves <span>8</span></p>
-        <p class="turnero-dia-viernes position-sticky">
-          Viernes <span>9</span>
+        <p class="turnero-dia turnero-dia-jueves position-sticky">Jueves <span class="turnero-dia-number">8</span></p>
+        <p class="turnero-dia turnero-dia-viernes position-sticky">
+          Viernes <span class="turnero-dia-number">9</span>
         </p>
 
         <p class="parte-izquierda turnero-hora-8">8:00</p>
@@ -78,19 +78,49 @@
         <p class="parte-izquierda turnero-hora-12">12:00</p>
         <p class="parte-izquierda turnero-hora-13">13:00</p>
         <p class="parte-izquierda turnero-hora-14">14:00</p>
-
-        <div class="turnos turno1">Perez Juan</div>
-        <!-- <div class="turnos turno2">Canavesio Lucas</div> -->
-        <div class="turnos turno3">Gutierrez Pedro</div>
-        <div class="turnos turno4">Lopez Federico</div>
       </section>
       <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog -->
       <dialog class="modal-crear-turno">
         <article class="modal-content">
-          <h3>Agreagr turno</h3>
-          <button class="close-modal">
-            <i class="bx bx-x"></i>
-          </button>
+          <div class="modal-header">
+            <h3>Agreagr turno</h3>
+            <button class="close-modal">
+              <i class="bx bx-x"></i>
+            </button>
+          </div>
+
+          <form action="" class="modal-body" id="add-turno-form">
+            <input type="date" name="date" id="select-day" />
+
+            <p>Inicio del turno:</p>
+            <div class="select-hour-container">
+              <select name="hour" id="select-hour">
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+              </select>
+              <p>:</p>
+              <select name="minute" id="select-minute">
+                <option value="00">00</option>
+                <option value="30">30</option>
+              </select>
+            </div>
+
+            <div class="fullname-input-container">
+              <input type="text" name="firstname" placeholder="nombre..." />
+              <input type="text" name="lastname" placeholder="apellido..." />
+            </div>
+
+            <button>enviar</button>
+
+            <p class="error" id="add-turno-error"></p>
+            <p class="succes" id="add-turno-succes"></p>
+          </form>
         </article>
       </dialog>
     </main>
