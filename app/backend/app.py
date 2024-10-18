@@ -33,7 +33,39 @@ def upload_turno ():
     minute = request.form.get('minute')
     motivo = request.form.get('motivo')
 
-    res = turnos.agregar_info(name, date, hour + ':' + minute, motivo)
+    res = turnos.agregar_info(name, date, hour + ':' + minute, motivo.lower())
+
+    return jsonify({
+        "status": res[2],
+        "name": res[1],
+        "message": res[0]
+    })
+
+@app.delete('/api/turnos/delete')
+def delete_turno ():
+    hora = request.form.get('hour')
+    dia = request.form.get('day')
+
+    res = turnos.eliminar_turno_por_fecha(dia, hora)
+
+    return jsonify({
+        "status": res[2],
+        "name": res[1],
+        "message": res[0]
+    })
+
+@app.put('/api/turnos/update')
+def update_turno():
+    fecha_actual = request.form.get('fecha-actual')
+    hora_actual = request.form.get('hora-actual')
+    motivo_actual = request.form.get('motivo-actual')
+    nueva_fecha = request.form.get('nueva-fecha')
+    nueva_hora = request.form.get('nueva-hora')
+    nuevo_motivo = request.form.get('nuevo-motivo')
+
+    print(fecha_actual, hora_actual, nueva_fecha, nueva_hora, nuevo_motivo)
+
+    res = turnos.actualizar_turno_por_fecha([fecha_actual, hora_actual, motivo_actual], [nueva_fecha, nueva_hora, nuevo_motivo])
 
     return jsonify({
         "status": res[2],

@@ -10,9 +10,10 @@ def solicitar_info(fecha_turno1, fecha_turno2):
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
-        query = "SELECT * FROM turnos WHERE fecha between ? and ?"
+        query = "SELECT * FROM turnos WHERE fecha between ? and ? order by horario, fecha"
         cursor.execute(query, (fecha_turno1, fecha_turno2))
         resultados = cursor.fetchall()
+
         if resultados:
             res = []
             for r in resultados:
@@ -74,7 +75,6 @@ def eliminar_turno_por_fecha(fecha_turno, t_horario):
     Elimina un turno según la fecha proporcionada.
     """
     try:
-
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
 
@@ -94,3 +94,30 @@ def eliminar_turno_por_fecha(fecha_turno, t_horario):
 
     except sqlite3.Error as e:
         return (f"Error al eliminar los turnos: {e}", "dataBaseError", 500)
+
+def actualizar_turno_por_fecha (datos_actuales, nuevos_datos):
+    # [fecha_actual, horario_actual, motivo_actual]
+    # [nueva_fecha, nuevo_horario, nuevo_motivo]
+    for i in range(len(datos_actuales)):
+        if nuevos_datos[i] == '': nuevos_datos[i] = datos_actuales[i]
+    print(datos_actuales)
+    print(nuevos_datos)
+    try:
+        connection = sqlite3.connect(DB_NAME)
+        cursor = connection.cursor()
+
+        query = "update turnos set fecha=?, horario=?, motivo=? WHERE fecha = ? and horario = ?"
+        cursor.execute(query, (nuevos_datos[0], nuevos_datos[1], nuevos_datos[2], datos_actuales[0], datos_actuales[1]))
+        connection.commit()
+
+        if cursor.rowcount > 0:
+            resultado = [f"Turno de la fecha {datos_actuales[0]} {datos_actuales[1]} modificado.", "dataUpdated", 200]
+        else:
+            resultado = [f"No se encontro turno para la fecha {datos_actuales[0]} {datos_actuales[1]}.", "noDataFound", 403]
+        
+        cursor.close()
+        connection.close()
+
+        return resultado
+    except sqlite3.Error as e:
+        return (f"Error al modificar el turno: {e}", "dataBaseError", 500)

@@ -21,7 +21,9 @@ const WEEK_DAYS_ARRAY = ["lunes", "martes", "miercoles", "jueves", "viernes"];
 
 // https://stackoverflow.com/questions/242608/disable-browsers-vertical-and-horizontal-scrollbars
 
-let monday_day_number;
+let monday_day_number
+let monday_date
+let friday_date
 
 function setTurneroHeaders(mondayDate) {
   const monthNumber = parseInt(mondayDate.split('/')[1]) - 1
@@ -37,8 +39,6 @@ function setTurneroHeaders(mondayDate) {
   document.querySelector('.turnero-semana > span').textContent = Math.round(monday_day_number / 7)
 }
 
-
-
 function mostrarTurno(infoTurno, diaSemana) {
   const div = document.createElement("div");
   div.classList.add("turnos");
@@ -53,8 +53,9 @@ function mostrarTurno(infoTurno, diaSemana) {
 
   div.style = `grid-row: ${row} / ${row + 1};grid-column: ${col} / ${col + 1}`;
 
+  div.addEventListener('click', (evt) => {funcionalidadTurnosClickeables(infoTurno, evt.currentTarget)})
+
   turnero.appendChild(div);
-  // <div class="turnos turno1">Perez Juan</div>
 }
 
 function getWeekFromADate(year, month, day) {
@@ -72,6 +73,8 @@ function getWeekFromADate(year, month, day) {
     if (i === 5) break;
   }
   monday_day_number = week[0].split('/')[0]
+  monday_date = week[0]
+  friday_date = week[4]
   return [week[0], week[4]];
 }
 
@@ -191,9 +194,6 @@ addTurnoForm.addEventListener("submit", (evt) => {
   data.delete('date')
   data.append('date', aux)
 
-  console.log(data)
-
-  // \\
   // Agregar el turno a la base de datos
   fetch('http://localhost:8000/api/turnos/upload', {
     method: 'POST',
@@ -219,3 +219,186 @@ addTurnoForm.addEventListener("submit", (evt) => {
       console.log(err)
     })
 });
+
+const turnoInformation = document.querySelector('.modal-turno-information')
+
+function funcionalidadTurnosClickeables(turnoInfo, turno) {
+  if (turno.childNodes.length !== 1) {
+    return
+  }
+
+  turno.classList.add('turnos-active')
+  setTimeout(() => {turno.classList.remove('turnos-active')}, 200)
+
+  const div = document.createElement('div')
+  div.classList.add('turno-info')
+  
+  const title = document.createElement('h3')
+  title.textContent = 'Informacion del Turno'
+  
+  const parrafosDia = document.createElement('p')
+  parrafosDia.innerHTML = `Dia: <span>${turnoInfo[2]}</sapn>`
+  
+  const parrafosHorario = document.createElement('p')
+  parrafosHorario.innerHTML = `Hora: <span>${turnoInfo[3]}</span>`
+  
+  const parrafosPaciente = document.createElement('p')
+  parrafosPaciente.innerHTML = `Paciente: <span>${turnoInfo[5].split(';')[1]} ${turnoInfo[5].split(';')[0]}</span>`
+  
+  const parrafosMotivo = document.createElement('p')
+  parrafosMotivo.innerHTML = `Motivo: <span>${turnoInfo[4]}</span>`
+  parrafosMotivo.style = 'max-height: 3.6rem; text-wrap: pretty; overflow: scroll'
+
+  const masInfoBtn = document.createElement('button')
+  masInfoBtn.textContent = 'Info del paciente'
+  masInfoBtn.classList.add('infoPacienteBtn')
+
+  const divModDelBtns = document.createElement('div')
+  divModDelBtns.classList.add('edit-delete-container')
+
+  const modBtn = document.createElement('span')
+  modBtn.classList.add('modificar-turno-btn')
+  const delBtn = document.createElement('span')
+  delBtn.classList.add('eliminar-turno-btn')
+
+  modBtn.innerHTML = `<i class='bx bx-pencil'></i> editar`
+  delBtn.innerHTML = `<i class='bx bxs-trash'></i> eliminar`
+
+  delBtn.addEventListener('click', () => {
+    d = new FormData()
+    d.append('hour', turnoInfo[3])
+    d.append('day', turnoInfo[2])
+    fetch('http://localhost:8000/api/turnos/delete', {
+      method: 'DELETE',
+      body: d
+    })
+      .then(res => res.json())
+      .then(response => {
+        if (response['status'] === 200) {
+          turnero.removeChild(turno)
+        }
+      })
+  })
+
+  modBtn.addEventListener('click', () => {crearModalModificarTurno(turnoInfo, turno, div)})
+
+  divModDelBtns.appendChild(modBtn)
+  divModDelBtns.appendChild(delBtn)
+
+  div.appendChild(divModDelBtns)
+  div.appendChild(title)
+  div.appendChild(parrafosDia)
+  div.appendChild(parrafosHorario)
+  div.appendChild(parrafosPaciente)
+  div.appendChild(parrafosMotivo)
+  div.appendChild(masInfoBtn)
+  
+  turno.appendChild(div)
+
+  turno.addEventListener('mouseleave', (evt) => {
+    if (div.hasChildNodes()) {
+      turno.removeChild(div)
+    }
+  })
+}
+
+function crearModalModificarTurno(infoTurnoActual, turno, modalInfo) {
+  const div = document.createElement('div')
+  div.classList.add('turno-info')
+  
+  const title = document.createElement('h3')
+  title.textContent = 'Modificacion del Turno'
+
+  const inputDia = document.createElement('input')
+  inputDia.setAttribute('type', 'date')
+  inputDia.setAttribute('name', "date")
+  inputDia.setAttribute('title', `nueva fecha (actual: ${infoTurnoActual[2]})`)
+  
+  const inputHorarioText = document.createElement('p')
+  inputHorarioText.textContent = `Nuevo horario (actual: ${infoTurnoActual[3]})`
+  inputHorarioText.style.fontWeight = 'normal'
+  const inputHorario = document.createElement('div')
+  inputHorario.classList.add('select-hour-container')
+  inputHorario.innerHTML = `
+              <select name="hour" id="select-hour">
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+              </select>
+              <p>:</p>
+              <select name="minute" id="select-minute">
+                <option value="00">00</option>
+                <option value="30">30</option>
+              </select>`
+  inputHorario.children[0].value = '-'
+  inputHorario.children[2].value = '-'
+  
+  
+  const inputMotivo = document.createElement('textarea')
+  inputMotivo.classList.add('textarea')
+  inputMotivo.setAttribute('name', 'motivo')
+  inputMotivo.setAttribute('placeholder', 'nuevo motivo...')
+
+  const confirmCancelContainer = document.createElement('div')
+  const canBtn = document.createElement('button')
+  const confBtn = document.createElement('button')
+
+  canBtn.textContent = 'cancelar'
+  confBtn.textContent = 'modificar'
+
+  confBtn.addEventListener('click', () => {
+    const d = new FormData()
+    d.append('fecha-actual', infoTurnoActual[2])
+    d.append('hora-actual', infoTurnoActual[3])
+    d.append('motivo-actual', infoTurnoActual[4])
+
+    if (inputDia.value === '') {
+      fech = ''
+    } else {
+      fech = inputDia.value.split('-')
+      fech = `${fech[2]}/${fech[1]}/${fech[0]}`
+    }
+    d.append('nueva-fecha', fech)
+    if (inputHorario.children[0].value === '' || inputHorario.children[2].value === '') {
+      d.append('nueva-hora', '')
+    } else {
+      d.append('nueva-hora', inputHorario.children[0].value + ':' + inputHorario.children[2].value)
+    }
+    d.append('nuevo-motivo', inputMotivo.value)
+
+    fetch('http://localhost:8000/api/turnos/update', {
+      method: "PUT",
+      body: d
+    })
+      .then(res => res.json())
+      .then(response => {
+        console.log(response)
+        actualizarTurnero(monday_date, friday_date)
+      })
+      .catch(err => {console.log(err)})
+  })
+
+  canBtn.addEventListener('click', () => {
+    turno.removeChild(div)
+  })
+
+  confirmCancelContainer.appendChild(canBtn)
+  confirmCancelContainer.appendChild(confBtn)
+
+  div.appendChild(title)
+  div.appendChild(inputDia)
+  div.appendChild(inputHorarioText)
+  div.appendChild(inputHorario)
+  div.appendChild(inputMotivo)
+  div.appendChild(confirmCancelContainer)
+
+  turno.removeChild(modalInfo)
+  turno.appendChild(div)
+
+  // Hacer que los datos de la modificacion se envien al servidor
+  
+}
