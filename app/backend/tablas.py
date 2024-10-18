@@ -65,12 +65,10 @@ async def FichaGeneral(conn):
             diabetes BOOLEAN,
             alergia BOOLEAN,
             detalles_alergia TEXT,
-            probl_reales BOOLEAN,
+            probl_renales BOOLEAN,
             probl_cardiacos BOOLEAN,
             plan_tratamiento TEXT,
-            observaciones TEXT,
-            firma_paciente BOOLEAN,
-            firma_profesional BOOLEAN
+            observaciones TEXT
         )
         ''')
 
@@ -125,13 +123,13 @@ async def Anamnesis(conn):
         )
         ''')
 
-# Crear tabla HistoriaClinicaPAMI
-async def HistoriaClinicaPAMI(conn):
+# Crear tabla HistoriaClinica
+async def HistoriaClinica(conn):
     async with conn.cursor() as cursor:
         await cursor.execute('''
         CREATE TABLE IF NOT EXISTS HistoriaClinicaPAMI (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            ficha_pami_id INTEGER,
+            paciente_id INTEGER,
             motivo_consulta TEXT,
             consulta_reciente BOOLEAN,
             dificultad_masticar BOOLEAN,
@@ -140,7 +138,8 @@ async def HistoriaClinicaPAMI(conn):
             sangrado_encias BOOLEAN,
             cantidad_cepillados_diarios INTEGER,
             momentos_azucar TEXT,
-            FOREIGN KEY (ficha_pami_id) REFERENCES FichaPAMI(id)
+            descripcion TEXT NOT NULL,
+            FOREIGN KEY (paciente_id) REFERENCES Pacientes(id)
         )
         ''')
 
@@ -151,7 +150,6 @@ async def odontograma(conn):
         CREATE TABLE IF NOT EXISTS Odontograma (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             paciente_id INTEGER,
-            diente TEXT NOT NULL,
             estado TEXT NOT NULL,
             tratamiento TEXT,
             FOREIGN KEY (paciente_id) REFERENCES Pacientes(id)
@@ -163,12 +161,9 @@ async def estadisticas(conn):
     async with conn.cursor() as cursor:
         await cursor.execute('''
         CREATE TABLE IF NOT EXISTS Estadisticas (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            paciente_id INTEGER,
             fecha DATE NOT NULL,
             descripcion TEXT NOT NULL,
             valor INTEGER,
-            FOREIGN KEY (paciente_id) REFERENCES Pacientes(id)
         )
         ''')
 
@@ -180,7 +175,7 @@ async def servicios(conn):
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre_servicio TEXT NOT NULL,
             descripcion TEXT NOT NULL,
-            costo REAL
+            costo float
         )
         ''')
 
@@ -201,7 +196,6 @@ async def main():
             FichaGeneral(conn),
             FichaPAMI(conn),
             Anamnesis(conn),
-            HistoriaClinicaPAMI(conn),
             odontograma(conn),
             estadisticas(conn),
             servicios(conn)
