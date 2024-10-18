@@ -28,7 +28,7 @@ let friday_date
 function setTurneroHeaders(mondayDate) {
   const monthNumber = parseInt(mondayDate.split('/')[1]) - 1
 
-  document.querySelector('.turnero-month').textContent = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'][monthNumber]
+  document.querySelector('.turnero-month').textContent = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][monthNumber]
 
   let dia = monday_day_number
   document.querySelectorAll('.turnero-dia-number').forEach(element => {
@@ -117,15 +117,15 @@ function actualizarTurnero(fechaLunes, fechaViernes) {
       }
       else if (data['name'] === 'dataBaseError') {
         console.error(data)
-        alert('Error al recuperar los turnos de la base de datos')
+        alert('Error on appointments search')
       }
       else {
-        alert(`No se han cargado turnos para la semana del lunes ${fechaLunes}`)
+        alert(`appointments no uploaded for the week of monday ${fechaLunes}`)
       }
     })
     .catch(err => {
       console.error(err);
-      alert('Error al recuperar los turnos de la base de datos')
+      alert('Error on appointments search')
     })
 }
 
@@ -168,12 +168,12 @@ addTurnoForm.addEventListener("submit", (evt) => {
   const data = new FormData(addTurnoForm);
 
   if (data.get("date") === "") {
-    addTurnoError.textContent = "No se ha seleccionado el dia";
+    addTurnoError.textContent = "Day not selected";
     return;
   }
 
   if (data.get("name") === "" || data.get("lastname") === "") {
-    addTurnoError.textContent = "Ingrese nombre y apellido";
+    addTurnoError.textContent = "Enter first and last name";
     return;
   }
 
@@ -181,7 +181,7 @@ addTurnoForm.addEventListener("submit", (evt) => {
   const dayIndex = dateObj.getDay() - 1;
 
   if (dayIndex === 5 || dayIndex === -1) {
-    addTurnoError.textContent = "No se atiende los sabados y domingos";
+    addTurnoError.textContent = "Can't set a appointment on saturday and sunday";
     return;
   }
 
@@ -202,12 +202,12 @@ addTurnoForm.addEventListener("submit", (evt) => {
     .then(res => res.json())
     .then(response => {
       if (response['status'] === 500) {
-        addTurnoError.textContent = 'Ocurrio un error al intentar cargar el turno'
+        addTurnoError.textContent = 'Error on appointment upload'
         console.log(response[0])
       } else if (response['name'] === 'dataNoUpload') {
-        addTurnoError.textContent = `El horario "${data.get('hour')}:${data.get('minute')}" del dia "${aux}" ya esta ocupado`
+        addTurnoError.textContent = `The hour "${data.get('hour')}:${data.get('minute')}" of day "${aux}" is already in use`
       } else {
-        addTurnoSucces.textContent = 'Turno agregado'
+        addTurnoSucces.textContent = 'appointment uploaded'
         if (currentWeek.includes(aux)) {
             // mostrar_turno([-, -, -, hour, -, apellidoNombre], day)
             mostrarTurno([0, 0, 0, `${data.get('hour')}:${data.get('minute')}`, 0, data.get('fullname')], WEEK_DAYS_ARRAY[(parseInt(aux.split('/')[0]) - monday_day_number)])
@@ -215,7 +215,7 @@ addTurnoForm.addEventListener("submit", (evt) => {
       }
     })
     .catch(err => {
-      addTurnoError.textContent = 'Error al conectar con el servidor'
+      addTurnoError.textContent = 'Error on server connection'
       console.log(err)
     })
 });
@@ -234,23 +234,23 @@ function funcionalidadTurnosClickeables(turnoInfo, turno) {
   div.classList.add('turno-info')
   
   const title = document.createElement('h3')
-  title.textContent = 'Informacion del Turno'
+  title.textContent = 'Appointment Information'
   
   const parrafosDia = document.createElement('p')
-  parrafosDia.innerHTML = `Dia: <span>${turnoInfo[2]}</sapn>`
+  parrafosDia.innerHTML = `Day: <span>${turnoInfo[2]}</sapn>`
   
   const parrafosHorario = document.createElement('p')
-  parrafosHorario.innerHTML = `Hora: <span>${turnoInfo[3]}</span>`
+  parrafosHorario.innerHTML = `Hour: <span>${turnoInfo[3]}</span>`
   
   const parrafosPaciente = document.createElement('p')
-  parrafosPaciente.innerHTML = `Paciente: <span>${turnoInfo[5].split(';')[1]} ${turnoInfo[5].split(';')[0]}</span>`
+  parrafosPaciente.innerHTML = `Patient: <span>${turnoInfo[5].split(';')[1]} ${turnoInfo[5].split(';')[0]}</span>`
   
   const parrafosMotivo = document.createElement('p')
-  parrafosMotivo.innerHTML = `Motivo: <span>${turnoInfo[4]}</span>`
+  parrafosMotivo.innerHTML = `Reason: <span>${turnoInfo[4]}</span>`
   parrafosMotivo.style = 'max-height: 3.6rem; text-wrap: pretty; overflow: scroll'
 
   const masInfoBtn = document.createElement('button')
-  masInfoBtn.textContent = 'Info del paciente'
+  masInfoBtn.textContent = 'Patient information'
   masInfoBtn.classList.add('infoPacienteBtn')
 
   const divModDelBtns = document.createElement('div')
@@ -261,8 +261,8 @@ function funcionalidadTurnosClickeables(turnoInfo, turno) {
   const delBtn = document.createElement('span')
   delBtn.classList.add('eliminar-turno-btn')
 
-  modBtn.innerHTML = `<i class='bx bx-pencil'></i> editar`
-  delBtn.innerHTML = `<i class='bx bxs-trash'></i> eliminar`
+  modBtn.innerHTML = `<i class='bx bx-pencil'></i> edit`
+  delBtn.innerHTML = `<i class='bx bxs-trash'></i> delete`
 
   delBtn.addEventListener('click', () => {
     d = new FormData()
@@ -295,7 +295,7 @@ function funcionalidadTurnosClickeables(turnoInfo, turno) {
   
   turno.appendChild(div)
 
-  turno.addEventListener('mouseleave', (evt) => {
+  turno.addEventListener('mouseleave', () => {
     if (div.hasChildNodes()) {
       turno.removeChild(div)
     }
@@ -307,15 +307,15 @@ function crearModalModificarTurno(infoTurnoActual, turno, modalInfo) {
   div.classList.add('turno-info')
   
   const title = document.createElement('h3')
-  title.textContent = 'Modificacion del Turno'
+  title.textContent = 'Appointment Edit'
 
   const inputDia = document.createElement('input')
   inputDia.setAttribute('type', 'date')
   inputDia.setAttribute('name', "date")
-  inputDia.setAttribute('title', `nueva fecha (actual: ${infoTurnoActual[2]})`)
-  
+  inputDia.setAttribute('title', `New day (current: ${infoTurnoActual[2]})`)
+
   const inputHorarioText = document.createElement('p')
-  inputHorarioText.textContent = `Nuevo horario (actual: ${infoTurnoActual[3]})`
+  inputHorarioText.textContent = `New hour (current: ${infoTurnoActual[3]})`
   inputHorarioText.style.fontWeight = 'normal'
   const inputHorario = document.createElement('div')
   inputHorario.classList.add('select-hour-container')
@@ -341,14 +341,14 @@ function crearModalModificarTurno(infoTurnoActual, turno, modalInfo) {
   const inputMotivo = document.createElement('textarea')
   inputMotivo.classList.add('textarea')
   inputMotivo.setAttribute('name', 'motivo')
-  inputMotivo.setAttribute('placeholder', 'nuevo motivo...')
+  inputMotivo.setAttribute('placeholder', 'New reason...')
 
   const confirmCancelContainer = document.createElement('div')
   const canBtn = document.createElement('button')
   const confBtn = document.createElement('button')
 
-  canBtn.textContent = 'cancelar'
-  confBtn.textContent = 'modificar'
+  canBtn.textContent = 'cancel'
+  confBtn.textContent = 'edit'
 
   confBtn.addEventListener('click', () => {
     const d = new FormData()
