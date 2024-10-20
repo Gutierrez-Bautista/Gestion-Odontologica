@@ -16,8 +16,7 @@ async def pacientes(conn):
                 domicilio TEXT,
                 fecha_nacimiento DATE,
                 posee_pami BOOLEAN
-            )
-        ''')
+            )''')
 
 # Crear tabla Turnos
 async def turnos(conn):
@@ -30,8 +29,7 @@ async def turnos(conn):
             horario TEXT NOT NULL,
             motivo TEXT,
             FOREIGN KEY (paciente_id) REFERENCES Pacientes(id)
-        )
-        ''')
+        )''')
 
 # Crear tabla HistoriaClinica
 async def HistoriaClinica(conn):
@@ -43,8 +41,7 @@ async def HistoriaClinica(conn):
             fecha DATE NOT NULL,
             descripcion TEXT NOT NULL,
             FOREIGN KEY (paciente_id) REFERENCES Pacientes(id)
-        )
-        ''')
+        )''')
 
 # Crear tabla FichaGeneral
 async def FichaGeneral(conn):
@@ -53,7 +50,7 @@ async def FichaGeneral(conn):
         CREATE TABLE IF NOT EXISTS FichaGeneral (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombre_apellido TEXT NOT NULL,
-            dni TEXT NOT NULL UNIQUE,
+            dni TEXT UNIQUE,
             obra_social TEXT,
             nro_afiliado TEXT,
             fecha_nacimiento DATE,
@@ -69,8 +66,7 @@ async def FichaGeneral(conn):
             probl_cardiacos BOOLEAN,
             plan_tratamiento TEXT,
             observaciones TEXT
-        )
-        ''')
+        )''')
 
 # Crear tabla FichaPAMI
 async def FichaPAMI(conn):
@@ -95,8 +91,7 @@ async def FichaPAMI(conn):
             telefono_fijo_prestador TEXT,
             codigo_prestador TEXT,
             medico_cabecera TEXT
-        )
-        ''')
+        )''')
 
 # Crear tabla Anamnesis
 async def Anamnesis(conn):
@@ -120,14 +115,13 @@ async def Anamnesis(conn):
             toma_aspirina_anticoagulantes BOOLEAN,
             fue_operado BOOLEAN,
             FOREIGN KEY (ficha_pami_id) REFERENCES FichaPAMI(id)
-        )
-        ''')
+        )''')
 
 # Crear tabla HistoriaClinica
-async def HistoriaClinica(conn):
+async def HistoriaClinicaOdontologica(conn):
     async with conn.cursor() as cursor:
         await cursor.execute('''
-        CREATE TABLE IF NOT EXISTS HistoriaClinicaPAMI (
+        CREATE TABLE IF NOT EXISTS HistoriaClinicaOdontologica (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             paciente_id INTEGER,
             motivo_consulta TEXT,
@@ -138,10 +132,9 @@ async def HistoriaClinica(conn):
             sangrado_encias BOOLEAN,
             cantidad_cepillados_diarios INTEGER,
             momentos_azucar TEXT,
-            descripcion TEXT NOT NULL,
+            descripcion TEXT,
             FOREIGN KEY (paciente_id) REFERENCES Pacientes(id)
-        )
-        ''')
+        )''')
 
 # Crear tabla Odontograma
 async def odontograma(conn):
@@ -153,8 +146,7 @@ async def odontograma(conn):
             estado TEXT NOT NULL,
             tratamiento TEXT,
             FOREIGN KEY (paciente_id) REFERENCES Pacientes(id)
-        )
-        ''')
+        )''')
 
 # Crear tabla Estadisticas
 async def estadisticas(conn):
@@ -163,9 +155,8 @@ async def estadisticas(conn):
         CREATE TABLE IF NOT EXISTS Estadisticas (
             fecha DATE NOT NULL,
             descripcion TEXT NOT NULL,
-            valor INTEGER,
-        )
-        ''')
+            valor INTEGER
+        )''')
 
 # Crear tabla Servicios
 async def servicios(conn):
@@ -176,8 +167,7 @@ async def servicios(conn):
             nombre_servicio TEXT NOT NULL,
             descripcion TEXT NOT NULL,
             costo float
-        )
-        ''')
+        )''')
 
 # Función para confirmar los cambios y cerrar la conexión
 async def fin(conn):
@@ -193,6 +183,7 @@ async def main():
             pacientes(conn),
             turnos(conn),
             HistoriaClinica(conn),
+            HistoriaClinicaOdontologica(conn),
             FichaGeneral(conn),
             FichaPAMI(conn),
             Anamnesis(conn),

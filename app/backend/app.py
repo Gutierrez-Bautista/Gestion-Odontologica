@@ -99,6 +99,66 @@ def post_pacientes():
     fecha_nacimiento = request.form.get('fecha_nacimiento')
     posee_pami = request.form.get('posee_pami')
 
+    print(request.form.to_dict())
+
+    """
+    Necesito que al alta se agreguen los datos de la ficha general, la ficha de PAMI, la anamnesis, el historial odontologico y el odontograma.
+    Tanto los pacientes normales como aquellos con PAMI tienen un historial odontologico y un odontograma, no obstante, cada uno de ellos tiene su ficha correspondiente, los pacientes que poseen PAMI tienen una ficha de PAMI mientras que el resto tiene una ficha general.
+    A continuacion se especifica el nombre con el que se pasan los datos desde el frontend junto con una descripcion de que se esta pasando y que tipo de datos son (todos son strings, cuando se dice que algo es un numero hace referencia a que el texto contiene solo numeros):
+
+    datos ficha general:
+      # obra-social (texto) --> puede estar vacio
+      # n-afiliado (0 o mayor) --> numero de afiliado (puede estar vacio)
+      # hta (0 o 1) --> si tiene hipertension arterial o no
+      # diabetes (0 o 1) --> si tiene diabetes o no
+      # alergias (texto) --> alergias del paciente (puede estar vacio)
+      # prob-renales (0 o 1) --> si tiene problemas renales o no
+      # prob-cardiacos (0 o 1) --> si tiene problemas cardiacos o no
+      # plan-tratamiento (texto) --> puede estar vacio
+      # observaciones (texto) --> puede estar vacio
+
+    datos de ficha pami:
+      # lugar (texto) --> no se de que
+      # fecha (dd/mm/aaaa) --> no se de que
+      # n-beneficio --> numero de beneficio
+      # titular (0 o 1) --> si es titular o no
+      # parentesco (texto) --> (supongo que es entre el paciente y el titular de la obra social) (puede estar vacio)
+      # loc-paciente (texto) --> localidad del paciente
+      # cod-post-paciente (texto) --> codigo postal del paciente
+      # profesional --> profesional
+      # domicilio-prestador (texto)
+      # loc-prestador --> localidad del prestador
+    
+    datos anamnesis:
+      # sufre-enfermedad (0 o 1) --> si sufre alguna enfermedad o no
+      # trat-med (texto) --> tratamiento medico (puede estar vacio)
+      # medicacion (texto) --> medicacion que toma (puede estar vacio)
+      # alergias-drogas (texto) --> medicaciones a las que es alergico (puede estar vacio)
+      # cant-fuma (0 o mayor) --> cantidad que fuma
+      # diabetes (0 o 1) --> si tiene diabetes o no
+      # hta (0 o 1) --> si tiene hipertension arterial o no
+      # aspi-antcuag (0 o 1) --> si toma aspirinas.anticuagulantes o no
+      # operado (0 o 1) --> si ha sido operado
+    
+    datos historia clinica odontologica:
+      # motivo-consulta (texto) --> por que asistio a consulta
+      # consulta-otro-prof (0 o 1) --> si ha consultado a otro porfesional
+      # dif-masticar (0 o 1) --> si tiene dificultad para masticar o no
+      # dif-hablar (0 o 1) --> si tiene dificultad para hablar o no
+      # mov-dental (0 o 1) --> si tiene movilidad dental o no
+      # sang-encias (0 o 1) --> si le sangran la encias o no
+      # cant-sepillados (o o mayor) --> cantidad de sepillados diarios
+      # azucar (texto) --> momentos de azucar
+    
+    datos odontograma:
+      # estado-odontograma (texto)
+      # tratamiento-odontograma (texto) --> puede estar vacio
+    
+    Estos son solo los datos puntuales de las tablas especificadas anteriormente, no obstante en algunas de ellas tambien deben cargarse datos que estan el la tabla de pacientes.
+
+    Cuando el paciente que se esta cargando es de PAMI no se pasan los datos de la ficha general mientras que si el paciente no posee PAMI no se pasan datos de la ficha PAMI ni de la anamnesis
+    """
+
     res = pacinetes.alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami)
 
     return jsonify({
