@@ -136,7 +136,7 @@ p.position-sticky {
     right: 70%;
     text-align: center;
 
-    width: 120%;
+    width: 254px;
     padding: 10px;
     border: 1px solid #000;
     border-radius: 1.2rem;
@@ -303,7 +303,7 @@ p.position-sticky {
     }
   }
   
-  & button:last-child {
+  & button {
     text-transform: capitalize;
     font-size: 1rem;
     padding: 0.3rem;
