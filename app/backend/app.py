@@ -3,10 +3,11 @@ from flask_cors import CORS
 from webbrowser import open
 import turnos
 import pacinetes
+import sqlite3
 
 app = Flask(__name__)
 CORS(app)
-
+DB_NAME = 'app/clinica.db'
 @app.get('/api/data')
 def data_get():
     return jsonify({
@@ -90,7 +91,15 @@ def get_pacientes ():
 
 @app.post('/api/pacientes/alta')
 def post_pacientes():
+
     nombre_apellido = request.form.get('nombre_apellido')
+
+    connection = sqlite3.connect(DB_NAME)
+    cursor = connection.cursor()
+    cursor.execute('select id from pacientes where nombre_apellido = ?',(nombre_apellido))
+    id_paciente = cursor.fetchall()[0][0]  #obtengo el id del paciente en cuestion
+
+
     telefono = request.form.get('telefono')
     email = request.form.get('email')
     edad = request.form.get('edad')
@@ -101,65 +110,70 @@ def post_pacientes():
 
     print(request.form.to_dict())
 
-    """
-    Necesito que al alta se agreguen los datos de la ficha general, la ficha de PAMI, la anamnesis, el historial odontologico y el odontograma.
-    Tanto los pacientes normales como aquellos con PAMI tienen un historial odontologico y un odontograma, no obstante, cada uno de ellos tiene su ficha correspondiente, los pacientes que poseen PAMI tienen una ficha de PAMI mientras que el resto tiene una ficha general.
-    A continuacion se especifica el nombre con el que se pasan los datos desde el frontend junto con una descripcion de que se esta pasando y que tipo de datos son (todos son strings, cuando se dice que algo es un numero hace referencia a que el texto contiene solo numeros):
+    #----datos de la ficha de pami----#
 
-    datos ficha general:
-      # obra-social (texto) --> puede estar vacio
-      # n-afiliado (0 o mayor) --> numero de afiliado (puede estar vacio)
-      # hta (0 o 1) --> si tiene hipertension arterial o no
-      # diabetes (0 o 1) --> si tiene diabetes o no
-      # alergias (texto) --> alergias del paciente (puede estar vacio)
-      # prob-renales (0 o 1) --> si tiene problemas renales o no
-      # prob-cardiacos (0 o 1) --> si tiene problemas cardiacos o no
-      # plan-tratamiento (texto) --> puede estar vacio
-      # observaciones (texto) --> puede estar vacio
+    lugar = request.form.get('lugar')
+    fecha = request.form.get('fecha')
+    nro_beneficio = request.form.get('n-beneficio')
+    titular,parentesco = request.form.get('titular')
+    localidad_paciente = request.form.get('parentesco')
+    codigo_postal_paciente = request.form.get('loc-paciente')
+    profesional = request.form.get('cod-post-paciente')
+    domicilio_prestador = request.form.get('profesional')
+    localidad_prestador = request.form.get('domicilio-prestador')
+    medico_cabecera = request.form.get('loc-prestador')
 
-    datos de ficha pami:
-      # lugar (texto) --> no se de que
-      # fecha (dd/mm/aaaa) --> no se de que
-      # n-beneficio --> numero de beneficio
-      # titular (0 o 1) --> si es titular o no
-      # parentesco (texto) --> (supongo que es entre el paciente y el titular de la obra social) (puede estar vacio)
-      # loc-paciente (texto) --> localidad del paciente
-      # cod-post-paciente (texto) --> codigo postal del paciente
-      # profesional --> profesional
-      # domicilio-prestador (texto)
-      # loc-prestador --> localidad del prestador
-    
-    datos anamnesis:
-      # sufre-enfermedad (0 o 1) --> si sufre alguna enfermedad o no
-      # trat-med (texto) --> tratamiento medico (puede estar vacio)
-      # medicacion (texto) --> medicacion que toma (puede estar vacio)
-      # alergias-drogas (texto) --> medicaciones a las que es alergico (puede estar vacio)
-      # cant-fuma (0 o mayor) --> cantidad que fuma
-      # diabetes (0 o 1) --> si tiene diabetes o no
-      # hta (0 o 1) --> si tiene hipertension arterial o no
-      # aspi-antcuag (0 o 1) --> si toma aspirinas.anticuagulantes o no
-      # operado (0 o 1) --> si ha sido operado
-    
-    datos historia clinica odontologica:
-      # motivo-consulta (texto) --> por que asistio a consulta
-      # consulta-otro-prof (0 o 1) --> si ha consultado a otro porfesional
-      # dif-masticar (0 o 1) --> si tiene dificultad para masticar o no
-      # dif-hablar (0 o 1) --> si tiene dificultad para hablar o no
-      # mov-dental (0 o 1) --> si tiene movilidad dental o no
-      # sang-encias (0 o 1) --> si le sangran la encias o no
-      # cant-sepillados (o o mayor) --> cantidad de sepillados diarios
-      # azucar (texto) --> momentos de azucar
-    
-    datos odontograma:
-      # estado-odontograma (texto)
-      # tratamiento-odontograma (texto) --> puede estar vacio
-    
-    Estos son solo los datos puntuales de las tablas especificadas anteriormente, no obstante en algunas de ellas tambien deben cargarse datos que estan el la tabla de pacientes.
+    datos_ficha_pami = (lugar,fecha,nro_beneficio,titular,parentesco,localidad_paciente,codigo_postal_paciente,profesional,domicilio_prestador, localidad_prestador,medico_cabecera)
 
-    Cuando el paciente que se esta cargando es de PAMI no se pasan los datos de la ficha general mientras que si el paciente no posee PAMI no se pasan datos de la ficha PAMI ni de la anamnesis
-    """
+    #----datos de la anamnesis----#   
 
-    res = pacinetes.alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami)
+    enfermedad = request.form.get ('sufre-enfermedad')
+    tratamiento_medico = request.form.get ('trat-med')
+    medicacion = request.form.get ('medicacion')
+    alergia_droga = request.form.get ('alergias-drogas')
+    diabetes1 = request.form.get ('diabetes')
+    cantidad_fuma = request.form.get ('cant-fuma')
+    probl_cardiacos1 = request.form.get ('probl-cardiacos')
+    hipertension = request.form.get ('hta')
+    toma_aspirina_anticoagulantes = request.form.get ('aspi-antcuag')
+    fue_operado = request.form.get ('operado')
+
+    anamnesis = (enfermedad,tratamiento_medico,medicacion,alergia_droga,diabetes1,cantidad_fuma,probl_cardiacos1,hipertension,toma_aspirina_anticoagulantes,fue_operado)
+
+    #----datos de la ficha general----#
+    obra_social = request.form.get ('obra-social')
+    nro_afiliado = request.form.get ('n-afiliado')
+    hta = request.form.get ('hta')
+    diabetes = request.form.get ('diabetes')
+    alergia = request.form.get ('alergias')
+    probl_renales = request.form.get ('prob-renales')
+    probl_cardiacos = request.form.get ('prob-cardiacos')
+    plan_tratamiento = request.form.get ('plan-tratamiento')
+    observaciones = request.form.get ('observaciones')
+
+    datos_ficha_general=(obra_social,nro_afiliado,hta,diabetes,alergia,probl_renales,probl_cardiacos,plan_tratamiento,observaciones)
+
+    #----historial clinico odontologico 
+
+    motivo_consulta = request.form.get ('motivo-consulta')
+    consulta_reciente = request.form.get ('consulta-otro-prof')
+    dificultad_masticar = request.form.get ('dif-masticar')
+    dificultad_hablar = request.form.get ('dif-hablar')
+    movilidad_dentaria = request.form.get ('mov-dental')
+    sangrado_encias = request.form.get ('sang-encias')
+    cantidad_cepillados_diarios = request.form.get ('cant-sepillados')
+    momentos_azucar = request.form.get ('azucar')
+
+    historia_clinica = (motivo_consulta,consulta_reciente,dificultad_masticar,dificultad_hablar,movilidad_dentaria,sangrado_encias,cantidad_cepillados_diarios,momentos_azucar)
+
+    #----datos del odontograma----#
+
+    estado = request.form.get ('estado-odontograma')
+    tratamiento = request.form.get ('tratamiento-odontograma')
+
+    odontograma = (estado,tratamiento)
+
+    res = pacinetes.alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis)
 
     return jsonify({
         "status": res[2],
