@@ -8,7 +8,6 @@ DB_NAME = 'app/clinica.db'
 
 #alta
 def alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami, anamnesis,datos_ficha_general):
-
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
@@ -18,18 +17,19 @@ def alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimi
         if not valid:
             cursor.execute('insert into Pacientes (nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami) values(?,?,?,?,?,?,?,?)',(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami))
             valid = cursor.fetchall()
-            return ['paciente cargado','dataUpload',200]
         else: 
-            return ('paciente ya cargado','allreadyUpload',200)
+            return ('paciente ya cargado','dataAlreadyUpload',200)
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
     finally:
         cursor.execute('select max(id) from Pacientes')
-        id = cursor.fetchall()[0][0]
+        id_paciente = cursor.fetchall()[0][0]
         if posee_pami == '1':
-            res = pacientes_fichas_pami.ficha_pami(datos_ficha_pami, id ,anamnesis)
+            res = pacientes_fichas_pami.ficha_pami(datos_ficha_pami, id_paciente ,anamnesis)
         else:
             res = pacientes_ficha_general.alta_ficha_general(nombre_apellido,datos_ficha_general)
+        
+        return res
 
 def actualizar_paciente (id,nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami, anamnesis,datos_ficha_general):
     try:

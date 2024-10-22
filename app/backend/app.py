@@ -115,13 +115,17 @@ def post_pacientes():
     lugar = request.form.get('lugar')
     fecha = request.form.get('fecha')
     nro_beneficio = request.form.get('n-beneficio')
-    titular,parentesco = request.form.get('titular')
-    localidad_paciente = request.form.get('parentesco')
-    codigo_postal_paciente = request.form.get('loc-paciente')
-    profesional = request.form.get('cod-post-paciente')
-    domicilio_prestador = request.form.get('profesional')
-    localidad_prestador = request.form.get('domicilio-prestador')
-    medico_cabecera = request.form.get('loc-prestador')
+    titular = request.form.get('titular')
+    parentesco = request.form.get('parentesco')
+    localidad_paciente = request.form.get('loc-paciente')
+    codigo_postal_paciente = request.form.get('cod-post-paciente')
+    profesional = request.form.get('profesional')
+    domicilio_prestador = request.form.get('domicilio-prestador')
+    localidad_prestador = request.form.get('loc-prestador')
+    medico_cabecera = request.form.get('medico-cabecera')
+    # Faltan:
+    # tel-fijo-prestador
+    # cod-prestador
 
     datos_ficha_pami = (lugar,fecha,nro_beneficio,titular,parentesco,localidad_paciente,codigo_postal_paciente,profesional,domicilio_prestador, localidad_prestador,medico_cabecera)
 
@@ -131,10 +135,10 @@ def post_pacientes():
     tratamiento_medico = request.form.get ('trat-med')
     medicacion = request.form.get ('medicacion')
     alergia_droga = request.form.get ('alergias-drogas')
-    diabetes1 = request.form.get ('diabetes')
     cantidad_fuma = request.form.get ('cant-fuma')
-    probl_cardiacos1 = request.form.get ('probl-cardiacos')
+    diabetes1 = request.form.get ('diabetes')
     hipertension = request.form.get ('hta')
+    probl_cardiacos1 = request.form.get ('probl-cardiacos')
     toma_aspirina_anticoagulantes = request.form.get ('aspi-antcuag')
     fue_operado = request.form.get ('operado')
 
@@ -164,16 +168,18 @@ def post_pacientes():
     cantidad_cepillados_diarios = request.form.get ('cant-sepillados')
     momentos_azucar = request.form.get ('azucar')
 
-    historia_clinica = (motivo_consulta,consulta_reciente,dificultad_masticar,dificultad_hablar,movilidad_dentaria,sangrado_encias,cantidad_cepillados_diarios,momentos_azucar)
+    # Se resive la info de la historia clinica odontologica pero no se guarda
+    historia_clinica_odontologica = (motivo_consulta,consulta_reciente,dificultad_masticar,dificultad_hablar,movilidad_dentaria,sangrado_encias,cantidad_cepillados_diarios,momentos_azucar)
 
     #----datos del odontograma----#
 
     estado = request.form.get ('estado-odontograma')
     tratamiento = request.form.get ('tratamiento-odontograma')
 
+    # Se resive la info del odontograma pero no se guarda
     odontograma = (estado,tratamiento)
 
-    res = pacinetes.alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis)
+    res = pacinetes.alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis, datos_ficha_general)
 
     return jsonify({
         "status": res[2],
