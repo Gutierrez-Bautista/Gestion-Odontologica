@@ -10,8 +10,9 @@ def alta_ficha_general(nombre_apellido,datos_ficha_general):
         cursor.execute(query, (nombre_apellido,))
         valid = cursor.fetchall()
         if not valid:
-            cursor.execute('insert into FichaGeneral (nombre_apellido,obra_social,nro_afiliado,hta,diabetes,alergia,probl_renales,probl_cardiacos,plan_tratamiento,observaciones) values(?,?,?,?,?,?,?,?,?,?)',(nombre_apellido,datos_ficha_general)) # creeria que esto da error
+            cursor.execute('insert into FichaGeneral (nombre_apellido,obra_social,nro_afiliado,hta,diabetes,alergia,probl_renales,probl_cardiacos,plan_tratamiento,observaciones) values(?,?,?,?,?,?,?,?,?,?)',(nombre_apellido,*datos_ficha_general)) # creeria que esto da error
             valid = cursor.fetchall()
+            connection.commit()
             return ['paciente cargado con ficha general','dataUpload',200]
         else: 
             return ['paciente ya cargado', 'dataAlreadyUpload', 200]
@@ -40,7 +41,8 @@ def actualizar_ficha_genral(datos_ficha_general,nombre_apellido):
         cursor.execute(query, (nombre_apellido,))
         valid = cursor.fetchall()
         if not valid:
-            cursor.execute('update table FichaGeneral set nombre_apellido = ? ,obra_social = ? ,nro_afiliado = ? ,hta = ? ,diabetes = ? ,alergia,probl_renales = ? ,probl_cardiacos = ? ,plan_tratamiento = ? ,observaciones = ?  where nombre_apellido = ?' , (datos_ficha_general, nombre_apellido))
+            cursor.execute('update table FichaGeneral set nombre_apellido = ? ,obra_social = ? ,nro_afiliado = ? ,hta = ? ,diabetes = ? ,alergia,probl_renales = ? ,probl_cardiacos = ? ,plan_tratamiento = ? ,observaciones = ?  where nombre_apellido = ?' , (*datos_ficha_general, nombre_apellido))
+            connection.commit()
             valid = cursor.fetchall()
             return ['paciente actualizado con ficha general','dataUpload',200]
         else: 
