@@ -93,13 +93,6 @@ def get_pacientes ():
 def post_pacientes():
 
     nombre_apellido = request.form.get('nombre_apellido')
-
-    connection = sqlite3.connect(DB_NAME)
-    cursor = connection.cursor()
-    cursor.execute('select id from pacientes where nombre_apellido = ?',(nombre_apellido))
-    id_paciente = cursor.fetchall()[0][0]  #obtengo el id del paciente en cuestion
-
-
     telefono = request.form.get('telefono')
     email = request.form.get('email')
     edad = request.form.get('edad')
@@ -107,8 +100,6 @@ def post_pacientes():
     domicilio = request.form.get('domicilio')
     fecha_nacimiento = request.form.get('fecha_nacimiento')
     posee_pami = request.form.get('posee_pami')
-
-    print(request.form.to_dict())
 
     #----datos de la ficha de pami----#
 
@@ -122,12 +113,11 @@ def post_pacientes():
     profesional = request.form.get('profesional')
     domicilio_prestador = request.form.get('domicilio-prestador')
     localidad_prestador = request.form.get('loc-prestador')
+    codigo_prestador = request.form.get('cod-prestador')
     medico_cabecera = request.form.get('medico-cabecera')
-    # Faltan:
-    # tel-fijo-prestador
-    # cod-prestador
+    tel_fijo_prestador = request.form.get('tel-fijo-prestador')
 
-    datos_ficha_pami = (lugar,fecha,nro_beneficio,titular,parentesco,localidad_paciente,codigo_postal_paciente,profesional,domicilio_prestador, localidad_prestador,medico_cabecera)
+    datos_ficha_pami = (lugar,fecha,nro_beneficio,titular,parentesco,localidad_paciente,codigo_postal_paciente,profesional,domicilio_prestador, localidad_prestador,codigo_prestador,medico_cabecera,tel_fijo_prestador)
 
     #----datos de la anamnesis----#   
 
@@ -158,7 +148,6 @@ def post_pacientes():
     datos_ficha_general=(obra_social,nro_afiliado,hta,diabetes,alergia,probl_renales,probl_cardiacos,plan_tratamiento,observaciones)
 
     #----historial clinico odontologico 
-
     motivo_consulta = request.form.get ('motivo-consulta')
     consulta_reciente = request.form.get ('consulta-otro-prof')
     dificultad_masticar = request.form.get ('dif-masticar')
@@ -168,7 +157,6 @@ def post_pacientes():
     cantidad_cepillados_diarios = request.form.get ('cant-sepillados')
     momentos_azucar = request.form.get ('azucar')
 
-    # Se resive la info de la historia clinica odontologica pero no se guarda
     historia_clinica_odontologica = (motivo_consulta,consulta_reciente,dificultad_masticar,dificultad_hablar,movilidad_dentaria,sangrado_encias,cantidad_cepillados_diarios,momentos_azucar)
 
     #----datos del odontograma----#
@@ -179,7 +167,7 @@ def post_pacientes():
     # Se resive la info del odontograma pero no se guarda
     odontograma = (estado,tratamiento)
 
-    res = pacinetes.alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis, datos_ficha_general)
+    res = pacinetes.alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis, datos_ficha_general,odontograma,historia_clinica_odontologica)
 
     return jsonify({
         "status": res[2],

@@ -2,12 +2,15 @@ import sqlite3
 import tablas
 import pacientes_fichas_pami
 import pacientes_ficha_general
+import fichas_compartidas
+
 
 DB_NAME = 'app/clinica.db'
 
 
 #alta
-def alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami, anamnesis,datos_ficha_general):
+def alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis, datos_ficha_general,odontograma,historia_clinica_odontologica):
+    print(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami)
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
@@ -16,6 +19,7 @@ def alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimi
         valid = cursor.fetchall()
         if not valid:
             cursor.execute('insert into Pacientes (nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami) values(?,?,?,?,?,?,?,?)',(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami))
+            connection.commit()
             valid = cursor.fetchall()
         else: 
             return ('paciente ya cargado','dataAlreadyUpload',200)
@@ -25,11 +29,12 @@ def alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimi
         cursor.execute('select max(id) from Pacientes')
         id_paciente = cursor.fetchall()[0][0]
         if posee_pami == '1':
-            res = pacientes_fichas_pami.ficha_pami(datos_ficha_pami, id_paciente ,anamnesis)
+            res = pacientes_fichas_pami.ficha_pami(datos_ficha_pami, anamnesis, id_paciente)
         else:
             res = pacientes_ficha_general.alta_ficha_general(nombre_apellido,datos_ficha_general)
-        
-        return res
+        res1 = fichas_compartidas.alta_odontograma(odontograma, id_paciente)
+        res2 = fichas_compartidas.agregar_historia_clinica_odon(historia_clinica_odontologica,id_paciente)
+        return [res, res1, res2]
 
 def actualizar_paciente (id,nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami, anamnesis,datos_ficha_general):
     try:
@@ -46,11 +51,10 @@ def actualizar_paciente (id,nombre_apellido,telefono,email,edad,dni,domicilio,fe
             return ('paciente no existe','pacienteNotExists',200)
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
-    
-#consulta por nombre ==> listo
-#consulta por id ==> listo
-#consulta por pami ==> listo
 
+# consulta por nombre ==> listo
+# consulta por id ==> listo
+# consulta por pami ==> listo
 
 def consul_pacente (id_paciente, nom_paciente, pami_paciente):
     try:
@@ -69,7 +73,7 @@ def consul_pacente (id_paciente, nom_paciente, pami_paciente):
                 else:
                     return ['cliente encontrado', valid[0], 200]
             elif nom_paciente is not None:
-                cursor.execute(query + 'where nombre_apellido =?',(nom_paciente,))
+                cursor.execute(query + 'where nombre_apellido like ?',(nom_paciente+'%',))
                 valid = cursor.fetchall()
                 if not valid:
                     return ['Cliente no encontrado', 'noDataFound', 403]

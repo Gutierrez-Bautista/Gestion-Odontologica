@@ -18,7 +18,7 @@ DB_NAME = 'app/clinica.db'
       # tratamiento-odontograma (texto) --> puede estar vacio  
 """
 
-def agregar_historia_clinica(historia_clinica, id_paciente):
+def agregar_historia_clinica_odon(historia_clinica, id_paciente):
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
@@ -26,7 +26,8 @@ def agregar_historia_clinica(historia_clinica, id_paciente):
         cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
         if not valid:
-            cursor.execute('insert into HistoriaClinicaOdontologica (paciente_id,motivo_consulta,consulta_reciente,dificultad_masticar,dificultad_hablar,movilidad_dentaria,sangrado_encias,cantidad_cepillados_diarios,momentos_azucar) values(?,?,?,?,?,?,?,?)',(id_paciente,historia_clinica))
+            cursor.execute('insert into HistoriaClinicaOdontologica (paciente_id,motivo_consulta,consulta_reciente,dificultad_masticar,dificultad_hablar,movilidad_dentaria,sangrado_encias,cantidad_cepillados_diarios,momentos_azucar) values(?,?,?,?,?,?,?,?,?)',(id_paciente,*historia_clinica))
+            connection.commit()
             valid = cursor.fetchall()
             return ['paciente cargado con historial clinico','dataUpload',200]
         else: 
@@ -35,7 +36,7 @@ def agregar_historia_clinica(historia_clinica, id_paciente):
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
 
-def actualizar_historia_clinica(historia_clinica,id_paciente):
+def actualizar_historia_clinica_odon(historia_clinica,id_paciente):
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
@@ -43,7 +44,8 @@ def actualizar_historia_clinica(historia_clinica,id_paciente):
         cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
         if not valid:
-            cursor.execute('update table HistoriaClinicaOdontologica set motivo_consulta = ?,consulta_reciente = ?,dificultad_masticar = ?,dificultad_hablar = ?,movilidad_dentaria = ?,sangrado_encias = ?,cantidad_cepillados_diarios = ?,momentos_azucar = ? where paciente_id = ?' , (historia_clinica, id_paciente))
+            cursor.execute('update table HistoriaClinicaOdontologica set motivo_consulta = ?,consulta_reciente = ?,dificultad_masticar = ?,dificultad_hablar = ?,movilidad_dentaria = ?,sangrado_encias = ?,cantidad_cepillados_diarios = ?,momentos_azucar = ? where paciente_id = ?' , (*historia_clinica, id_paciente))
+            connection.commit()
             valid = cursor.fetchall()
             return ['paciente actualizado con historia clinica','dataUpload',200]
         else: 
@@ -51,7 +53,7 @@ def actualizar_historia_clinica(historia_clinica,id_paciente):
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
-def consultar_historia_clinica(historia_clinica,id_paciente):
+def consultar_historia_clinica_odon(historia_clinica,id_paciente):
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
@@ -73,7 +75,8 @@ def alta_odontograma(odontograma, id_paciente):
         cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
         if not valid:
-            cursor.execute('insert into odontograma (paciente_id ,estado,tratamiento) values(?,?,?)',(id_paciente,odontograma))
+            cursor.execute('insert into odontograma (paciente_id ,estado,tratamiento) values(?,?,?)',(id_paciente,*odontograma))
+            connection.commit()
             valid = cursor.fetchall()
             return ['paciente cargado con odontograma','dataUpload',200]
         else: 
@@ -104,7 +107,8 @@ def actualizar_odontograma(id_paciente,odontograma):
         cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
         if not valid:
-            cursor.execute('update table odontograma set  where paciente_id = ?' , (odontograma, id_paciente))
+            cursor.execute('update table odontograma set  where paciente_id = ?' , (*odontograma, id_paciente))
+            connection.commit()
             valid = cursor.fetchall()
             return ['paciente actualizado con odontograma','dataUpload',200]
         else: 

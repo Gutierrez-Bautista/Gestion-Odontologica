@@ -78,7 +78,8 @@ async def FichaPAMI(conn):
             domicilio_prestador TEXT,
             localidad_prestador TEXT,
             codigo_prestador TEXT,
-            medico_cabecera TEXT
+            medico_cabecera TEXT,
+            tel_fijo_prestador text
         )''')
 
 # Crear tabla Anamnesis
@@ -127,7 +128,7 @@ async def odontograma(conn):
         CREATE TABLE IF NOT EXISTS Odontograma (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             paciente_id INTEGER,
-            estado TEXT NOT NULL,
+            estado TEXT,
             tratamiento TEXT,
             FOREIGN KEY (paciente_id) REFERENCES Pacientes(id)
         )''')
