@@ -39,7 +39,7 @@ function setTurneroHeaders(mondayDate) {
   document.querySelector('.turnero-semana > span').textContent = Math.round(monday_day_number / 7)
 }
 
-function mostrarTurno(infoTurno, diaSemana) {
+async function mostrarTurno(infoTurno, diaSemana) {
   const div = document.createElement("div");
   div.classList.add("turnos");
 
@@ -222,7 +222,7 @@ addTurnoForm.addEventListener("submit", (evt) => {
 
 const turnoInformation = document.querySelector('.modal-turno-information')
 
-function funcionalidadTurnosClickeables(turnoInfo, turno) {
+async function funcionalidadTurnosClickeables(turnoInfo, turno) {
   if (turno.childNodes.length !== 1) {
     return
   }

@@ -63,25 +63,111 @@
         </div>
 
         <article class="grilla-pacientes">
-          <div class="paciente">
-            <p class="paciente-nombre">Perez Pablo</p>
-            <p class="paciente-telefono">Tel: 1234 567-890</p>
-            <p class="paciente-pami">PAMI: Si</p>
-          </div>
-
-          <div class="paciente">
-            <p class="paciente-nombre">Gutierrez Nicolas</p>
-            <p class="paciente-telefono">Tel: 1234 567-098</p>
-            <p class="paciente-pami">PAMI: No</p>
-          </div>
-          
-          <div class="paciente">
-            <p class="paciente-nombre">Gadban Tomas</p>
-            <p class="paciente-telefono">Tel: <span>1234 756-098</span></p>
-            <p class="paciente-pami">PAMI: <span>No</span></p>
-          </div>
         </article>
       </section>
+
+      
+      <div class="paciente-info-basica">
+        <p></p>
+        <p>ID: <span></span></p>
+        <p>Tel: <span></span></p>
+        <p>email: <span></span></p>
+        <p>edad: <span></span></p>
+        <p>dni: <span></span></p>
+        <p>domicilio: <span></span></p>
+        <p>nacimiento: <span></span></p>
+        <p>pami: <span></span></p>
+        <div class="paciente-btns-container">
+          <button class="paciente-btn" id="paciente-ficha-btn">Ficha</button>
+          <button class="paciente-btn" id="paciente-historia-clin-btn">Historia clinica</button>
+          <button class="paciente-btn" id="paciente-historia-odon-btn">Historial odontologico</button>
+        </div>
+      </div>
+
+      <div class="div-info-paciente" id="paciente-ficha-general">
+        <div class="info">
+          <h3>Juan Perez</h3>
+          <p>DNI: <span></span></p>
+          <p>Obra Social: <span></span></p>
+          <p>N° Afiliado: <span></span></p>
+          <p>Fecha de nacimiento: <span></span></p>
+          <p>Edad: <span></span></p>
+          <p>Domicilio: <span></span></p>
+          <p>Telefono: <span></span></p>
+          <p>HTA: <span></span></p>
+          <p>Diabetes: <span></span></p>
+          <p>Alergias: <span></span></p>
+          <p>Probl. Renales: <span></span></p>
+          <p>Probl. Cardiacos: <span></span></p>
+          <p>Plan de tratamiento: <span></span></p>
+          <p>Observaciones: <span></span></p>
+
+          <!-- Planilla de cara de los dientes* -->
+          <h4>Odontograma</h4>
+          <img src="img/Odontograma.png" alt="">
+          <p>Estado bucal del paciente: <span></span></p>
+          <p>Tratamiento: <span></span></p>
+        </div>
+      </div>
+      <div class="div-info-paciente" id="paciente-ficha-pami">
+        <div class="info">
+          <h3>Juan Perez</h3>
+          
+          <p>Lugar: <span></span></p>
+          <p>Fecha: <span></span></p>
+          <p>N° Beneficio: <span></span></p>
+          <p>Titular: <span></span></p>
+          <p>Parentesco: <span></span></p>
+          <p>DNI: <span></span></p>
+          <p>Fecha de nacimiento: <span></span></p>
+          <p>Edad: <span></span></p>
+          <p>Domicilio: <span></span></p>
+          <p>Localidad Paciente: <span></span></p>
+          <p>Codigo Postal Paciente: <span></span></p>
+          <p>Telefono Paciente: <span></span></p>
+          <p>Profesional: <span></span></p>
+          <p>Domicilio Prestador: <span></span></p>
+          <p>Localidad Prestador: <span></span></p>
+          <p>Teléfono Fijo Prestador: <span></span></p>
+          <p>Código Prestador: <span></span></p>
+          <p>Médico de cabecera: <span></span></p>
+          <h4>Anamnesis</h4>
+          <p>Sufre alguna enfermedad: <span></span></p>
+          <p>Tratamiento Médico: <span></span></p>
+          <p>Medicación: <span></span></p>
+          <p>Alérgia a drogas: <span></span></p>
+          <p>Diabetes: <span></span></p>
+          <p>Cantidad que fuma al dia: <span></span></p>
+          <p>HTA: <span></span></p>
+          <p>Aspirina o Anticuagulantes: <span></span></p>
+          <p>Operado: <span></span></p>
+          <!-- Planilla de cara de los dientes* -->
+          <h4>Odontograma</h4>
+          <img src="img/Odontograma.png" alt="">
+          <p>Estado bucal del paciente: <span></span></p>
+          <p>Tratamiento: <span></span></p>
+        </div>
+      </div>
+      <div class="div-info-paciente" id="paciente-historial-odontologico">
+        <div class="info">
+          <h3>Juan Perez</h3>
+          <p>Motivo de Consulta: <span></span></p>
+          <p>Consulta a otro Profesional: <span></span></p>
+          <p>Dificultad para masticar: <span></span></p>
+          <p>Dificultad para hablas: <span></span></p>
+          <p>Movilidad dentaria: <span></span></p>
+          <p>Sangrado de encías: <span></span></p>
+          <p>Cantidad de cepillados diarios: <span></span></p>
+          <p>Momentos de azúcar: <span></span></p>
+        </div>
+      </div>
+      <div class="div-info-paciente show-info" id="paciente-historia-clinica">
+        <div class="info">
+          <h3>Juan Perez</h3>
+          <!-- Tenes que hacer esto boludon -->
+        </div>
+      </div>
+
       <dialog class="modal-crear-paciente">
         <article class="modal-content">
           <div class="modal-header">

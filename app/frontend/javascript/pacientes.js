@@ -1,32 +1,22 @@
 
 // =====================================================
 // nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami
-// const d = new FormData()
-// d.append('nombre_apellido', 'carlos;juarez')
-// d.append('telefono', '123456789')
-// d.append('email', 'carlos.ju@gmail.com')
-// d.append('edad', 25)
-// d.append('dni', '32481294')
-// d.append('domicilio', 'calle fantastica Nro 7')
-// d.append('fecha_nacimiento', '09/06/1999')
-// d.append('posee_pami', 1)
-// const d = new FormData()
-// d.append('nombre_apellido', 'carlos;juarez')
-// d.append('telefono', '123456789')
-// d.append('email', 'carlos.ju@gmail.com')
-// d.append('edad', 25)
-// d.append('dni', '32481294')
-// d.append('domicilio', 'calle fantastica Nro 7')
-// d.append('fecha_nacimiento', '09/06/1999')
-// d.append('posee_pami', 1)
+const d = new FormData()
+d.append('nombre_apellido', 'carlos;juarez')
+d.append('telefono', '123456789')
+d.append('email', 'carlos.ju@gmail.com')
+d.append('edad', 25)
+d.append('dni', '32481294')
+d.append('domicilio', 'calle fantastica Nro 7')
+d.append('fecha_nacimiento', '09/06/1999')
+d.append('posee_pami', 1)
 
-
-// fetch('http://localhost:8000/api/pacientes/alta', {
-//   method: 'POST',
-//   body: d
-// })
-//   .then(res => res.json())
-//   .then(response => {console.log(response)})
+fetch('http://localhost:8000/api/pacientes/alta', {
+  method: 'POST',
+  body: d
+})
+  .then(res => res.json())
+  .then(response => {console.log(response)})
 
 // =============================
 // =============================
@@ -219,3 +209,95 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
       console.log(response)
     })
 })
+
+let focusedPacienteId = null
+
+function modalInfoClientes(apellido, nombre, id, tel, email, edad, dni, domicilio, fech_nac, pami, div) {
+  const datos = [0, id, tel, email, edad, dni, domicilio, fech_nac, pami]
+  const hijos = div.children
+  hijos.item(0).textContent = apellido + ' ' + nombre
+  for (let i = 1; i < datos.length; i++) {
+    hijos.item(i).children.item(0).textContent = datos[i]
+  }
+}
+
+async function crearBtnPaciente(infoPaciente) {
+  const nomApe = infoPaciente[1].split(';')
+  const tel = infoPaciente[2]
+  const pami = infoPaciente[8] === '0' ? 'No' : 'Si'
+  
+  console.log(nomApe, tel, pami)
+  
+  const container = document.createElement('div')
+  container.classList.add('paciente')
+
+  const pacienteNom = document.createElement('p')
+  pacienteNom.classList.add('paciente-nombre')
+  pacienteNom.textContent = `${nomApe[1]} ${nomApe[0]}`
+
+  const pacienteTel = document.createElement('p')
+  pacienteTel.classList.add('paciente-telefono')
+  pacienteTel.innerHTML = `Tel: <span>${tel}</span>`
+
+  const pacientePami = document.createElement('p')
+  pacientePami.classList.add('paciente-pami')
+  pacientePami.innerHTML = `PAMI: <span>${pami}</span>`
+  
+  container.appendChild(pacienteNom)
+  container.appendChild(pacienteTel)
+  container.appendChild(pacientePami)
+  
+  divInfoBasica = document.querySelector('.paciente-info-basica')
+  container.addEventListener('click', () => {
+    // [id, nombre_apellido, telefono, email, edad, dni, domicilio, fecha_nacimiento, posee_pami]
+
+    if (divInfoBasica.parentElement === container) {
+      return;
+    }
+    container.classList.add('paciente-clicked')
+    setTimeout(() => {
+      container.classList.remove('paciente-clicked')
+    }, 200);
+
+    modalInfoClientes(nomApe[1], nomApe[0], infoPaciente[0], infoPaciente[2], infoPaciente[3], infoPaciente[4], infoPaciente[5], infoPaciente[6], infoPaciente[7], infoPaciente[8], divInfoBasica)
+    divInfoBasica.style = 'display: block'
+
+    container.appendChild(divInfoBasica)
+    focusedPacienteId = infoPaciente[0]
+  })
+  
+  container.addEventListener('mouseleave', () => {
+    if (divInfoBasica.parentElement !== null) {
+      divInfoBasica.parentElement.removeChild(divInfoBasica)
+      focusedPacienteId = null
+    }
+  })
+
+  document.querySelector('.grilla-pacientes').appendChild(container)
+}
+
+const btnFicha = document.getElementById('paciente-ficha-btn')
+const btnHistoriaClinica = document.getElementById('paciente-historia-clin-btn')
+const btnHistoriaOdontologica = document.getElementById('paciente-historia-odon-btn')
+
+const divFichaGeneral = document.getElementById('paciente-ficha-general')
+const divFichaPami = document.getElementById('paciente-ficha-pami')
+const divHistoriaClinica = document.getElementById('paciente-historial-odontologico')
+const divHistoriaOdontologica = document.getElementById('paciente-historia-clinica')
+
+const infoFichaGeneral = document.querySelector('.paciente-ficha-general .info')
+const infoFichaPami = document.querySelector('.paciente-ficha-pami .info')
+const infoHistoriaClinica = document.querySelector('.paciente-historial-odontologico .info')
+const infoHistoriaOdontologica = document.querySelector('.paciente-historia-clinica .info')
+
+// async function buscarInfoPaciente() {
+//   fetch('')
+// }
+
+btnHistoriaClinica.addEventListener('click', () => {})
+
+// ================
+
+crearBtnPaciente([1, 'pablo;perez', '1234-56-7890', 'perez.pablo@gmail.com', 20, 24012841, 'calle Juarez Nro 12', '04/02/2004', '1'])
+crearBtnPaciente([2, 'carlo;ramirez', '3142-56-9708', 'carlos.ramirez@gmail.com', 18, 27192103, 'calle Juarez Nro 20', '10/07/2006', '0'])
+crearBtnPaciente([3, 'pedro;rodriguez', '4132-65-0879', 'rodriguez.pedro@gmail.com', 23, 24012841, 'calle Juarez Nro 7', '15/10/2001', '0'])

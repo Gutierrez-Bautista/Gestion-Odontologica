@@ -69,88 +69,6 @@
   border: 1px solid var(--focus-color);
 }
 
-/* DATOS DE LOS PACIENTES */
-/* .info-pacientes {
-  margin: 1rem 1rem 0 1rem;
-  border-collapse: collapse;
-  border-top: 1px solid #000;
-  border-bottom: 1px solid #000;
-}
-
-.info-pacientes thead {
-  text-transform: uppercase;
-  font-weight: bold;
-}
-
-.info-pacientes td {
-  margin: 0;
-  border: 1px solid #000;
-  border-bottom: none;
-  text-align: center;
-
-  padding: 0.5rem 0;
-}
-
-.mostrar-mas-info-cliente {
-  background-color: transparent;
-  border: none;
-  border-radius: none;
-  text-decoration: underline #36d;
-  color: #36d;
-}
-
-.mostrar-mas-info-cliente:hover {
-  cursor: pointer;
-}
-
-.mostrar-mas-info-cliente:active {
-  color: #249;
-} */
-
-/* GRILLA DE PACIENTES */
-.grilla-pacientes {
-  width: 100vw;
-  padding: .5rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 20vw));
-  justify-content: center;
-  gap: .5rem;
-}
-
-.paciente {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  width: 100%;
-  max-width: 300px;
-  padding: .4rem;
-  border: 1px solid #000;
-  border-radius: 1rem;
-
-  font-weight: bold;
-
-  transition: all .2s ease;
-
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.05);
-    box-shadow: 0 0 .4rem 4px var(--primary-color);
-  }
-
-  &:active {
-    transform: scale(.95);
-  }
-
-  & p:first-child {
-    margin-bottom: 1rem;
-  }
-
-  & span {
-    font-weight: normal;
-  }
-}
-
 /* AGREGAR PACIENTE MODAL */
 .modal-crear-paciente {
   height: 100vh;
@@ -295,4 +213,171 @@ textarea {
 
 .succes {
   color: rgb(24, 97, 29);
+}
+
+/* GRILLA DE PACIENTES */
+.grilla-pacientes {
+  width: 100vw;
+  padding: .5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 20vw));
+  justify-content: center;
+  gap: .5rem;
+}
+
+.paciente {
+  position: relative;
+  z-index: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+  max-width: 300px;
+  padding: .4rem;
+  border: 1px solid #000;
+  border-radius: 1rem;
+
+  font-weight: bold;
+
+  transition: all .2s ease;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    box-shadow: 0 0 .4rem 4px var(--primary-color);
+  }
+
+  &.paciente-clicked {
+    transform: scale(.98)
+  }
+
+  & p:first-child {
+    font-size: 1.35rem;
+    margin-bottom: 1rem;
+    text-transform: capitalize;
+  }
+
+  & span {
+    font-weight: normal;
+  }
+}
+
+/* PACIENTE INFO BASICA */
+.paciente-info-basica {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  bottom: 10%;
+
+  width: 100%;
+  background-color: var(--background-color);
+  padding: 1rem;
+  border: 1px solid #000;
+  border-radius: 1.2rem;
+  cursor: auto;
+
+  & > span {
+    position: absolute;
+    z-index: 20;
+    top: .8rem;
+    right: .8rem;
+    color: #d55;
+    font-size: 1.2rem;
+
+    & i {
+      transition: all .5s ease;
+    }
+
+    &:hover i{
+      cursor: pointer;
+      transform: rotate(360deg);
+      color: #822;
+    }
+  }
+}
+
+.paciente-btns-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+
+  height: 4rem;
+  padding: 0;
+  background-color: var(--background-color);
+  border: 1px solid #000;
+  border-radius: .7rem;
+  overflow: hidden;
+
+  & .paciente-btn:last-child {
+    grid-column: 1 / 3;
+    border-top: 1px solid #000;
+  }
+
+  & .paciente-btn:first-child {
+    border-right: 1px solid #000;
+  }
+}
+
+.paciente-btn {
+  font-size: .8rem;
+  border: none;
+  /* width: 6rem; */
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--primary-color);
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+@media (min-width: 1360px) {
+  .paciente-info-basica {
+    right: 0;
+  }
+}
+
+/* DIVS INFO DE PACIENTES */
+.div-info-paciente {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  display: none;
+  width: 100vw;
+  height: 100vh;
+  background-color: #68b6;
+}
+
+.show-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.div-info-paciente .info {
+  padding: 1rem;
+  background-color: var(--background-color);
+  border-radius: 1.2rem;
+  max-height: 80vh;
+  overflow: scroll;
+
+  & h3, h4 {
+    font-size: 1.6rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  & p {
+    margin-bottom: .6rem;
+    font-weight: bold;
+  }
+
+  & span {
+    font-weight: normal;
+  }
 }
