@@ -91,7 +91,6 @@ def get_pacientes ():
 
 @app.post('/api/pacientes/alta')
 def post_pacientes():
-
     nombre_apellido = request.form.get('nombre_apellido')
     telefono = request.form.get('telefono')
     email = request.form.get('email')
@@ -140,8 +139,8 @@ def post_pacientes():
     hta = request.form.get ('hta')
     diabetes = request.form.get ('diabetes')
     alergia = request.form.get ('alergias')
-    probl_renales = request.form.get ('prob-renales')
-    probl_cardiacos = request.form.get ('prob-cardiacos')
+    probl_renales = request.form.get ('probl-renales')
+    probl_cardiacos = request.form.get ('probl-cardiacos')
     plan_tratamiento = request.form.get ('plan-tratamiento')
     observaciones = request.form.get ('observaciones')
 
@@ -154,10 +153,11 @@ def post_pacientes():
     dificultad_hablar = request.form.get ('dif-hablar')
     movilidad_dentaria = request.form.get ('mov-dental')
     sangrado_encias = request.form.get ('sang-encias')
-    cantidad_cepillados_diarios = request.form.get ('cant-sepillados')
+    cantidad_cepillados_diarios = request.form.get ('cant-cepillados')
+    descripcion = request.form.get('descripcion')
     momentos_azucar = request.form.get ('azucar')
 
-    historia_clinica_odontologica = (motivo_consulta,consulta_reciente,dificultad_masticar,dificultad_hablar,movilidad_dentaria,sangrado_encias,cantidad_cepillados_diarios,momentos_azucar)
+    historia_clinica_odontologica = (motivo_consulta,consulta_reciente,dificultad_masticar,dificultad_hablar,movilidad_dentaria,sangrado_encias,cantidad_cepillados_diarios,momentos_azucar, descripcion)
 
     #----datos del odontograma----#
 

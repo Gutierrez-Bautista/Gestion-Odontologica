@@ -2,15 +2,15 @@ import sqlite3
 
 DB_NAME = 'app/clinica.db'
 
-def alta_ficha_general(nombre_apellido,datos_ficha_general):
+def alta_ficha_general(datos_ficha_general, id_paciente):
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
-        query = "SELECT * FROM FichaGeneral where nombre_apellido = ?"
-        cursor.execute(query, (nombre_apellido,))
+        query = "SELECT * FROM FichaGeneral where id_paciente = ?"
+        cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
         if not valid:
-            cursor.execute('insert into FichaGeneral (nombre_apellido,obra_social,nro_afiliado,hta,diabetes,alergia,probl_renales,probl_cardiacos,plan_tratamiento,observaciones) values(?,?,?,?,?,?,?,?,?,?)',(nombre_apellido,*datos_ficha_general)) # creeria que esto da error
+            cursor.execute('insert into FichaGeneral (id_paciente,obra_social,nro_afiliado,hta,diabetes,alergia,probl_renales,probl_cardiacos,plan_tratamiento,observaciones) values(?,?,?,?,?,?,?,?,?,?)',(id_paciente,*datos_ficha_general))
             valid = cursor.fetchall()
             connection.commit()
             return ['paciente cargado con ficha general','dataUpload',200]
@@ -19,15 +19,16 @@ def alta_ficha_general(nombre_apellido,datos_ficha_general):
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
-def consulta_ficha_general(nombre_apellido):
+def consulta_ficha_general(id_paciente):
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
-        query = "SELECT * FROM FichaGeneral where nombre_apellido = ?"
-        cursor.execute(query, (nombre_apellido,))
+        query = "SELECT * FROM FichaGeneral where id_paciente = ?"
+        cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
-        if not valid:
-            return ['ficha general del paciente encontrada', valid, 200]
+
+        if valid:
+            return ['ficha general del paciente encontrada', valid[0], 200]
         else: 
             return ('paciente no existe','pacienteNotExists',200)
     except sqlite3.Error as e:

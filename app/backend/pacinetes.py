@@ -31,7 +31,7 @@ def alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimi
         if posee_pami == '1':
             res = pacientes_fichas_pami.ficha_pami(datos_ficha_pami, anamnesis, id_paciente)
         else:
-            res = pacientes_ficha_general.alta_ficha_general(nombre_apellido,datos_ficha_general)
+            res = pacientes_ficha_general.alta_ficha_general(datos_ficha_general, id_paciente)
         res1 = fichas_compartidas.alta_odontograma(odontograma, id_paciente)
         res2 = fichas_compartidas.agregar_historia_clinica_odon(historia_clinica_odontologica,id_paciente)
         return [res, res1, res2]
@@ -71,7 +71,30 @@ def consul_pacente (id_paciente, nom_paciente, pami_paciente):
                 if not valid:
                     return ['Cliente no encontrado', 'noDataFound', 403]
                 else:
-                    return ['cliente encontrado', valid[0], 200]
+                    basic = valid[0]
+                    if basic[8] == 0:
+                        ficha = pacientes_ficha_general.consulta_ficha_general(id_paciente)
+                    else:
+                        ficha = pacientes_fichas_pami.consulta_ficha_pami(id_paciente)
+                    
+                    historial_odontologico = fichas_compartidas.consultar_historia_clinica_odon(id_paciente)
+                    odontograma = fichas_compartidas.consulta_odontograma(id_paciente)
+
+                    if ficha[1] == 'pacienteNotExists':
+                        return ['error garrafal en ficha, debe rehacerse la BBDD', 'criticalError', 500]
+                    if historial_odontologico[1] == 'pacienteNotExists':
+                        return ['error garrafal en historial odontologico, debe rehacerse la BBDD', 'criticalError', 500]
+                    if odontograma[1] == 'pacienteNotExists':
+                        return ['error garrafal en odontograma, debe rehacerse la BBDD', 'criticalError', 500]
+                    ficha = ficha[1]
+                    historial_odontologico = historial_odontologico[1]
+                    odontograma = odontograma[1]
+
+                    return ['cliente encontrado',
+                            {"basic": valid[0],
+                            "historial_odontologico": historial_odontologico,
+                            "odontograma": odontograma,
+                            "historia_clinica": "notDeveloped"}, 200]
             elif nom_paciente is not None:
                 cursor.execute(query + 'where nombre_apellido like ?',(nom_paciente+'%',))
                 valid = cursor.fetchall()

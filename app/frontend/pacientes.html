@@ -66,7 +66,6 @@
         </article>
       </section>
 
-      
       <div class="paciente-info-basica">
         <p></p>
         <p>ID: <span></span></p>
@@ -164,7 +163,24 @@
       <div class="div-info-paciente" id="paciente-historia-clinica">
         <div class="info">
           <h3>Juan Perez</h3>
-          <!-- Tenes que hacer esto boludon -->
+          <table class="lista-historia-clinica">
+            <tr>
+              <td>Fecha</td>
+              <td>Descripcion</td>
+            </tr>
+            <tr>
+              <td>10/09/2024</td>
+              <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit autem, aperiam hic dignissimos blanditiis vitae! Alias, ut. Mollitia, consectetur quidem dicta facilis ab amet!</td>
+            </tr>
+            <tr>
+              <td>10/09/2024</td>
+              <td>Lorem ipsum dolor</td>
+            </tr>
+            <tr>
+              <td>10/09/2024</td>
+              <td>Lorem ipsum dolor sit amet </td>
+            </tr>
+          </table>
         </div>
       </div>
 
@@ -206,7 +222,7 @@
 
             <label>
               Nacimento: 
-              <input type="date" name="birthday" required/>
+              <input type="date" name="fecha_nacimiento" required/>
             </label>
 
             <label>
@@ -463,7 +479,7 @@
 
             <label>
               Movilidad dentaria:
-              <select name="mov-dentaria">
+              <select name="mov-dental">
                 <option value="1">Si</option>
                 <option value="0">No</option>
               </select>
@@ -486,6 +502,11 @@
               Momentos de azucar:
               <input type="text" name="azucar" required>
             </label>
+
+            <label for="hist_odon_desc">
+              Descripcion:
+            </label>
+            <textarea name="descripcion" id="hist_odon_desc"></textarea>
 
             <button>Siguiente</button>
           </form>

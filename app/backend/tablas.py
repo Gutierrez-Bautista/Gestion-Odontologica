@@ -49,7 +49,7 @@ async def FichaGeneral(conn):
         await cursor.execute('''
         CREATE TABLE IF NOT EXISTS FichaGeneral (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nombre_apellido TEXT NOT NULL,
+            id_paciente INTEGER NOT NULL,
             obra_social TEXT,
             nro_afiliado TEXT,
             hta BOOLEAN,
@@ -67,6 +67,7 @@ async def FichaPAMI(conn):
         await cursor.execute('''
         CREATE TABLE IF NOT EXISTS FichaPAMI (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id_paciente INTEGER NOT NULL,
             lugar TEXT,
             fecha DATE,
             nro_beneficio TEXT,
