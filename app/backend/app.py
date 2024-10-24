@@ -34,8 +34,9 @@ def upload_turno ():
     hour = request.form.get("hour")
     minute = request.form.get('minute')
     motivo = request.form.get('motivo')
+    pami = request.form.get('pami')
 
-    res = turnos.agregar_info(name, date, hour + ':' + minute, motivo.lower())
+    res = turnos.agregar_info(name, date, hour + ':' + minute, motivo.lower(), pami)
 
     return jsonify({
         "status": res[2],

@@ -194,6 +194,8 @@ addTurnoForm.addEventListener("submit", (evt) => {
   data.delete('date')
   data.append('date', aux)
 
+  console.log(data)
+
   // Agregar el turno a la base de datos
   fetch('http://localhost:8000/api/turnos/upload', {
     method: 'POST',

@@ -14,7 +14,6 @@ botonAgregarPaciente.addEventListener('click', () => {
 function cerrarModalAgregar() {
   modalAgragarPaciente.removeAttribute('open')
   const forms = document.getElementsByClassName('modal-body')
-  // console.log(forms)
 
   for (f of forms) {
     if (f.id === 'cliente-basic-form') {
@@ -78,11 +77,6 @@ clienteBasicForm.addEventListener('submit', (evt) => {
     return
   }
 
-  const fechaFormateada = darFormatoFecha(basicFormData.get('fecha_nacimiento'))
-
-  basicFormData.delete('fecha_nacimiento')
-  basicFormData.append('fecha_nacimiento', fechaFormateada)
-
   basicFormData.append('nombre_apellido', fname + ';' + lname)
   basicFormData.delete('firstname')
   basicFormData.delete('lastname')
@@ -96,14 +90,16 @@ clienteBasicForm.addEventListener('submit', (evt) => {
       }
 
       // calcular edad del paciente
-      const birthDate = new Date(basicFormData.get('birthday'))
+      // let aux = .split('/')
+      const birthDate = new Date(basicFormData.get('fecha_nacimiento'))
       const currentDate = new Date()
       const a = new Date(currentDate - birthDate).getFullYear() - 1970
+
       basicFormData.append('edad', a)
 
-      const aux = basicFormData.get('birthday')
-      basicFormData.delete('birthday')
-      basicFormData.append('birthday', aux)
+      const aux = darFormatoFecha(basicFormData.get('fecha_nacimiento'))
+      basicFormData.delete('fecha_nacimiento')
+      basicFormData.append('fecha_nacimiento', aux)
 
       if (basicFormData.get('posee_pami') === '1') {
         cambiarFormulario(clienteBasicForm, clienteFichaPamiForm)
@@ -126,7 +122,11 @@ clienteFichaPamiForm.addEventListener('submit', (evt) => {
   evt.preventDefault()
   
   fichaPamiData = new FormData(clienteFichaPamiForm)
-  
+
+  const fecha = fichaPamiData.get('fecha')
+  const fechaFormateada = darFormatoFecha(fecha)
+  fichaPamiData.delete('fecha')
+  fichaPamiData.append('fecha', fechaFormateada)
   
   cambiarFormulario(clienteFichaPamiForm, clienteAnamnesisForm)
 })
@@ -194,11 +194,12 @@ let focusedPacienteId = null
 let focusedPacientePami = null
 
 function modalInfoClientes(apellido, nombre, id, tel, email, edad, dni, domicilio, fech_nac, pami, div) {
-  const datos = [0, id, tel, email, edad, dni, domicilio, fech_nac, pami]
+  const datos = [0, -1, tel, email, edad, dni, domicilio, fech_nac, pami]
   const hijos = div.children
   hijos.item(0).textContent = apellido + ' ' + nombre
-  for (let i = 1; i < datos.length; i++) {
-    hijos.item(i).children.item(0).textContent = datos[i]
+  hijos.item(1).textContent = id
+  for (let i = 2; i < datos.length; i++) {
+    hijos.item(i).children.item(0).textContent = datos[i] === null ? 'No cargado' : (datos[i] === 1 || datos[i] === 0 ? (datos[i] === 1 ? 'Si' : 'No') : datos[i])
   }
   focusedPacienteId = id
   focusedPacientePami = pami
@@ -206,8 +207,8 @@ function modalInfoClientes(apellido, nombre, id, tel, email, edad, dni, domicili
 
 async function crearBtnPaciente(infoPaciente) {
   const nomApe = infoPaciente[1].split(';')
-  const tel = infoPaciente[2]
-  const pami = infoPaciente[8] === '0' ? 'No' : 'Si'
+  const tel = infoPaciente[2] ?? 'No cargado'
+  const pami = infoPaciente[8] === 0 ? 'No' : 'Si'
   
   const container = document.createElement('div')
   container.classList.add('paciente')
@@ -244,6 +245,7 @@ async function crearBtnPaciente(infoPaciente) {
     divInfoBasica.style = 'display: block'
 
     container.appendChild(divInfoBasica)
+    console.log('infoPaciente: ', infoPaciente)
     focusedPacienteId = infoPaciente[0]
     focusedPacientePami = infoPaciente[8]
   })
@@ -267,53 +269,210 @@ const divHistoriaClinica = document.getElementById('paciente-historia-clinica')
 const divHistoriaOdontologica = document.getElementById('paciente-historial-odontologico')
 const allInfoDivs = document.querySelectorAll('.div-info-paciente')
 
-const infoFichaGeneral = document.querySelector('.paciente-ficha-general .info')
-const infoFichaPami = document.querySelector('.paciente-ficha-pami .info')
-const infoHistoriaClinica = document.querySelector('.paciente-historial-odontologico .info')
-const infoHistoriaOdontologica = document.querySelector('.paciente-historia-clinica .info')
+const infoFichaGeneral = document.querySelector('#paciente-ficha-general .info')
+const infoFichaPami = document.querySelector('#paciente-ficha-pami .info')
+const infoHistoriaOdontologica = document.querySelector('#paciente-historial-odontologico .info')
+const infoHistoriaClinica = document.querySelector('#paciente-historia-clinica .info')
+const allCloseBtns = document.querySelectorAll('.div-info-paciente i')
 
-function buscarInfoPaciente() {
-  fetch(`http://localhost:8000/api/pacientes/get?id_paciente=${focusedPacienteId}`)
+allCloseBtns.forEach(e => {
+  e.addEventListener('click', () => {
+    e.parentElement.parentElement.classList.remove('show-info')
+  })
+})
+
+async function buscarInfoPaciente() {
+  let a
+  await fetch(`http://localhost:8000/api/pacientes/get?id_paciente=${focusedPacienteId}`)
     .then(res => res.json())
-    .then(data => {console.log(data)})
+    .then(data => {a = data})
     .catch(err => {
       console.log(err)
       alert('Error al conectar con el servidor, por favor reiniciar aplicacion')
     })
+  return a
 }
 
-btnHistoriaClinica.addEventListener('click', () => {
+// No esta implementado en el backend
+btnHistoriaClinica.addEventListener('click', async () => {
   for (d of allInfoDivs) {
     d.classList.remove('show-info')
   }
   divHistoriaClinica.classList.add('show-info')
-  buscarInfoPaciente()
+  data = await buscarInfoPaciente()
+  console.log(data)
 })
 
-btnFicha.addEventListener('click', () => {
+// Hecho
+btnFicha.addEventListener('click', async () => {
+  let data = await buscarInfoPaciente()
+
+  if (data['status'] !== 200) {
+    return;
+  }
+
+  data = data['name']
+  
   for (d of allInfoDivs) {
     d.classList.remove('show-info')
   }
-  if (focusedPacientePami === '1') {
+
+  let infoFicha
+
+  if (focusedPacientePami === 1) {
     divFichaPami.classList.add('show-info')
+    infoFicha = infoFichaPami
   } else {
     divFichaGeneral.classList.add('show-info')
+    infoFicha = infoFichaGeneral
   }
 
-  buscarInfoPaciente()
+  console.log(infoFicha)
+
+  const basic = data['basic']
+  basic.shift()
+  const ficha = data['ficha']
+  ficha.splice(0, 2)
+  const odontograma = data['odontograma']
+  odontograma.splice(0, 2)
+  let anamnesis = data['anamnesis']
+
+  let dataInOneArray
+  if (focusedPacientePami === 1) {
+    anamnesis.splice(0, 2)
+    dataInOneArray = [...basic, ...ficha, ...anamnesis, ...odontograma]
+  } else {
+    dataInOneArray = [...basic, ...ficha, ...odontograma]
+  }
+
+  console.log(`dataInOneArray: `, dataInOneArray)
+
+  dataIndex = 0
+  for (let i = 0; i < infoFicha.children.length; i++) {
+    child = infoFicha.children[i]
+    if (child.tagName === 'P') {
+      const val = dataInOneArray[dataIndex] === null ? 'No cargado' : (dataInOneArray[dataIndex] === 0 || dataInOneArray[dataIndex] === 1 ? (dataInOneArray[dataIndex] === 0 ? 'No' : 'Si') : dataInOneArray[dataIndex])
+      child.children[0].textContent = val
+      dataIndex++
+    } else if (child.tagName === 'H3') {
+      const nomApe = dataInOneArray[0].split(';')
+      child.textContent = `${nomApe[1]} ${nomApe[0]}`
+      dataIndex++
+    }
+  }
 })
 
-btnHistoriaOdontologica.addEventListener('click', () => {
+// Hecho
+btnHistoriaOdontologica.addEventListener('click', async () => {
   for (d of allInfoDivs) {
     d.classList.remove('show-info')
   }
   divHistoriaOdontologica.classList.add('show-info')
 
-  buscarInfoPaciente()
+  let data = await buscarInfoPaciente()
+  console.log(data)
+
+  if (data['status'] !== 200) {
+    return
+  }
+
+  nomApe = data['name']['basic'][1].split(';')
+
+  data = data['name']['historial_odontologico']
+  console.log(data)
+
+  infoHistoriaOdontologica.children[1].textContent = `${nomApe[1]} ${nomApe[0]}`
+
+  for (let i = 2; i < infoHistoriaOdontologica.children.length; i++) {
+    span = infoHistoriaOdontologica.children[i].children[0]
+    if (i === 8) {
+      span.textContent = data[i]
+    } else {
+      span.textContent = data[i] === null ? 'No cargado' : (data[i] === 1 || data[i] === 0 ? (data[i] === 1 ? 'Si' : 'No') : data[i])
+    }
+  }
 })
 
 // ================
 
-crearBtnPaciente([1, 'pablo;perez', '1234-56-7890', 'perez.pablo@gmail.com', 20, 24012841, 'calle Juarez Nro 12', '04/02/2004', '1'])
-crearBtnPaciente([2, 'carlo;ramirez', '3142-56-9708', 'carlos.ramirez@gmail.com', 18, 27192103, 'calle Juarez Nro 20', '10/07/2006', '0'])
-crearBtnPaciente([3, 'pedro;rodriguez', '4132-65-0879', 'rodriguez.pedro@gmail.com', 23, 24012841, 'calle Juarez Nro 7', '15/10/2001', '0'])
+// crearBtnPaciente([1, 'pablo;perez', '1234-56-7890', 'perez.pablo@gmail.com', 20, 24012841, 'calle Juarez Nro 12', '04/02/2004', '1'])
+// crearBtnPaciente([2, 'carlo;ramirez', '3142-56-9708', 'carlos.ramirez@gmail.com', 18, 27192103, 'calle Juarez Nro 20', '10/07/2006', '0'])
+// crearBtnPaciente([3, 'pedro;rodriguez', '4132-65-0879', 'rodriguez.pedro@gmail.com', 23, 24012841, 'calle Juarez Nro 7', '15/10/2001', '0'])
+
+function getWeekFromADate(year, month, day) {
+  const today = new Date(year, month - 1, day);
+  const week = [];
+
+  for (let i = 1; 1 <= 7; i++) {
+    let first = today.getDate() - today.getDay() + i;
+    const day = new Date(today.setDate(first))
+      .toISOString()
+      .slice(0, 10)
+      .split("-");
+    const formatedDay = `${day[2]}/${day[1]}/${day[0]}`;
+    week.push(formatedDay);
+    if (i === 5) break;
+  }
+  // monday_day_number = week[0].split('/')[0]
+  // monday_date = week[0]
+  // friday_date = week[4]
+  return [week[0], week[4]];
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const today = new Date()
+  currentWeek = getWeekFromADate(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    today.getDate()
+  );
+
+  const fetchBodyData = new FormData()
+  fetchBodyData.append("fecha_turno1", currentWeek[0])
+  fetchBodyData.append("fecha_turno2", currentWeek[1])
+  
+  fetch("http://localhost:8000/api/turnos/get", {
+    method: "POST",
+    body: fetchBodyData,
+  })
+    .then((res) => res.json())
+    .then(response => {
+      if (response['status'] !== 200) {
+        alert('No se cargaron turno para esta semana por lo que no se muestran pacientes')
+        return
+      }
+
+      const data = response['message']
+      for (t of data) {
+        fetch(`http://localhost:8000/api/pacientes/get?id_paciente=${t[1]}`)
+          .then(res => res.json())
+          .then(response => {
+            crearBtnPaciente(response['name']['basic'])
+          })
+      }
+    })
+})
+
+const formBuscar = document.getElementById('form-buscar-paciente')
+
+formBuscar.addEventListener('submit', evt => {
+  evt.preventDefault()
+
+  const reqData = new FormData(formBuscar)
+  console.log(reqData)
+
+  fetch(`http://localhost:8000/api/pacientes/get?nom_paciente=${reqData.get('busqueda-paciente')}`)
+    .then(res => res.json())
+    .then(response => {
+      if (response['status'] !== 200) {
+        alert(`No hay pacientes cuyo nombre o apellido comience con: "${reqData.get('busqueda-paciente')}"`)
+        return
+      }
+      document.querySelector('.grilla-pacientes').innerHTML = ''
+      const data = response['name']
+
+      data.forEach(element => {
+        crearBtnPaciente(element)
+      });
+    })
+})

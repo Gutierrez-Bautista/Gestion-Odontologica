@@ -1,5 +1,6 @@
 import sqlite3
 import tablas
+import pacinetes
 
 DB_NAME = 'app/clinica.db'
 
@@ -37,7 +38,7 @@ def solicitar_info(fecha_turno1, fecha_turno2):
 def solicitar_info_turno_id (turno_id):
     return (f'Aun no se ha creado la funcionalidad', 'inDevelopment', 404)
 
-def agregar_info(nombre, fecha, hora, motivo):
+def agregar_info(nombre, fecha, hora, motivo, pami):
     """
     Agrega un nuevo turno a la base de datos.
     """
@@ -51,8 +52,9 @@ def agregar_info(nombre, fecha, hora, motivo):
             cursor.execute(q, (nombre,))
             res = cursor.fetchall()
             if len(res) == 0:
-                cursor.execute("insert into Pacientes (nombre_apellido) values (?)", (nombre,))
-                connection.commit()
+                pacinetes.alta_paciente(nombre, None,None,None,None,None,None,pami,[None, None, None, None, None, None, None, None, None, None, None, None, None], [None, None, None, None, None,None, None,None, None,None],[None,None,None,None,None,None,None,None,None],[None,None], [None,None,None,None,None,None,None,None,None])
+                # cursor.execute("insert into Pacientes (nombre_apellido) values (?)", (nombre,))
+                # connection.commit()
                 cursor.execute("select max(id) from Pacientes")
                 paciente_id = cursor.fetchall()[0][0]
             else:

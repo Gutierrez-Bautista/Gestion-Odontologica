@@ -74,9 +74,11 @@ def consul_pacente (id_paciente, nom_paciente, pami_paciente):
                     basic = valid[0]
                     if basic[8] == 0:
                         ficha = pacientes_ficha_general.consulta_ficha_general(id_paciente)
+                        
                     else:
                         ficha = pacientes_fichas_pami.consulta_ficha_pami(id_paciente)
-                    
+                        
+
                     historial_odontologico = fichas_compartidas.consultar_historia_clinica_odon(id_paciente)
                     odontograma = fichas_compartidas.consulta_odontograma(id_paciente)
 
@@ -86,17 +88,26 @@ def consul_pacente (id_paciente, nom_paciente, pami_paciente):
                         return ['error garrafal en historial odontologico, debe rehacerse la BBDD', 'criticalError', 500]
                     if odontograma[1] == 'pacienteNotExists':
                         return ['error garrafal en odontograma, debe rehacerse la BBDD', 'criticalError', 500]
+                    
                     ficha = ficha[1]
+
                     historial_odontologico = historial_odontologico[1]
                     odontograma = odontograma[1]
 
+                    if basic[8] == 0: anamnesis = "noAplica"
+                    else: anamnesis = pacientes_fichas_pami.consulta_anamnesis(ficha[0])[1]
+
+
                     return ['cliente encontrado',
-                            {"basic": valid[0],
+                            {"basic": basic,
+                            "ficha": ficha,
+                            "anamnesis": anamnesis,
                             "historial_odontologico": historial_odontologico,
                             "odontograma": odontograma,
                             "historia_clinica": "notDeveloped"}, 200]
             elif nom_paciente is not None:
-                cursor.execute(query + 'where nombre_apellido like ?',(nom_paciente+'%',))
+                cursor.execute(query + "where nombre_apellido like ? ||'%' or nombre_apellido like '%;' || ? || '%'",(nom_paciente, nom_paciente))
+
                 valid = cursor.fetchall()
                 if not valid:
                     return ['Cliente no encontrado', 'noDataFound', 403]
@@ -113,7 +124,6 @@ def consul_pacente (id_paciente, nom_paciente, pami_paciente):
                 return ['argumento no pasado', 'argNotPassed', 412]
         except sqlite3.Error as e:
                 return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
-        
 
 def eliminar(id_paciente):
     pass
