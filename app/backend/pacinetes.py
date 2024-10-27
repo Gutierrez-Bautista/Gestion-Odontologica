@@ -10,7 +10,6 @@ DB_NAME = 'app/clinica.db'
 
 #alta
 def alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis, datos_ficha_general,odontograma,historia_clinica_odontologica):
-    print(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami)
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
@@ -44,8 +43,43 @@ def actualizar_paciente (id,nombre_apellido,telefono,email,edad,dni,domicilio,fe
         cursor.execute(query, (id,))
         valid = cursor.fetchall()
         if valid:
-            cursor.execute('update table Pacientes set nombre_apellido = ? ,telefono = ? ,email = ? ,edad = ? ,dni = ? ,domicilio = ? ,fecha_nacimiento = ? ,posee_pami = ? where nombre_apellido = ?', (nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami,nombre_apellido))
+            cursor.execute('update table Pacientes set nombre_apellido = ? ,telefono = ? ,email = ? ,edad = ? ,dni = ? ,domicilio = ? ,fecha_nacimiento = ? ,posee_pami = ? where id = ?', (nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami,id))
             valid = cursor.fetchall()
+            connection.commit()
+
+            if posee_pami == True:
+                cursor.execute('select * from FichaPami where id_paciente = ?', id)
+                valid = cursor.fetchall()
+                cursor.execute('select * from FichaGeneral where id_paciente = ?', id)
+                valid1 = cursor.fetchall()
+
+                if valid1:
+
+                    cursor.execute('delete FichaGeneral where id_paciente = ?',id)
+
+                if valid:
+                    pacientes_fichas_pami.actualizar_ficha_pami (datos_ficha_pami, id ,anamnesis)
+                
+                else:   
+                    pacientes_fichas_pami.ficha_pami (datos_ficha_pami , anamnesis, id)
+            else:
+                cursor.execute('select * from FichaPami where id_paciente = ?', id)
+                valid = cursor.fetchall()
+                cursor.execute('select * from FichaGeneral where id_paciente = ?', id)
+                valid1 = cursor.fetchall()
+
+                if valid:
+
+                    cursor.execute('delete FichaPami where id_paciente = ?',id)
+                    cursor.execute('delete Anamnesis where ficha_pami_id = ?',id)
+
+                if valid1:
+                   res = pacientes_ficha_general.actualizar_ficha_genral (datos_ficha_general,nombre_apellido)
+                
+                else:
+                   res = pacientes_ficha_general.alta_ficha_general (datos_ficha_general, id)
+            connection.commit()
+
             return ['paciente actualizado','dataUpload',200]
         else: 
             return ('paciente no existe','pacienteNotExists',200)

@@ -100,7 +100,7 @@ async def Anamnesis(conn):
             hipertension BOOLEAN,
             toma_aspirina_anticoagulantes BOOLEAN,
             fue_operado BOOLEAN,
-            FOREIGN KEY (ficha_pami_id) REFERENCES FichaPAMI(id)
+            FOREIGN KEY (ficha_pami_id) REFERENCES FichaPAMI(id_paciente)
         )''')
 
 # Crear tabla HistoriaClinica
