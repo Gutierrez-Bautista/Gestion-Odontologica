@@ -114,3 +114,17 @@ def actualizar_odontograma(id_paciente,odontograma):
             return ('paciente no existe','pacienteNotExists',200)
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
+    
+
+
+def alta_historia_clinica(datos_historia_clinica):
+    pass
+
+def actualizar_historia_clinica(datos_historia_clinica, id_historia_clinica):
+    pass
+
+def consulta_historia_clinica(id_paciente):
+    pass
+
+def eliminar_historia_clinica(id_historia_clinica):
+    pass

@@ -35,8 +35,9 @@ def solicitar_info(fecha_turno1, fecha_turno2):
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
-def solicitar_info_turno_id (turno_id):
-    return (f'Aun no se ha creado la funcionalidad', 'inDevelopment', 404)
+def solicitar_info_turno_id_paciente (id_paciente):
+    #turnos del paciente por id del paciente desde la fecha actual
+    pass
 
 def agregar_info(nombre, fecha, hora, motivo, pami):
     """
@@ -75,6 +76,7 @@ def agregar_info(nombre, fecha, hora, motivo, pami):
 def eliminar_turno_por_fecha(fecha_turno, t_horario):
     """
     Elimina un turno según la fecha proporcionada.
+    
     """
     try:
         connection = sqlite3.connect(DB_NAME)
