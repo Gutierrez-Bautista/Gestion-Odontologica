@@ -112,6 +112,17 @@
 
   font-size: 1.3rem;
   text-transform: capitalize;
+
+  & .title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & span {
+      font-size: 1rem;
+      text-transform: none;
+    }
+  }
 }
 
 .close-modal {
@@ -385,17 +396,32 @@ textarea {
     text-transform: none;
   }
 
-  i {
+  .bx-x {
     position: absolute;
     top: .6rem;
     right: .6rem;
     font-size: 1.4rem;
     color: #d55;
     transition: all .3s ease;
-
+    
     &:hover {
       cursor: pointer;
       transform: rotate(360deg);
+    }
+  }
+
+  .paciente-modif-btn {
+    position: absolute;
+    top: .6rem;
+    left: .6rem;
+    color: #081;
+    font-size: 1rem;
+    transition: all .3s ease;
+
+    &:hover {
+      cursor: pointer;
+      color: #041;
+      transform: scale(1.1);
     }
   }
 }

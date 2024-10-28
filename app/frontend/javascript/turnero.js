@@ -32,6 +32,13 @@ function setTurneroHeaders(mondayDate) {
 
   let dia = monday_day_number
   document.querySelectorAll('.turnero-dia-number').forEach(element => {
+    if (monthNumber === 1 && dia > 28) {
+      dia = 1
+    } else if ([0, 2, 4, 6, 7, 9, 11].includes(monthNumber)) {
+      if (dia > 31) {dia = 1}
+    } else {
+      if (dia > 30) {dia = 1}
+    }
     element.textContent = dia
     dia++
   })
@@ -96,7 +103,10 @@ function actualizarTurnero(fechaLunes, fechaViernes) {
     turnero.removeChild(t);
   });
 
+  // No devuelve los turnos de la semana, creo que es porque el lunes y el viernes forman parte de distinto mes
   const fetchBodyData = new FormData();
+  console.log(fetchBodyData)
+  console.log(fechaLunes, fechaViernes)
   fetchBodyData.append("fecha_turno1", fechaLunes);
   fetchBodyData.append("fecha_turno2", fechaViernes);
   
@@ -106,6 +116,7 @@ function actualizarTurnero(fechaLunes, fechaViernes) {
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data)
       const frag = document.createDocumentFragment();
 
       if (data['name'] === 'dataFound') {

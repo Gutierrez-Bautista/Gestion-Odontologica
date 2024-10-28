@@ -85,6 +85,7 @@
 
       <div class="div-info-paciente" id="paciente-ficha-general">
         <div class="info">
+          <span class="paciente-modif-btn" id="modif-ficha-general"><i class='bx bx-pencil'></i>editar</span>
           <i class="bx bx-x"></i>
           <h3>Juan Perez</h3>
           <p>Telefono: <span></span></p>
@@ -115,6 +116,7 @@
       </div>
       <div class="div-info-paciente" id="paciente-ficha-pami">
         <div class="info">
+          <span class="paciente-modif-btn" id="modif-ficha-pami"><i class='bx bx-pencil'></i>editar</span>
           <i class="bx bx-x"></i>
 
           <h3>Juan Perez</h3>
@@ -162,6 +164,7 @@
       </div>
       <div class="div-info-paciente" id="paciente-historial-odontologico">
         <div class="info">
+          <span class="paciente-modif-btn" id="modif-hist-odon"><i class='bx bx-pencil'></i>editar</span>
           <i class="bx bx-x"></i>
           <h3>Juan Perez</h3>
           <p>Motivo de Consulta: <span></span></p>
@@ -177,6 +180,7 @@
       </div>
       <div class="div-info-paciente" id="paciente-historia-clinica">
         <div class="info">
+          <span class="paciente-modif-btn" id="modif-hist-clinica"><i class='bx bx-pencil'></i>editar</span>
           <i class="bx bx-x"></i>
           <h3>Juan Perez</h3>
           <table class="lista-historia-clinica">
@@ -203,7 +207,9 @@
       <dialog class="modal-crear-paciente">
         <article class="modal-content">
           <div class="modal-header">
-            <h3>Agreagr paciente</h3>
+            <div class="title-container">
+              <h3>Agreagr paciente</h3>
+            </div>
             <button class="close-modal">
               <i class="bx bx-x"></i>
             </button>
@@ -375,11 +381,7 @@
               <input type="text" name="loc-prestador" required>
             </label>
 
-            <label>
-              Tel. fijo prestador:
-              <input type="text" name="tel-fijo-prestador" required>
-            </label>
-
+            
             <label>
               Codigo prestador:
               <input type="text" name="cod-prestador" required>
@@ -390,6 +392,10 @@
               <input type="text" name="medico-cabecera" id="" required>
             </label>
             
+            <label>
+              Tel. fijo prestador:
+              <input type="text" name="tel-fijo-prestador" required>
+            </label>
             <button>Siguiente</button>
           </form>
 
@@ -419,7 +425,7 @@
 
             <label>
               Cantidad de cigarrillos por dia:
-              <input type="number" name="cant-fuma" placeholder="" min="0" pattern="[0-9]{1,}">
+              <input type="number" name="cant-fuma" placeholder="" min="0" pattern="[0-9]{1,}" required>
             </label>
 
             <label>
@@ -467,7 +473,7 @@
 
           <form action="" class="modal-body" id="cliente-historial-odontologico-form">
             <label for="mot-con">Motivo de consulta:</label>
-            <textarea name="motivo-consulta" id="mot-con" required></textarea>
+            <textarea name="motivo-consulta" id="mot-con"></textarea>
 
             <label>
               Consultó otro profesional:
@@ -533,7 +539,7 @@
             <label for="estado">
               Estado bucal del paciente:
             </label>
-            <textarea name="estado-odontograma" id="estado" required></textarea>
+            <textarea name="estado-odontograma" id="estado"></textarea>
 
             <label for="tratamiento">Tratamiento:</label>
             <textarea name="tratamiento-odontograma" id="tratamiento"></textarea>
