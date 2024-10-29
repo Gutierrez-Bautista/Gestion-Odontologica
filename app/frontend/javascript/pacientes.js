@@ -38,9 +38,10 @@ function cerrarModalAgregar() {
         inp.setAttribute('required', '')
       }
     })
+    modalMode = 'alta'
+    clienteOdontogramaForm.children[5].textContent = 'Cargar'
   }
 
-  modalMode = 'alta'
   succesText.textContent = ''
   errorText.textContent = ''
 
@@ -131,10 +132,13 @@ clienteBasicForm.addEventListener('submit', (evt) => {
 clienteFichaGeneralForm.addEventListener('submit', (evt) => {
   evt.preventDefault()
   
-  fichaGeneralData = new FormData(clienteFichaGeneralForm);
+  fichaGeneralData = new FormData(clienteFichaGeneralForm)
 
-  
-  cambiarFormulario(clienteFichaGeneralForm, clienteHistorialOdontologicoForm)
+  if (modalMode === 'alta') {
+    cambiarFormulario(clienteFichaGeneralForm, clienteHistorialOdontologicoForm)
+  } else {
+    cambiarFormulario(clienteFichaGeneralForm, clienteOdontogramaForm)
+  }
 })
 
 clienteFichaPamiForm.addEventListener('submit', (evt) => {
@@ -155,8 +159,11 @@ clienteAnamnesisForm.addEventListener('submit', (evt) => {
   
   anamnesisData = new FormData(clienteAnamnesisForm)
   
-  
-  cambiarFormulario(clienteAnamnesisForm, clienteHistorialOdontologicoForm)
+  if (modalMode === 'alta') {
+    cambiarFormulario(clienteAnamnesisForm, clienteHistorialOdontologicoForm)
+  } else {
+    cambiarFormulario(clienteAnamnesisForm, clienteOdontogramaForm)
+  }
 })
 
 clienteHistorialOdontologicoForm.addEventListener('submit', (evt) => {
@@ -174,8 +181,6 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
 
   reqData = new FormData()
 
-  console.log(focusedPacienteInfo)
-
   if (modalMode !== 'alta') {
     for (const d of basicFormData.entries()) {
       if (d[0] === 'nombre_apellido') {
@@ -185,7 +190,7 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
       } else if (d[1] === 'NaN') {
         basicFormData.set('edad', focusedPacienteInfo['basic'][3])
         basicFormData.set('fecha_nacimiento', focusedPacienteInfo['basic'][6])
-      } else if (d[1] === ''){
+      } else if (d[1] === '' || d[1] === 'null' || d[1] === null){
         basicFormData.set(d[0], focusedPacienteInfo['basic'][[0, 'telefono', 'email', 0, 'dni', 'domicilio'].indexOf(d[0])])
       }
     }
@@ -193,7 +198,7 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
     if (basicFormData.get('posee_pami') === '0' && focusedPacientePami === 0) {
       let i = 0
       for (const d of fichaGeneralData.entries()) {
-        if (d[1] === '') {
+        if (d[1] === '' || d[1] === 'null' || d[1] === null) {
           fichaGeneralData.set(d[0], focusedPacienteInfo['ficha'][i])
         }
         i++
@@ -202,7 +207,7 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
       let i = 0
       for (const d of fichaPamiData.entries()) {
         if (i === 1) {i++}
-        if (d[1] === '' && d[0] !== 'fecha') {
+        if ((d[1] === '' || d[1] === 'null' || d[1] === null) && d[0] !== 'fecha') {
           fichaPamiData.set(d[0], focusedPacienteInfo['ficha'][i])
         } else if (d[1] === '') {
           fichaPamiData.set('fecha', focusedPacienteInfo['ficha'][1])
@@ -211,7 +216,7 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
       }
       i = 0
       for (const d of anamnesisData.entries()) {
-        if (d[1] === '') {
+        if (d[1] === '' || d[1] === 'null' || d[1] === null) {
           anamnesisData.set(d[0], focusedPacienteInfo['anamnesis'][i])
         }
         i++
@@ -220,7 +225,7 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
 
     let i = 0
     for (const d of historialOdontologicoData.entries()) {
-      if (d[1] === '') {
+      if (d[1] === '' || d[1] === 'null' || d[1] === null) {
         historialOdontologicoData.set(d[0], focusedPacienteInfo['histOdon'][i])
       }
       i++
@@ -228,7 +233,7 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
     
     i = 0
     for (const d of odontogramaData.entries()) {
-      if (d[1] === '') {
+      if (d[1] === '' || d[1] === 'null' || d[1] === null) {
         odontogramaData.set(d[0], focusedPacienteInfo['odontograma'][i])
       }
       i++
@@ -259,15 +264,15 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
     reqData.append(d[0], d[1])
   }
 
-  if (modalMode !== 'alta') {
-    /*
-    Punto en el que estoy:
-      # Se cambia la configuracion del modal de alta paciente para que funcione tambien para la modificacion de Ficha. Falta hacerlo en historial odontologico.
-      # No esta implementado que al ir a modificar ficha solo te pida cargar los datos basicos, de ficha y del odontograma; lo mismo con el historial odontologico.
-    */
-    // HACER PETICION AL BACKEND PARA ACTUALIZAR LOS DATOS
-    return
-  }
+  reqData.append('modo', modalMode)
+  reqData.append('paciente-id', focusedPacienteId)
+
+  /*
+  Punto en el que estoy:
+    # Se cambia la configuracion del modal de alta paciente para que funcione tambien para la modificacion de Ficha. Falta hacerlo en historial odontologico.
+    # No esta implementado que al ir a modificar ficha solo te pida cargar los datos basicos, de ficha y del odontograma; lo mismo con el historial odontologico.
+  */
+  // HACER PETICION AL BACKEND PARA ACTUALIZAR LOS DATOS
 
   fetch('http://localhost:8000/api/pacientes/alta', {
     method: 'POST',
@@ -275,19 +280,21 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
   })
     .then(res => res.json())
     .then(response => {
+      console.log(response)
       if (response['message'][2] === 200) {
-        succesText.textContent = 'Paciente cargado'
+        succesText.textContent = modalMode === 'alta' ? 'Paciente cargado' : 'Datos actualizados'
         setTimeout(cerrarModalAgregar, 700)
       } else {
-        errorText.textContent = 'No se pudo cargar el paciente'
+        errorText.textContent = modalMode === 'alta' ? 'No se pudo cargar el paciente' : 'No se pudo actualizar el paciente'
       }
     })
+    .catch(err => {console.log(err)})
 })
 
 // MUESTRA DE DATOS PACIENTES
 let focusedPacienteId = null
 let focusedPacientePami = null
-let focusedPacienteInfo = null
+let focusedPacienteInfo = {}
 
 function modalInfoClientes(apellido, nombre, id, tel, email, edad, dni, domicilio, fech_nac, pami, div) {
   const datos = [0, -1, tel, email, edad, dni, domicilio, fech_nac, pami]
@@ -303,7 +310,7 @@ function modalInfoClientes(apellido, nombre, id, tel, email, edad, dni, domicili
 
 async function crearBtnPaciente(infoPaciente) {
   const nomApe = infoPaciente[1].split(';')
-  const tel = infoPaciente[2] ?? 'No cargado'
+  const tel = (infoPaciente[2] === null || infoPaciente[2] === 'null' || infoPaciente[2] === 'undefined') ? 'No cargado' : infoPaciente[2]
   const pami = infoPaciente[8] === 0 ? 'No' : 'Si'
   
   const container = document.createElement('div')
@@ -331,12 +338,12 @@ async function crearBtnPaciente(infoPaciente) {
     // [id, nombre_apellido, telefono, email, edad, dni, domicilio, fecha_nacimiento, posee_pami]
 
     if (divInfoBasica.parentElement === container) {
-      return;
+      return
     }
     container.classList.add('paciente-clicked')
     setTimeout(() => {
       container.classList.remove('paciente-clicked')
-    }, 200);
+    }, 200)
 
     modalInfoClientes(nomApe[1], nomApe[0], infoPaciente[0], infoPaciente[2], infoPaciente[3], infoPaciente[4], infoPaciente[5], infoPaciente[6], infoPaciente[7], infoPaciente[8], divInfoBasica)
     divInfoBasica.style = 'display: block'
@@ -379,6 +386,14 @@ allCloseBtns.forEach(e => {
     e.parentElement.parentElement.classList.remove('show-info')
   })
 })
+// insert into FichaGeneral values (4, 3, '', '', 0, 1, 'alergias', 0, 0, 'plan trat.', 'obs')
+
+// update pacientes set posee_pami = 0 where id = 3
+// delete from Anamnesis where ficha_pami_id = 2
+
+/*
+Actual mente el error se encuentra cuando queremos pasar un paciente que no tiene PAMI a los que si, al intentearlo lo borra de FichaGeneral pero no lo agrega en FichaPAMI ni Anamnesis, el error lo lanza en la linea 18 de pacientes_ficha_pami.py y es "database is locked"
+*/
 
 async function buscarInfoPaciente() {
   let a
@@ -431,7 +446,7 @@ btnFicha.addEventListener('click', async () => {
   let data = await buscarInfoPaciente()
 
   if (data['status'] !== 200) {
-    return;
+    return
   }
 
   data = data['name']
@@ -458,6 +473,8 @@ btnFicha.addEventListener('click', async () => {
   odontograma.splice(0, 2)
   let anamnesis = [...data['anamnesis']]
 
+  console.log('basic =', basic)
+
   let dataInOneArray
   if (focusedPacientePami === 1) {
     anamnesis.splice(0, 2)
@@ -470,7 +487,12 @@ btnFicha.addEventListener('click', async () => {
   for (let i = 0; i < infoFicha.children.length; i++) {
     child = infoFicha.children[i]
     if (child.tagName === 'P') {
-      const val = dataInOneArray[dataIndex] === null ? 'No cargado' : (dataInOneArray[dataIndex] === 0 || dataInOneArray[dataIndex] === 1 ? (dataInOneArray[dataIndex] === 0 ? 'No' : 'Si') : dataInOneArray[dataIndex])
+      console.log('dataInOneArray[dataIndex] =', dataInOneArray[dataIndex], '\ntypeof dataInOneArray[dataIndex] =', typeof dataInOneArray[dataIndex])
+      
+      const val = (dataInOneArray[dataIndex] === null || dataInOneArray[dataIndex] === 'null' || dataInOneArray[dataIndex] === 'undefined') ? 'No cargado' : (dataInOneArray[dataIndex] === 0 || dataInOneArray[dataIndex] === 1 ? (dataInOneArray[dataIndex] === 0 ? 'No' : 'Si') : dataInOneArray[dataIndex])
+      
+      console.log(child, val, typeof val)
+      
       child.children[0].textContent = val
       dataIndex++
     } else if (child.tagName === 'H3') {
@@ -513,23 +535,23 @@ btnHistoriaOdontologica.addEventListener('click', async () => {
 
 // CONSULTA POR NOMBRE
 function getWeekFromADate(year, month, day) {
-  const today = new Date(year, month - 1, day);
-  const week = [];
+  const today = new Date(year, month - 1, day)
+  const week = []
 
   for (let i = 1; 1 <= 7; i++) {
-    let first = today.getDate() - today.getDay() + i;
+    let first = today.getDate() - today.getDay() + i
     const day = new Date(today.setDate(first))
       .toISOString()
       .slice(0, 10)
-      .split("-");
-    const formatedDay = `${day[2]}/${day[1]}/${day[0]}`;
-    week.push(formatedDay);
-    if (i === 5) break;
+      .split("-")
+    const formatedDay = `${day[2]}/${day[1]}/${day[0]}`
+    week.push(formatedDay)
+    if (i === 5) break
   }
   // monday_day_number = week[0].split('/')[0]
   // monday_date = week[0]
   // friday_date = week[4]
-  return [week[0], week[4]];
+  return [week[0], week[4]]
 }
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -538,7 +560,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     today.getFullYear(),
     today.getMonth() + 1,
     today.getDate()
-  );
+  )
 
   const fetchBodyData = new FormData()
   fetchBodyData.append("fecha_turno1", currentWeek[0])
@@ -585,7 +607,7 @@ formBuscar.addEventListener('submit', evt => {
 
       data.forEach(element => {
         crearBtnPaciente(element)
-      });
+      })
     })
 })
 
@@ -607,6 +629,7 @@ function fichaModify() {
 
   modalAgragarPaciente.children[0].children[0].children[0].innerHTML = '<h3>Modificar Pacientes</h3><span>(Dejar en blanco lo que no se quiera modificar)</span>'
 
+  clienteOdontogramaForm.children[5].textContent = 'Modificar'
   modalAgragarPaciente.setAttribute('open', '')
 }
 

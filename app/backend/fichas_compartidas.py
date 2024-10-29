@@ -44,7 +44,7 @@ def actualizar_historia_clinica_odon(historia_clinica,id_paciente):
         cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
         if not valid:
-            cursor.execute('update table HistoriaClinicaOdontologica set motivo_consulta = ?,consulta_reciente = ?,dificultad_masticar = ?,dificultad_hablar = ?,movilidad_dentaria = ?,sangrado_encias = ?,cantidad_cepillados_diarios = ?,momentos_azucar = ?, descripcion = ? where paciente_id = ?' , (*historia_clinica, id_paciente))
+            cursor.execute('update HistoriaClinicaOdontologica set motivo_consulta = ?,consulta_reciente = ?,dificultad_masticar = ?,dificultad_hablar = ?,movilidad_dentaria = ?,sangrado_encias = ?,cantidad_cepillados_diarios = ?,momentos_azucar = ?, descripcion = ? where paciente_id = ?' , (*historia_clinica, id_paciente))
             connection.commit()
             valid = cursor.fetchall()
             return ['paciente actualizado con historia clinica','dataUpload',200]
@@ -105,12 +105,11 @@ def actualizar_odontograma(id_paciente,odontograma):
         query = "SELECT * FROM odontograma where paciente_id = ?"
         cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
-        if not valid:
-            cursor.execute('update table odontograma set  where paciente_id = ?' , (*odontograma, id_paciente))
+        if valid:
+            cursor.execute('update odontograma set estado = ?, tratamiento = ? where paciente_id = ?' , (*odontograma, id_paciente))
             connection.commit()
-            valid = cursor.fetchall()
             return ['paciente actualizado con odontograma','dataUpload',200]
-        else: 
+        else:
             return ('paciente no existe','pacienteNotExists',200)
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)

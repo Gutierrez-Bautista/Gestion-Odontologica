@@ -389,6 +389,10 @@ textarea {
   & p {
     margin-bottom: .6rem;
     font-weight: bold;
+
+    max-width: 80%;
+    max-height: 5.5rem;
+    overflow-y: scroll;
   }
 
   & span {

@@ -17,6 +17,7 @@ def alta_ficha_general(datos_ficha_general, id_paciente):
         else: 
             return ['paciente ya cargado', 'dataAlreadyUpload', 200]
     except sqlite3.Error as e:
+        print('error en alta_ficha_general')
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
 def consulta_ficha_general(id_paciente):
@@ -34,19 +35,23 @@ def consulta_ficha_general(id_paciente):
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
-def actualizar_ficha_genral(datos_ficha_general,nombre_apellido):
+def actualizar_ficha_genral(datos_ficha_general, id_paciente):
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
-        query = "SELECT * FROM FichaPAMI where nombre_apellido = ?"
-        cursor.execute(query, (nombre_apellido,))
+        query = "SELECT * FROM FichaGeneral where id_paciente = ?"
+        cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
-        if not valid:
-            cursor.execute('update table FichaGeneral set nombre_apellido = ? ,obra_social = ? ,nro_afiliado = ? ,hta = ? ,diabetes = ? ,alergia,probl_renales = ? ,probl_cardiacos = ? ,plan_tratamiento = ? ,observaciones = ?  where nombre_apellido = ?' , (*datos_ficha_general, nombre_apellido))
+        print('actualizar_ficha_general linea 45. id_paciente =', id_paciente)
+        print('actualizar_ficha_general linea 45. valid =', valid)
+        print('actualizar_ficha_general linea 45. datos_ficha_general =', datos_ficha_general)
+        if valid:
+            cursor.execute('update FichaGeneral set obra_social = ?, nro_afiliado = ?, hta = ?, diabetes = ?, alergia = ?,probl_renales = ?, probl_cardiacos = ?, plan_tratamiento = ?, observaciones = ? where id_paciente = ?', (*datos_ficha_general, id_paciente))
             connection.commit()
             valid = cursor.fetchall()
             return ['paciente actualizado con ficha general','dataUpload',200]
         else: 
             return ('paciente no existe','pacienteNotExists',200)
     except sqlite3.Error as e:
+        print('error en actualizar_ficha_general:', e)
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)

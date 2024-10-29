@@ -168,7 +168,24 @@ def post_pacientes():
     # Se resive la info del odontograma pero no se guarda
     odontograma = (estado,tratamiento)
 
-    res = pacinetes.alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis, datos_ficha_general,odontograma,historia_clinica_odontologica)
+    #----que hacer ("alta", "modificacion-ficha", "modificacion-historial-odontologico"----#
+    modo = request.form.get('modo')
+
+    # ---- id del paciente en caso de modificacion ----#
+    id_paciente = request.form.get('paciente-id')
+
+
+    print('modo:', modo)
+    if modo == 'alta':
+        print('Alta de pacientes')
+        res = pacinetes.alta_paciente(nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis, datos_ficha_general,odontograma,historia_clinica_odontologica)
+    elif modo == 'modificacion-ficha':
+        print('Modificacion de ficha de pacientes')
+        # id,nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami, anamnesis,datos_ficha_general
+        res = pacinetes.actualizar_paciente(id_paciente, nombre_apellido,telefono,email,edad,dni,domicilio,fecha_nacimiento,posee_pami, datos_ficha_pami,anamnesis, datos_ficha_general,odontograma)
+    else:
+        res = ['El modo pasado no es valido', 'invalidMode', 400]
+    print(res)
 
     return jsonify({
         "status": res[2],
