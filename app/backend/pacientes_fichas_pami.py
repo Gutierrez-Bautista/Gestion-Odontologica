@@ -46,6 +46,7 @@ def actualizar_ficha_pami (datos_ficha_pami, id_paciente, anamnesis):
         print('actualizar_ficha_pami linea 46. datos_ficha_pami =', datos_ficha_pami)
         if valid:
             cursor.execute('update FichaPAMI set lugar = ?, fecha = ?, nro_beneficio = ?, titular = ?, parentesco = ?, localidad_paciente = ?, codigo_postal_paciente = ?, profesional = ?, domicilio_prestador = ?,  localidad_prestador = ?, codigo_prestador = ?, medico_cabecera = ?, tel_fijo_prestador = ? where id_paciente = ?' , (*datos_ficha_pami, id_paciente))
+            connection.commit()
             cursor.execute('update Anamnesis set enfermedad = ?, tratamiento_medico = ?, medicacion = ?, alergia_droga = ?, diabetes = ?, cantidad_fuma =? ,probl_cardiacos = ?, hipertension = ?, toma_aspirina_anticoagulantes = ?, fue_operado = ? where id = ?',(*anamnesis, valid[0][0]))
             connection.commit()
             valid = cursor.fetchall()
