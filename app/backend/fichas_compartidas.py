@@ -35,16 +35,16 @@ def agregar_historia_clinica_odon(historia_clinica, id_paciente):
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
-
 def actualizar_historia_clinica_odon(historia_clinica,id_paciente):
+    print(historia_clinica, '\n', id_paciente)
     try:
         connection = sqlite3.connect(DB_NAME)
         cursor = connection.cursor()
         query = "SELECT * FROM HistoriaClinicaOdontologica where paciente_id = ?"
         cursor.execute(query, (id_paciente,))
         valid = cursor.fetchall()
-        if not valid:
-            cursor.execute('update HistoriaClinicaOdontologica set motivo_consulta = ?,consulta_reciente = ?,dificultad_masticar = ?,dificultad_hablar = ?,movilidad_dentaria = ?,sangrado_encias = ?,cantidad_cepillados_diarios = ?,momentos_azucar = ?, descripcion = ? where paciente_id = ?' , (*historia_clinica, id_paciente))
+        if valid:
+            cursor.execute('update HistoriaClinicaOdontologica set motivo_consulta = ?, consulta_reciente = ?,dificultad_masticar = ?, dificultad_hablar = ?, movilidad_dentaria = ?,sangrado_encias = ?,cantidad_cepillados_diarios = ?,momentos_azucar = ?, descripcion = ? where paciente_id = ?' , (*historia_clinica, id_paciente))
             connection.commit()
             valid = cursor.fetchall()
             return ['paciente actualizado con historia clinica','dataUpload',200]

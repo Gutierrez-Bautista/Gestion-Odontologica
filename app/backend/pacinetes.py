@@ -59,14 +59,13 @@ def actualizar_paciente (id,nombre_apellido,telefono,email,edad,dni,domicilio,fe
                 print('pacientes linea 59. "valid1"', valid1)
                 print('pacientes linea 60. "if valid1"', True if valid1 else False)
 
-                if valid1:
-                    cursor.execute('delete from FichaGeneral where id_paciente = ?',id)
-
                 if valid:
                     res = pacientes_fichas_pami.actualizar_ficha_pami (datos_ficha_pami, id ,anamnesis)
-                
                 else:   
                     res = pacientes_fichas_pami.ficha_pami (datos_ficha_pami , anamnesis, id)
+
+                if valid1:
+                    cursor.execute('delete from FichaGeneral where id_paciente = ?',id)
             else:
                 print('if posee_pami == "1" = False')
                 cursor.execute('select * from FichaPAMI where id_paciente = ?', id)
@@ -78,15 +77,14 @@ def actualizar_paciente (id,nombre_apellido,telefono,email,edad,dni,domicilio,fe
                 print('pacientes linea 79. "valid1"', valid1)
                 print('pacientes linea 80. "if valid1"', True if valid1 else False)
 
+                if valid1:
+                    res = pacientes_ficha_general.actualizar_ficha_genral (datos_ficha_general, id)
+                else:
+                    res = pacientes_ficha_general.alta_ficha_general (datos_ficha_general, id)
+
                 if valid:
                     cursor.execute('delete from FichaPAMI where id_paciente = ?',id)
                     cursor.execute('delete from Anamnesis where ficha_pami_id = ?',id)
-
-                if valid1:
-                    res = pacientes_ficha_general.actualizar_ficha_genral (datos_ficha_general, id)
-                
-                else:
-                    res = pacientes_ficha_general.alta_ficha_general (datos_ficha_general, id)
             connection.commit()
             print('res =', res)
 
@@ -174,4 +172,28 @@ def consul_pacente (id_paciente, nom_paciente, pami_paciente):
                 return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
 def eliminar(id_paciente):
-    pass
+    try:
+        connection = sqlite3.connect(DB_NAME)
+        cursor = connection.cursor()
+    except sqlite3.Error as e:
+        return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
+    finally:
+        try:
+            query = "SELECT posee_pami FROM Pacientes where id = ?"
+            cursor.execute(query, id_paciente)
+            posee_pami = cursor.fetchall()[0][0]
+            if posee_pami == 1:
+                cursor.execute('select id from FichaPAMI where id_paciente = ?', (id_paciente,))
+                id_ficha = cursor.fetchall()[0][0]
+                cursor.execute('delete from FichaPAMI where id_paciente = ?', (id_paciente,))
+                cursor.execute('delete from Anamnesis where ficha_pami_id = ?', (id_ficha,))
+            else:
+                cursor.execute('delete from FichaGeneral where id_paciente = ?', (id_paciente,))
+            cursor.execute('delete from Turnos where paciente_id = ?', (id_paciente,))
+            cursor.execute('delete from Pacientes where id = ?',(id_paciente,))
+            connection.commit()
+            print('===============')
+
+            return (f'Paciente eliminado', 'dataDeleted', 200)
+        except sqlite3.Error as e:
+            return ((f"Error al solicitar la información: {e}", "dataBaseError", 500))

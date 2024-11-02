@@ -3,6 +3,7 @@ from flask_cors import CORS
 from webbrowser import open
 import turnos
 import pacinetes
+import fichas_compartidas
 import sqlite3
 
 app = Flask(__name__)
@@ -186,6 +187,44 @@ def post_pacientes():
     else:
         res = ['El modo pasado no es valido', 'invalidMode', 400]
     print(res)
+
+    return jsonify({
+        "status": res[2],
+        "name": res[1],
+        "message": res[0]
+    })
+
+@app.delete('/api/pacientes')
+def delete_pacientes():
+    id_paciente = request.form.get('id-paciente')
+
+    res = pacinetes.eliminar(id_paciente)
+
+    return jsonify({
+        "status": res[2],
+        "name": res[1],
+        "message": res[0]
+    })
+
+@app.put('/api/historial_odontologico')
+def modificar_historial_odontologico():
+    id_paciente = request.form.get('id-paciente')
+
+    motivo_consulta = request.form.get ('motivo-consulta')
+    consulta_reciente = request.form.get ('consulta-otro-prof')
+    dificultad_masticar = request.form.get ('dif-masticar')
+    dificultad_hablar = request.form.get ('dif-hablar')
+    movilidad_dentaria = request.form.get ('mov-dental')
+    sangrado_encias = request.form.get ('sang-encias')
+    cantidad_cepillados_diarios = request.form.get ('cant-cepillados')
+    descripcion = request.form.get('descripcion')
+    momentos_azucar = request.form.get ('azucar')
+
+    # motivo_consulta = ?, consulta_reciente = ?,dificultad_masticar = ?, dificultad_hablar = ?, movilidad_dentaria = ?,sangrado_encias = ?,cantidad_cepillados_diarios = ?,momentos_azucar = ?, descripcion = ?
+
+    historia_clinica_odontologica = (motivo_consulta,consulta_reciente,dificultad_masticar,dificultad_hablar,movilidad_dentaria,sangrado_encias,cantidad_cepillados_diarios,momentos_azucar, descripcion)
+
+    res = fichas_compartidas.actualizar_historia_clinica_odon(historia_clinica_odontologica, id_paciente)
 
     return jsonify({
         "status": res[2],

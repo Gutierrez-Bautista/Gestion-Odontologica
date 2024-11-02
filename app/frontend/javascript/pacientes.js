@@ -29,9 +29,13 @@ function cerrarModalAgregar() {
       f.classList.remove('show-form')
     }
   }
-  
+
+  const inputs = document.querySelectorAll('.modal-body input')
+  inputs.forEach(inp => {
+    inp.value = ''
+  })
+
   if (modalMode !== 'alta') {
-    const inputs = document.querySelectorAll('.modal-body input')
     document.getElementById('estado').setAttribute('required', '')
     inputs.forEach(inp => {
       if (!['obra-social', 'n-afiliado', 'alergias', 'titular', 'parentesco', 'trat-med', 'medicacion', 'alergias-drogas'].includes(inp.getAttribute('name'))) {
@@ -40,6 +44,7 @@ function cerrarModalAgregar() {
     })
     modalMode = 'alta'
     clienteOdontogramaForm.children[5].textContent = 'Cargar'
+    clienteHistorialOdontologicoForm.children[11].textContent = 'Siguiente'
   }
 
   succesText.textContent = ''
@@ -170,8 +175,39 @@ clienteHistorialOdontologicoForm.addEventListener('submit', (evt) => {
   evt.preventDefault()
 
   historialOdontologicoData = new FormData(clienteHistorialOdontologicoForm)
+
+  if (modalMode === 'modificar-historial-odontologico') {
+    let i = 0
+    for (d of historialOdontologicoData.entries()) {
+      if (d[1] === '') {
+        historialOdontologicoData.set(d[0], focusedPacienteInfo['histOdon'][i])
+      }
+      i++
+    }
+    historialOdontologicoData.append('id-paciente', focusedPacienteId)
+
+    fetch('http://localhost:8000/api/historial_odontologico', {
+      method: 'PUT',
+      body: historialOdontologicoData
+    })
+      .then(res => res.json())
+      .then(response => {
+        if (response['status'] === 200) {
+          alert('Paciente modificado')
+          cerrarModalAgregar()
+        } else {
+          alert('No se puedo modificar el paciente')
+          cerrarModalAgregar()
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        alert('no se puedo actualizar el historial odontologico del paciente')
+      })
+  } else {
+    cambiarFormulario(clienteHistorialOdontologicoForm, clienteOdontogramaForm)
+  }
   
-  cambiarFormulario(clienteHistorialOdontologicoForm, clienteOdontogramaForm)
 })
 
 clienteOdontogramaForm.addEventListener('submit', (evt) => {
@@ -280,7 +316,6 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
   })
     .then(res => res.json())
     .then(response => {
-      console.log(response)
       if (response['message'][2] === 200) {
         succesText.textContent = modalMode === 'alta' ? 'Paciente cargado' : 'Datos actualizados'
         setTimeout(cerrarModalAgregar, 700)
@@ -295,17 +330,44 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
 let focusedPacienteId = null
 let focusedPacientePami = null
 let focusedPacienteInfo = {}
+let deletingPaciente = false
 
 function modalInfoClientes(apellido, nombre, id, tel, email, edad, dni, domicilio, fech_nac, pami, div) {
   const datos = [0, -1, tel, email, edad, dni, domicilio, fech_nac, pami]
   const hijos = div.children
-  hijos.item(0).textContent = apellido + ' ' + nombre
-  hijos.item(1).textContent = id
-  for (let i = 2; i < datos.length; i++) {
+  hijos.item(1).textContent = apellido + ' ' + nombre
+  hijos.item(2).textContent = id
+  for (let i = 3; i < datos.length; i++) {
     hijos.item(i).children.item(0).textContent = datos[i] === null ? 'No cargado' : (datos[i] === 1 || datos[i] === 0 ? (datos[i] === 1 ? 'Si' : 'No') : datos[i])
   }
+
   focusedPacienteId = id
   focusedPacientePami = pami
+
+  hijos.item(0).addEventListener('click', () => {
+    if (deletingPaciente) {
+      return
+    }
+
+    deletingPaciente = true
+
+    const delData = new FormData()
+    delData.append('id-paciente', focusedPacienteId)
+    fetch('http://localhost:8000/api/pacientes', {
+      method: 'DELETE',
+      body: delData
+    })
+      .then(res => res.json())
+      .then(response => {
+        if (response['status'] === 200) {
+          alert(`Paciente ${apellido} ${nombre} eliminado`)
+          actualizarGrillaPacientes()
+        } else {
+          alert(`No se pudo eliminar al paciente ${apellido} ${nombre}. Intentarlo mas tarde`)
+        }
+        deletingPaciente = false
+      })
+  })
 }
 
 async function crearBtnPaciente(infoPaciente) {
@@ -386,14 +448,6 @@ allCloseBtns.forEach(e => {
     e.parentElement.parentElement.classList.remove('show-info')
   })
 })
-// insert into FichaGeneral values (4, 3, '', '', 0, 1, 'alergias', 0, 0, 'plan trat.', 'obs')
-
-// update pacientes set posee_pami = 0 where id = 3
-// delete from Anamnesis where ficha_pami_id = 2
-
-/*
-Actual mente el error se encuentra cuando queremos pasar un paciente que no tiene PAMI a los que si, al intentearlo lo borra de FichaGeneral pero no lo agrega en FichaPAMI ni Anamnesis, el error lo lanza en la linea 18 de pacientes_ficha_pami.py y es "database is locked"
-*/
 
 async function buscarInfoPaciente() {
   let a
@@ -473,8 +527,6 @@ btnFicha.addEventListener('click', async () => {
   odontograma.splice(0, 2)
   let anamnesis = [...data['anamnesis']]
 
-  console.log('basic =', basic)
-
   let dataInOneArray
   if (focusedPacientePami === 1) {
     anamnesis.splice(0, 2)
@@ -487,11 +539,7 @@ btnFicha.addEventListener('click', async () => {
   for (let i = 0; i < infoFicha.children.length; i++) {
     child = infoFicha.children[i]
     if (child.tagName === 'P') {
-      console.log('dataInOneArray[dataIndex] =', dataInOneArray[dataIndex], '\ntypeof dataInOneArray[dataIndex] =', typeof dataInOneArray[dataIndex])
-      
       const val = (dataInOneArray[dataIndex] === null || dataInOneArray[dataIndex] === 'null' || dataInOneArray[dataIndex] === 'undefined') ? 'No cargado' : (dataInOneArray[dataIndex] === 0 || dataInOneArray[dataIndex] === 1 ? (dataInOneArray[dataIndex] === 0 ? 'No' : 'Si') : dataInOneArray[dataIndex])
-      
-      console.log(child, val, typeof val)
       
       child.children[0].textContent = val
       dataIndex++
@@ -523,9 +571,10 @@ btnHistoriaOdontologica.addEventListener('click', async () => {
 
   infoHistoriaOdontologica.children[2].textContent = `${nomApe[1]} ${nomApe[0]}`
 
-  for (let i = 3; i < infoHistoriaOdontologica.children.length; i++) {
-    span = infoHistoriaOdontologica.children[i].children[0]
-    if (i === 8) {
+  for (let i = 2; i < infoHistoriaOdontologica.children.length; i++) {
+    span = infoHistoriaOdontologica.children[i + 1].children[0]
+
+    if (i === 9) {
       span.textContent = data[i]
     } else {
       span.textContent = data[i] === null ? 'No cargado' : (data[i] === 1 || data[i] === 0 ? (data[i] === 1 ? 'Si' : 'No') : data[i])
@@ -554,7 +603,8 @@ function getWeekFromADate(year, month, day) {
   return [week[0], week[4]]
 }
 
-window.addEventListener('DOMContentLoaded', async () => {
+async function actualizarGrillaPacientes() {
+  document.querySelector('.grilla-pacientes').innerHTML = ''
   const today = new Date()
   currentWeek = getWeekFromADate(
     today.getFullYear(),
@@ -586,7 +636,9 @@ window.addEventListener('DOMContentLoaded', async () => {
           })
       }
     })
-})
+}
+
+window.addEventListener('DOMContentLoaded', actualizarGrillaPacientes)
 
 const formBuscar = document.getElementById('form-buscar-paciente')
 
@@ -643,4 +695,23 @@ modificarFichaPamiBtn.addEventListener('click', () => {
   fichaModify()
 
   divFichaPami.classList.remove('show-info')
+})
+
+modificarHistorialOdontologicoBtn.addEventListener('click', () => {
+  modalMode = 'modificar-historial-odontologico'
+
+  const inputs = document.querySelectorAll('.modal-body input')
+  inputs.forEach(inp => {
+    if (!['obra-social', 'n-afiliado', 'alergias', 'titular', 'parentesco', 'trat-med', 'medicacion', 'alergias-drogas'].includes(inp.getAttribute('name'))) {
+      inp.removeAttribute('required')
+    }
+  })
+
+  modalAgragarPaciente.children[0].children[0].children[0].innerHTML = '<h3>Modificar Historial Odontologico</h3><span>(Dejar en blanco lo que no se quiera modificar)</span>'
+
+  clienteHistorialOdontologicoForm.children[11].textContent = 'Modificar'
+
+  divHistoriaOdontologica.classList.remove('show-info')
+  cambiarFormulario(clienteBasicForm, clienteHistorialOdontologicoForm)
+  modalAgragarPaciente.setAttribute('open', '')
 })

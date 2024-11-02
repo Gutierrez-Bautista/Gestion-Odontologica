@@ -295,15 +295,11 @@ textarea {
     top: .8rem;
     right: .8rem;
     color: #d55;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    transition: all .2s ease;
 
-    & i {
-      transition: all .5s ease;
-    }
-
-    &:hover i{
+    &:hover {
       cursor: pointer;
-      transform: rotate(360deg);
       color: #822;
     }
   }
