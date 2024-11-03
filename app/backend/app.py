@@ -232,6 +232,53 @@ def modificar_historial_odontologico():
         "message": res[0]
     })
 
+@app.get('/api/historia_clinica')
+def get_historia_clinica ():
+    id_paciente = request.args.get('id_paciente')
+
+    return jsonify({
+        "staus": 101,
+        "message": f"ID de paciente recivida: {id_paciente}",
+        "name": "testMessage"
+    })
+
+@app.post('/api/historia_clinica')
+def post_historia_clinica ():
+    # id, paciente_id, fecha, descripcion
+    id_paciente = request.form.get('id-paciente')
+    fecha = request.form.get('fecha')
+    desc = request.form.get('descripcion')
+
+    data_historia_clinica = (id_paciente, fecha, desc)
+
+    return jsonify({
+        "staus": 101,
+        "message": f"Data recived: {id_paciente}, {fecha}, {desc}",
+        "name": "testMessage"
+    })
+
+@app.put('/api/historia_clinica')
+def put_historia_clinica ():
+    id_ficha = request.form.get('id-ficha')
+    fecha = request.form.get('fecha')
+    desc = request.form.get('descripcion')
+
+    return jsonify({
+        "staus": 101,
+        "message": f"data recived: {id_ficha}, {fecha}, {desc}",
+        "name": "testMessage"
+    })
+
+@app.delete('/api/historia_clinica')
+def delete_historia_clinica ():
+    id_ficha = request.form.get('id-ficha')
+
+    return jsonify({
+        "staus": 101,
+        "message": f"ID ficha recived: {id_ficha}",
+        "name": "testMessage"
+    })
+
 if __name__ == '__main__':
     # open('app/frontend/index.html', 2)
     app.run(debug = True, port = 8000, use_reloader = False)

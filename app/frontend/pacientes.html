@@ -183,25 +183,26 @@
       </div>
       <div class="div-info-paciente" id="paciente-historia-clinica">
         <div class="info">
-          <span class="paciente-modif-btn" id="modif-hist-clinica"><i class='bx bx-pencil'></i>editar</span>
           <i class="bx bx-x"></i>
           <h3>Juan Perez</h3>
           <table class="lista-historia-clinica">
             <tr>
               <td>Fecha</td>
-              <td>Descripcion</td>
+              <td colspan="3">Descripcion</td>
             </tr>
             <tr>
-              <td>10/09/2024</td>
-              <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit autem, aperiam hic dignissimos blanditiis vitae! Alias, ut. Mollitia, consectetur quidem dicta facilis ab amet!</td>
-            </tr>
-            <tr>
-              <td>10/09/2024</td>
-              <td>Lorem ipsum dolor</td>
-            </tr>
-            <tr>
-              <td>10/09/2024</td>
-              <td>Lorem ipsum dolor sit amet </td>
+              <td colspan="4" class="add-row-btn">
+                <button class="agregar-historia-clinica-btn"><i class='bx bx-plus'></i></button>
+              </td>
+              <td class="add-row-form hide-td">
+                <input type="date">
+              </td>
+              <td class="add-row-form hide-td">
+                <input type="text">
+              </td>
+              <td class="add-row-form hide-td" colspan="2">
+                <button>send</button>
+              </td>
             </tr>
           </table>
         </div>

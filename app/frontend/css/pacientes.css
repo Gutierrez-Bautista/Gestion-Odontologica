@@ -432,8 +432,12 @@ table {
 }
 
 td {
-  padding: .5rem;
+  padding: .3rem .5rem;
   border-bottom: 2px solid #000;
+
+  &:last-child {
+    padding: 0;
+  }
 }
 
 tr {
@@ -444,4 +448,78 @@ tr:first-child {
   background-color: #879f9f;
   text-align: center;
   font-weight: bold;
+}
+
+.add-row-btn {
+  padding: 0;
+}
+
+tr button {
+  transition: all .2s ease;
+}
+
+.editar-historia-clinica-btn {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #000;
+  border-radius: 0;
+  background-color:#bfc;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #579f6f;
+  }
+}
+
+.eliminar-historia-clinica-btn {
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid #000;
+  border-radius: 0;
+  background-color:#d55;
+  
+  &:hover {
+    cursor: pointer;
+    background-color: #a22;
+  }
+
+}
+
+.agregar-historia-clinica-btn {
+  width: 100%;
+  height: 2rem;
+  border: none;
+  font-size: 1.3rem;
+  border-radius: 0;
+  background-color: #d55;
+
+  &:hover {
+    cursor: pointer;
+    background-color: #a22;
+  }
+}
+
+.hide-td {
+  display: none;
+}
+
+.add-row-form input {
+  width: 100%;
+  
+  &:focus {
+    outline: none;
+    border: 1px solid var(--focus-color);
+  }
+}
+
+.add-row-form button {
+  width: 100%;
+  height: 2rem;
+  border: none;
+  font-size: 1.3rem;
+  border-radius: 0;
+
+  &:hover {
+    cursor: pointer;
+  }
 }

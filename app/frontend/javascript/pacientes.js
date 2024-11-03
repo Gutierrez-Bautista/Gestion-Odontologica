@@ -428,19 +428,16 @@ async function crearBtnPaciente(infoPaciente) {
 }
 
 const btnFicha = document.getElementById('paciente-ficha-btn')
-const btnHistoriaClinica = document.getElementById('paciente-historia-clin-btn')
 const btnHistoriaOdontologica = document.getElementById('paciente-historia-odon-btn')
 
 const divFichaGeneral = document.getElementById('paciente-ficha-general')
 const divFichaPami = document.getElementById('paciente-ficha-pami')
-const divHistoriaClinica = document.getElementById('paciente-historia-clinica')
 const divHistoriaOdontologica = document.getElementById('paciente-historial-odontologico')
 const allInfoDivs = document.querySelectorAll('.div-info-paciente')
 
 const infoFichaGeneral = document.querySelector('#paciente-ficha-general .info')
 const infoFichaPami = document.querySelector('#paciente-ficha-pami .info')
 const infoHistoriaOdontologica = document.querySelector('#paciente-historial-odontologico .info')
-const infoHistoriaClinica = document.querySelector('#paciente-historia-clinica .info')
 const allCloseBtns = document.querySelectorAll('.div-info-paciente i')
 
 allCloseBtns.forEach(e => {
@@ -485,15 +482,6 @@ async function buscarInfoPaciente() {
   }
   return a
 }
-
-// No esta implementado en el backend
-btnHistoriaClinica.addEventListener('click', async () => {
-  for (d of allInfoDivs) {
-    d.classList.remove('show-info')
-  }
-  divHistoriaClinica.classList.add('show-info')
-  data = await buscarInfoPaciente()
-})
 
 // Hecho
 btnFicha.addEventListener('click', async () => {
@@ -663,11 +651,10 @@ formBuscar.addEventListener('submit', evt => {
     })
 })
 
-// MODIFICACION
+// MODIFICACION FICHA y HISTORIAL ODONTOLOGICO
 const modificarFichaGenBtn = document.getElementById('modif-ficha-general')
 const modificarFichaPamiBtn = document.getElementById('modif-ficha-pami')
 const modificarHistorialOdontologicoBtn = document.getElementById('modif-hist-odon')
-const modificarHistoriaClinicaBtn = document.getElementById('modif-hist-clinica')
 
 function fichaModify() {
   modalMode = 'modificacion-ficha'
@@ -715,3 +702,123 @@ modificarHistorialOdontologicoBtn.addEventListener('click', () => {
   cambiarFormulario(clienteBasicForm, clienteHistorialOdontologicoForm)
   modalAgragarPaciente.setAttribute('open', '')
 })
+
+// Historia Clinica
+// No esta implementado en el backend
+let focusedHistoriaClinica = null
+async function buscarHistoriaClinicaPaciente() {
+  for (d of allInfoDivs) {
+    d.classList.remove('show-info')
+  }
+  divHistoriaClinica.classList.add('show-info')
+  data = await fetch(`http://localhost:8000/api/historia_clinica?id_paciente=${focusedPacienteId}`)
+  response = await data.json()
+
+  console.log(response)
+
+  /*
+  tablaHistoriaClinica.innerHTML = '<tr>
+              <td>Fecha</td>
+              <td colspan="3">Descripcion</td>
+            </tr>'
+  for (hist of response['message']) {
+    const row = document.createElement('tr')
+    row.innerHTML += `
+      <tr>
+        <td>hist[0]</td>
+        <td>hist[1]</td>
+      </tr>
+    `
+    const td = document.createElement('td')
+
+    const btnAdd = document.createElement('button')
+    const btnDel = document.createElement('button')
+
+    btnAdd.innerHTML = "<i class='bx bx-pencil'></i>"
+    btnAdd.classList.add('editar-historia-clinica-btn')
+
+    btnDel.innerHTML = "<i class='bx bxs-trash'></i>"
+    btnDel.classList.add('eliminar-historia-clinica-btn')
+
+    td.appendChild(btnAdd)
+    td.appendChild(btnDel)
+    row.appendChild(td)
+
+    btnAdd.addEventListener('click', () => {
+      console.log('enviar la modificacion')
+    })
+
+    btnDel.addEventListener('click' () => {
+      console.log('enviar para eliminar')
+    })
+  }
+  
+  tablaHistoriaClinica.innerHTML += '<tr>
+              <td colspan="4" class="add-row-btn">
+                <button class="agregar-historia-clinica-btn"><i class='bx bx-plus'></i></button>
+              </td>
+              <td class="add-row-form hide-td">
+                <input type="date">
+              </td>
+              <td class="add-row-form hide-td">
+                <input type="text">
+              </td>
+              <td class="add-row-form hide-td" colspan="2">
+                <button>send</button>
+              </td>
+            </tr>'
+  */
+}
+
+const tablaHistoriaClinica = document.querySelector('.lista-historia-clinica')
+const btnHistoriaClinica = document.getElementById('paciente-historia-clin-btn')
+const infoHistoriaClinica = document.querySelector('#paciente-historia-clinica .info')
+const divHistoriaClinica = document.getElementById('paciente-historia-clinica')
+const btnAgregarHistClin = document.querySelector('.agregar-historia-clinica-btn')
+const formAddHistClin = document.querySelectorAll('.add-row-form')
+
+// mostrar historia clinica
+btnHistoriaClinica.addEventListener('click', buscarHistoriaClinicaPaciente)
+
+// agregar historia clinica
+btnAgregarHistClin.addEventListener('click', () => {
+  formAddHistClin[2].children[0].textContent = 'enivar'
+  btnAgregarHistClin.parentElement.classList.add('hide-td')
+  for (td of formAddHistClin) {
+    td.classList.remove('hide-td')
+  }
+})
+
+formAddHistClin[2].addEventListener('click', () => {
+  if (formAddHistClin[0].children[0].value === '' || formAddHistClin[1].children[0].value === '') {
+    alert('Completar ambos campos')
+    return
+  }
+
+  const addData = new FormData()
+
+  fechaFormato = darFormatoFecha(formAddHistClin[0].children[0].value)
+
+  addData.append('id-paciente', focusedPacienteId)
+  addData.append('fecha', fechaFormato)
+  addData.append('descripcion', formAddHistClin[1].children[0].value)
+
+  fetch('http://localhost:8000/api/historia_clinica', {
+    method: 'POST',
+    body: addData
+  })
+  .then(res => res.json())
+  .then(response => {
+    console.log(response)
+    btnAgregarHistClin.parentElement.classList.remove('hide-td')
+    for (td of formAddHistClin) {
+      td.classList.add('hide-td')
+    }
+    })
+    .catch(err => {
+      console.log(err)
+      alert('No se pudo cargar la historia clinica')
+    })
+})
+
+// editar historia clinica
