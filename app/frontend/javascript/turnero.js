@@ -262,10 +262,6 @@ async function funcionalidadTurnosClickeables(turnoInfo, turno) {
   parrafosMotivo.innerHTML = `Motivo: <span>${turnoInfo[4]}</span>`
   parrafosMotivo.style = 'max-height: 3.6rem; text-wrap: pretty; overflow: scroll'
 
-  const masInfoBtn = document.createElement('button')
-  masInfoBtn.textContent = 'Info del paciente'
-  masInfoBtn.classList.add('infoPacienteBtn')
-
   const divModDelBtns = document.createElement('div')
   divModDelBtns.classList.add('edit-delete-container')
 
@@ -304,7 +300,6 @@ async function funcionalidadTurnosClickeables(turnoInfo, turno) {
   div.appendChild(parrafosHorario)
   div.appendChild(parrafosPaciente)
   div.appendChild(parrafosMotivo)
-  div.appendChild(masInfoBtn)
   
   turno.appendChild(div)
 

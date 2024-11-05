@@ -28,10 +28,17 @@ let friday_date
 function setTurneroHeaders(mondayDate) {
   const monthNumber = parseInt(mondayDate.split('/')[1]) - 1
 
-  document.querySelector('.turnero-month').textContent = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][monthNumber]
+  document.querySelector('.turnero-month').textContent = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'Agust', 'September', 'October', 'November', 'December'][monthNumber]
 
-  let dia = monday_day_number
+  let dia = parseInt(monday_day_number)
   document.querySelectorAll('.turnero-dia-number').forEach(element => {
+    if (monthNumber === 1 && dia > 28) {
+      dia = 1
+    } else if ([0, 2, 4, 6, 7, 9, 11].includes(monthNumber)) {
+      if (dia > 31) {dia = 1}
+    } else {
+      if (dia > 30) {dia = 1}
+    }
     element.textContent = dia
     dia++
   })
@@ -39,7 +46,7 @@ function setTurneroHeaders(mondayDate) {
   document.querySelector('.turnero-semana > span').textContent = Math.round(monday_day_number / 7)
 }
 
-function mostrarTurno(infoTurno, diaSemana) {
+async function mostrarTurno(infoTurno, diaSemana) {
   const div = document.createElement("div");
   div.classList.add("turnos");
 
@@ -96,7 +103,10 @@ function actualizarTurnero(fechaLunes, fechaViernes) {
     turnero.removeChild(t);
   });
 
+  // No devuelve los turnos de la semana, creo que es porque el lunes y el viernes forman parte de distinto mes
   const fetchBodyData = new FormData();
+  console.log(fetchBodyData)
+  console.log(fechaLunes, fechaViernes)
   fetchBodyData.append("fecha_turno1", fechaLunes);
   fetchBodyData.append("fecha_turno2", fechaViernes);
   
@@ -106,6 +116,7 @@ function actualizarTurnero(fechaLunes, fechaViernes) {
   })
     .then((res) => res.json())
     .then((data) => {
+      console.log(data)
       const frag = document.createDocumentFragment();
 
       if (data['name'] === 'dataFound') {
@@ -117,15 +128,15 @@ function actualizarTurnero(fechaLunes, fechaViernes) {
       }
       else if (data['name'] === 'dataBaseError') {
         console.error(data)
-        alert('Error on appointments search')
+        alert('Server error, please restart')
       }
       else {
-        alert(`appointments no uploaded for the week of monday ${fechaLunes}`)
+        alert(`no shifts uploaded ${fechaLunes}`)
       }
     })
     .catch(err => {
       console.error(err);
-      alert('Error on appointments search')
+      alert("Can't connect with server, please restart")
     })
 }
 
@@ -173,7 +184,7 @@ addTurnoForm.addEventListener("submit", (evt) => {
   }
 
   if (data.get("name") === "" || data.get("lastname") === "") {
-    addTurnoError.textContent = "Enter first and last name";
+    addTurnoError.textContent = "Insert firstname and lastname";
     return;
   }
 
@@ -181,7 +192,7 @@ addTurnoForm.addEventListener("submit", (evt) => {
   const dayIndex = dateObj.getDay() - 1;
 
   if (dayIndex === 5 || dayIndex === -1) {
-    addTurnoError.textContent = "Can't set a appointment on saturday and sunday";
+    addTurnoError.textContent = "Day can't be Saturday or Sunday";
     return;
   }
 
@@ -194,6 +205,8 @@ addTurnoForm.addEventListener("submit", (evt) => {
   data.delete('date')
   data.append('date', aux)
 
+  console.log(data)
+
   // Agregar el turno a la base de datos
   fetch('http://localhost:8000/api/turnos/upload', {
     method: 'POST',
@@ -202,12 +215,12 @@ addTurnoForm.addEventListener("submit", (evt) => {
     .then(res => res.json())
     .then(response => {
       if (response['status'] === 500) {
-        addTurnoError.textContent = 'Error on appointment upload'
+        addTurnoError.textContent = 'Error on shift upload'
         console.log(response[0])
       } else if (response['name'] === 'dataNoUpload') {
-        addTurnoError.textContent = `The hour "${data.get('hour')}:${data.get('minute')}" of day "${aux}" is already in use`
+        addTurnoError.textContent = `"${data.get('hour')}:${data.get('minute')}" of "${aux}" is in use`
       } else {
-        addTurnoSucces.textContent = 'appointment uploaded'
+        addTurnoSucces.textContent = 'Shift Added'
         if (currentWeek.includes(aux)) {
             // mostrar_turno([-, -, -, hour, -, apellidoNombre], day)
             mostrarTurno([0, 0, 0, `${data.get('hour')}:${data.get('minute')}`, 0, data.get('fullname')], WEEK_DAYS_ARRAY[(parseInt(aux.split('/')[0]) - monday_day_number)])
@@ -215,14 +228,14 @@ addTurnoForm.addEventListener("submit", (evt) => {
       }
     })
     .catch(err => {
-      addTurnoError.textContent = 'Error on server connection'
+      addTurnoError.textContent = 'Error on server connection, please restart'
       console.log(err)
     })
 });
 
 const turnoInformation = document.querySelector('.modal-turno-information')
 
-function funcionalidadTurnosClickeables(turnoInfo, turno) {
+async function funcionalidadTurnosClickeables(turnoInfo, turno) {
   if (turno.childNodes.length !== 1) {
     return
   }
@@ -234,7 +247,7 @@ function funcionalidadTurnosClickeables(turnoInfo, turno) {
   div.classList.add('turno-info')
   
   const title = document.createElement('h3')
-  title.textContent = 'Appointment Information'
+  title.textContent = 'Shift Information'
   
   const parrafosDia = document.createElement('p')
   parrafosDia.innerHTML = `Day: <span>${turnoInfo[2]}</sapn>`
@@ -248,10 +261,6 @@ function funcionalidadTurnosClickeables(turnoInfo, turno) {
   const parrafosMotivo = document.createElement('p')
   parrafosMotivo.innerHTML = `Reason: <span>${turnoInfo[4]}</span>`
   parrafosMotivo.style = 'max-height: 3.6rem; text-wrap: pretty; overflow: scroll'
-
-  const masInfoBtn = document.createElement('button')
-  masInfoBtn.textContent = 'Patient information'
-  masInfoBtn.classList.add('infoPacienteBtn')
 
   const divModDelBtns = document.createElement('div')
   divModDelBtns.classList.add('edit-delete-container')
@@ -291,11 +300,10 @@ function funcionalidadTurnosClickeables(turnoInfo, turno) {
   div.appendChild(parrafosHorario)
   div.appendChild(parrafosPaciente)
   div.appendChild(parrafosMotivo)
-  div.appendChild(masInfoBtn)
   
   turno.appendChild(div)
 
-  turno.addEventListener('mouseleave', () => {
+  turno.addEventListener('mouseleave', (evt) => {
     if (div.hasChildNodes()) {
       turno.removeChild(div)
     }
@@ -307,13 +315,13 @@ function crearModalModificarTurno(infoTurnoActual, turno, modalInfo) {
   div.classList.add('turno-info')
   
   const title = document.createElement('h3')
-  title.textContent = 'Appointment Edit'
+  title.textContent = 'Edit Shift'
 
   const inputDia = document.createElement('input')
   inputDia.setAttribute('type', 'date')
   inputDia.setAttribute('name', "date")
-  inputDia.setAttribute('title', `New day (current: ${infoTurnoActual[2]})`)
-
+  inputDia.setAttribute('title', `New date (current: ${infoTurnoActual[2]})`)
+  
   const inputHorarioText = document.createElement('p')
   inputHorarioText.textContent = `New hour (current: ${infoTurnoActual[3]})`
   inputHorarioText.style.fontWeight = 'normal'
@@ -341,14 +349,14 @@ function crearModalModificarTurno(infoTurnoActual, turno, modalInfo) {
   const inputMotivo = document.createElement('textarea')
   inputMotivo.classList.add('textarea')
   inputMotivo.setAttribute('name', 'motivo')
-  inputMotivo.setAttribute('placeholder', 'New reason...')
+  inputMotivo.setAttribute('placeholder', 'reason...')
 
   const confirmCancelContainer = document.createElement('div')
   const canBtn = document.createElement('button')
   const confBtn = document.createElement('button')
 
-  canBtn.textContent = 'cancel'
-  confBtn.textContent = 'edit'
+  canBtn.textContent = 'Cancel'
+  confBtn.textContent = 'Edit'
 
   confBtn.addEventListener('click', () => {
     const d = new FormData()

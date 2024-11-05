@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="css/main.css" />
     <script type="module">
       document.getElementById('cambiar-idioma').addEventListener('input', (e) => {
-        if (e.currentTarget.value === 'EN') {
-          window.location.href = 'http://localhost:5500/app/frontend/settings.html'
+        if (e.currentTarget.value === 'ES') {
+          window.location.href = 'http://localhost:5500/app/frontend/configuracion.html'
         }
       })
     </script>
@@ -17,37 +17,35 @@
     <header>
       <div class="hero">
         <div class="information">
-          <span>Doctora xxxxxxxxxxx</span>
-          <span>Tel: 12 3456 7890</span>
-          <span>Provincia de Cordoba</span>
+          <span>Doctor xxxxxxxxxxx</span>
+          <span>Phone: 12 3456 7890</span>
+          <span>Province: Cordoba</span>
         </div>
-        <h1><span>Programa de</span> Gestión Odontológica</h1>
+        <h1><span>Ontological Management</span> App</h1>
         <img src="img/logo-onu.webp" alt="Logo del centro odontologico" />
       </div>
       <nav>
         <ul class="navegation-menu">
           <li class="nav-item">
-            <a href="index.html">Turnero</a>
+            <a href="index-en.html">Shift Calendar</a>
           </li>
           <li class="nav-item">
-            <a href="pacientes.html">Pacientes</a>
+            <a href="patients.html">Patients</a>
           </li>
           <li class="nav-item">
-            <a href="estadisticas.html">Estadisticas</a>
+            <a href="stadistics.html">Stadistics</a>
           </li>
           <li class="nav-item">
-            <a href="manual-de-uso-provisional.pdf" target="_blank"
-              >Uso del programa</a
-            >
+            <a href="manual-de-uso-provisional.pdf" target="_blank">App usage</a>
           </li>
           <li class="nav-item">
-            <a href="configuracion.html" class="active">Configuracion</a>
+            <a href="settings.html" class="active">Settings</a>
           </li>
         </ul>
       </nav>
     </header>
     <main>
-      <a href="settings.html" class="change-lang-btn">cambiar idioma</a>
+      <a href="configuracion.html" class="change-lang-btn">change language</a>
     </main>
   </body>
 </html>

@@ -1,128 +1,134 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>odontology management</title>
-  <link
-    href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="css/main.css" />
-  <link rel="stylesheet" href="css/turnero.css" />
-</head>
-<body>
-  <header>
-    <div class="hero">
-      <div class="information">
-        <span>Odontologist: xxxxxxxxxxx</span>
-        <span>Phone: 12 3456 7890</span>
-        <span>Province: Cordoba</span>
-      </div>
-      <h1><span>App</span> odontology management</h1>
-      <img src="img/logo-onu.webp" alt="Logo del centro odontologico" />
-    </div>
-    <nav>
-      <ul class="navegation-menu">
-        <li class="nav-item">
-          <a class="active" href="#">Date File</a>
-        </li>
-        <li class="nav-item">
-          <a href="pacientes.html">Patients</a>
-        </li>
-        <li class="nav-item">
-          <a href="estadisticas.html">Stadistics</a>
-        </li>
-        <li class="nav-item">
-          <a href="manual-de-uso-provisional.pdf" target="_blank">App usage</a>
-        </li>
-        <li class="nav-item">
-          <a href="configuracion.html">Settings</a>
-        </li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <section class="turnero">
-      <div class="turnero-head position-sticky">
-        <div class="nothing position-sticky"></div>
-        <div class="date">
-          <h2>Date File</h2>
-          <span class="turnero-month position-sticky">August</span>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión Odontológica</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/turnero.css" />
+  </head>
+  <body>
+    <header>
+      <div class="hero">
+        <div class="information">
+          <span>Doctor xxxxxxxxxxx</span>
+          <span>Phone: 12 3456 7890</span>
+          <span>Province: Cordoba</span>
         </div>
-        <button
-          class="add-button position-sticky"
-          id="add-turno-button-id"
-          title="Agregar turno">
-          <i class="bx bx-plus"></i>
-        </button>
+        <h1><span>Ontological Management</span> App</h1>
+        <img src="img/logo-onu.webp" alt="Logo del centro odontologico" />
       </div>
-
-      <p class="parte-izquierda turnero-semana">Week <span>1</span></p>
-
-      <p class="turnero-dia turnero-dia-lunes position-sticky">Monday <span class="turnero-dia-number">5</span></p>
-      <p class="turnero-dia turnero-dia-martes position-sticky">Tuesday <span class="turnero-dia-number">6</span></p>
-      <p class="turnero-dia turnero-dia-miercoles position-sticky">
-        Wendsday <span class="turnero-dia-number">7</span>
-      </p>
-      <p class="turnero-dia turnero-dia-jueves position-sticky">Thursday <span class="turnero-dia-number">8</span></p>
-      <p class="turnero-dia turnero-dia-viernes position-sticky">
-        Friday <span class="turnero-dia-number">9</span>
-      </p>
-
-      <p class="parte-izquierda turnero-hora-8">8:00</p>
-      <p class="parte-izquierda turnero-hora-9">9:00</p>
-      <p class="parte-izquierda turnero-hora-10">10:00</p>
-      <p class="parte-izquierda turnero-hora-11">11:00</p>
-      <p class="parte-izquierda turnero-hora-12">12:00</p>
-      <p class="parte-izquierda turnero-hora-13">13:00</p>
-      <p class="parte-izquierda turnero-hora-14">14:00</p>
-    </section>
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog -->
-    <dialog class="modal-crear-turno">
-      <article class="modal-content">
-        <div class="modal-header">
-          <h3>Add date</h3>
-          <button class="close-modal">
-            <i class="bx bx-x"></i>
+      <nav>
+        <ul class="navegation-menu">
+          <li class="nav-item">
+            <a class="active" href="index-en.html">Shift Calendar</a>
+          </li>
+          <li class="nav-item">
+            <a href="patients.html">Patients</a>
+          </li>
+          <li class="nav-item">
+            <a href="stadistics.html">Stadistics</a>
+          </li>
+          <li class="nav-item">
+            <a href="manual-de-uso-provisional.pdf" target="_blank">App Usage</a>
+          </li>
+          <li class="nav-item">
+            <a href="settings.html">Settings</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="turnero">
+        <div class="turnero-head position-sticky">
+          <div class="nothing position-sticky"></div>
+          <div class="date">
+            <h2>Shift Calendar</h2>
+            <span class="turnero-month position-sticky">August</span>
+          </div>
+          <button
+            class="add-button position-sticky"
+            id="add-turno-button-id"
+            title="Agregar turno">
+            <i class="bx bx-plus"></i>
           </button>
         </div>
 
-        <form action="" class="modal-body" id="add-turno-form">
-          <input type="date" name="date" id="select-day"/>
+        <p class="parte-izquierda turnero-semana">Week <span>1</span></p>
 
-          <p>Date start:</p>
-          <div class="select-hour-container">
-            <select name="hour" id="select-hour">
-              <option value="08">08</option>
-              <option value="09">09</option>
-              <option value="10">10</option>
-              <option value="11">11</option>
-              <option value="12">12</option>
-              <option value="13">13</option>
-              <option value="14">14</option>
-            </select>
-            <p>:</p>
-            <select name="minute" id="select-minute">
-              <option value="00">00</option>
-              <option value="30">30</option>
-            </select>
+        <p class="turnero-dia turnero-dia-lunes position-sticky">Monday <span class="turnero-dia-number">5</span></p>
+        <p class="turnero-dia turnero-dia-martes position-sticky">Tuesday <span class="turnero-dia-number">6</span></p>
+        <p class="turnero-dia turnero-dia-miercoles position-sticky">
+          Wendsday <span class="turnero-dia-number">7</span>
+        </p>
+        <p class="turnero-dia turnero-dia-jueves position-sticky">Thursday <span class="turnero-dia-number">8</span></p>
+        <p class="turnero-dia turnero-dia-viernes position-sticky">
+          Friday <span class="turnero-dia-number">9</span>
+        </p>
+
+        <p class="parte-izquierda turnero-hora-8">8:00</p>
+        <p class="parte-izquierda turnero-hora-9">9:00</p>
+        <p class="parte-izquierda turnero-hora-10">10:00</p>
+        <p class="parte-izquierda turnero-hora-11">11:00</p>
+        <p class="parte-izquierda turnero-hora-12">12:00</p>
+        <p class="parte-izquierda turnero-hora-13">13:00</p>
+        <p class="parte-izquierda turnero-hora-14">14:00</p>
+      </section>
+      <!-- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/dialog -->
+      <dialog class="modal-crear-turno">
+        <article class="modal-content">
+          <div class="modal-header">
+            <h3>Add Shift</h3>
+            <button class="close-modal">
+              <i class="bx bx-x"></i>
+            </button>
           </div>
 
-          <div class="fullname-input-container">
-            <input type="text" name="firstname" placeholder="first name..." />
-            <input type="text" name="lastname" placeholder="last name..." />
-          </div>
+          <form action="" class="modal-body" id="add-turno-form">
+            <input type="date" name="date" id="select-day" />
 
-          <textarea name="motivo" id="motivo-turno" class="textarea" placeholder="reason..."></textarea>
+            <p>Shift start:</p>
+            <div class="select-hour-container">
+              <select name="hour" id="select-hour">
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+              </select>
+              <p>:</p>
+              <select name="minute" id="select-minute">
+                <option value="00">00</option>
+                <option value="30">30</option>
+              </select>
+            </div>
 
-          <button>send</button>
+            <div class="fullname-input-container">
+              <input type="text" name="firstname" placeholder="firstname..." />
+              <input type="text" name="lastname" placeholder="lastname..." />
+            </div>
 
-          <p class="error" id="add-turno-error"></p>
-          <p class="succes" id="add-turno-succes"></p>
-        </form>
-      </article>
-    </dialog>
-  </main>
-  <script src="javascript/turnero-en.js"></script>
-</body>
+            <textarea name="motivo" id="motivo-turno" class="textarea"></textarea>
+
+            <label for="alta-turno-pami">PAMI:</label>
+            <select name="pami" id="alta-turno-pami">
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+
+            <button>send</button>
+
+            <p class="error" id="add-turno-error"></p>
+            <p class="succes" id="add-turno-succes"></p>
+          </form>
+        </article>
+      </dialog>
+    </main>
+    <script src="javascript/turnero-en.js"></script>
+  </body>
 </html>

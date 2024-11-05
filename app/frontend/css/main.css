@@ -14,6 +14,22 @@
   box-sizing: border-box;
 }
 
+.change-lang-btn {
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #000;
+  border-radius: .4rem;
+  padding: .4rem;
+  margin-left: 1rem;
+  font-size: 1rem;
+  transition: all .2s ease;
+
+  &:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.4);
+  }
+}
+
 body {
   background-color: var(--background-color);
 }
@@ -44,6 +60,7 @@ h1 {
 nav {
   background-color: var(--primary-color);
   padding: 1rem 2rem;
+  margin-bottom: 1rem;
 }
 
 .navegation-menu {

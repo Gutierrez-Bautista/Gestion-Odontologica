@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión Odontológica</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/pacientes.css" />
+  </head>
+  <body>
+    <header>
+      <div class="hero">
+        <div class="information">
+          <span>Doctor xxxxxxxxxxx</span>
+          <span>Phone: 12 3456 7890</span>
+          <span>Province: Cordoba</span>
+        </div>
+        <h1><span>Odontological Management</span> App</h1>
+        <img src="img/logo-onu.webp" alt="Logo del centro odontologico" />
+      </div>
+      <nav>
+        <ul class="navegation-menu">
+          <li class="nav-item">
+            <a href="index.html">Shift Calendar</a>
+          </li>
+          <li class="nav-item">
+            <a href="patients.html" class="active">Patients</a>
+          </li>
+          <li class="nav-item">
+            <a href="stadistics.html">Stadistics</a>
+          </li>
+          <li class="nav-item">
+            <a href="manual-de-uso-provisional.pdf" target="_blank">App Usage</a>
+          </li>
+          <li class="nav-item">
+            <a href="settings.html">Settings</a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <section class="section-pacientes">
+        <div class="opciones-paciente">
+          <div class="relleno"></div>
+          <form action="" method="self" id="form-buscar-paciente">
+            <input
+              type="text"
+              name="busqueda-paciente"
+              placeholder="firstname or lastname
+              class="search-box" />
+            <button class="search-button">
+              <i class="bx bx-search-alt"></i>
+            </button>
+          </form>
+          <button class="add-button" title="Agregar paciente">
+            <i class="bx bx-plus"></i>
+          </button>
+        </div>
+
+        <article class="grilla-pacientes">
+        </article>
+      </section>
+
+      <div class="paciente-info-basica">
+        <span><i class='bx bxs-trash'></i> delete</span>
+        <p></p>
+        <p>Patinet ID: <span></span></p>
+        <p>Phone: <span></span></p>
+        <p>email: <span></span></p>
+        <p>age: <span></span></p>
+        <p>ID: <span></span></p>
+        <p>Address: <span></span></p>
+        <p>birthdate: <span></span></p>
+        <p>pami: <span></span></p>
+        <div class="paciente-btns-container">
+          <!-- File es ficha, supongo -->
+          <button class="paciente-btn" id="paciente-ficha-btn">File</button>
+          <button class="paciente-btn" id="paciente-historia-clin-btn">clinical history</button>
+          <button class="paciente-btn" id="paciente-historia-odon-btn">odontological history</button>
+        </div>
+      </div>
+
+      <div class="div-info-paciente" id="paciente-ficha-general">
+        <div class="info">
+          <span class="paciente-modif-btn" id="modif-ficha-general"><i class='bx bx-pencil'></i>edit</span>
+          <i class="bx bx-x"></i>
+          <h3>Juan Perez</h3>
+          <p>Phone: <span></span></p>
+          <p>Email: <span></span></p>
+          <p>Age: <span></span></p>
+          <p>ID: <span></span></p>
+          <p>Address: <span></span></p>
+          <p>birthdate: <span></span></p>
+          <p>PAMI: <span></span></p>
+
+          <!-- File es ficha, supongo -->
+          <h4>File</h4>
+          <p>Medical insurance: <span></span></p>
+          <p>Affiliated Number: <span></span></p>
+          <p>HTA: <span></span></p>
+          <p>Diabetes: <span></span></p>
+          <p>allergy: <span></span></p>
+          <p>Renal problems: <span></span></p>
+          <p>Cardiac problems: <span></span></p>
+          <p class="long-text">Treatment plan: <span></span></p>
+          <p>Observations: <span></span></p>
+
+          <!-- Planilla de cara de los dientes* -->
+          <!-- odontograma = odontogram -->
+          <h4>Odontogram</h4>
+          <img src="img/Odontograma.png" alt="">
+          <p class="long-text">Patient dental state: <span></span></p>
+          <p class="long-text">Treatment: <span></span></p>
+        </div>
+      </div>
+      <div class="div-info-paciente" id="paciente-ficha-pami">
+        <div class="info">
+          <span class="paciente-modif-btn" id="modif-ficha-pami"><i class='bx bx-pencil'></i>edit</span>
+          <i class="bx bx-x"></i>
+
+          <h3>Juan Perez</h3>
+          <p>Phone: <span></span></p>
+          <p>Email: <span></span></p>
+          <p>Age: <span></span></p>
+          <p>ID: <span></span></p>
+          <p>Address: <span></span></p>
+          <p>birthdate: <span></span></p>
+          <p>PAMI: <span></span></p>
+
+          <h4>File</h4>
+          
+          <!-- Lugar = place -->
+          <p>Place: <span></span></p>
+          <p>Date: <span></span></p>
+          <p>Affiliated number: <span></span></p>
+          <p>Holder: <span></span></p>
+          <p>Relationship: <span></span></p>
+          <p>Patient Locality: <span></span></p>
+          <p>Patient postal code: <span></span></p>
+          <p>Professional: <span></span></p>
+          <p>Provider Address: <span></span></p>
+          <p>Provider Locality: <span></span></p>
+          <p>Provider code: <span></span></p>
+          <p>Family doctor: <span></span></p>
+          <p>Provider landline phone: <span></span></p>
+
+          <h4>Anamnesis</h4>
+          <p>Illness: <span></span></p>
+          <p class="long-text">Medical Treatment: <span></span></p>
+          <p>Medication: <span></span></p>
+          <p>Medicament allergy: <span></span></p>
+          <p>Diabetes: <span></span></p>
+          <p>smoke per day: <span></span></p>
+          <p>Cardiac problems: <span></span></p>
+          <p>HTA: <span></span></p>
+          <p>Aspirina or Anticoagulant: <span></span></p>
+          <p>Operated: <span></span></p>
+
+          <h4>Odontogram</h4>
+          <img src="img/Odontograma.png" alt="">
+          <p class="long-text">Patient bucal state: <span></span></p>
+          <p class="long-text">Treatment: <span></span></p>
+        </div>
+      </div>
+      <div class="div-info-paciente" id="paciente-historial-odontologico">
+        <div class="info">
+          <span class="paciente-modif-btn" id="modif-hist-odon">
+            <i class='bx bx-pencil'></i>edit
+          </span>
+          <i class="bx bx-x"></i>
+          <h3>Juan Perez</h3>
+          <p>Consultation reason: <span></span></p>
+          <p>Ask to other profesional: <span></span></p>
+          <p>Chew with difficulty: <span></span></p>
+          <p>Speak with difficulty: <span></span></p>
+          <p>Dental movement: <span></span></p>
+          <p>Gum bleed: <span></span></p>
+          <p>Mouth brush per day: <span></span></p>
+          <p>Sugar moments: <span></span></p>
+          <p>Description: <span></span></p>
+        </div>
+      </div>
+      <div class="div-info-paciente" id="paciente-historia-clinica">
+        <div class="info">
+          <i class="bx bx-x"></i>
+          <h3>Juan Perez</h3>
+          <table class="lista-historia-clinica">
+            <tr>
+              <td>Date</td>
+              <td colspan="3">Description</td>
+            </tr>
+            <tr>
+              <td colspan="4" class="add-row-btn">
+                <button class="agregar-historia-clinica-btn"><i class='bx bx-plus'></i></button>
+              </td>
+              <td class="add-row-form hide-td">
+                <input type="date">
+              </td>
+              <td class="add-row-form hide-td">
+                <input type="text">
+              </td>
+              <td class="add-row-form hide-td" colspan="2">
+                <button>send</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <dialog class="modal-crear-paciente">
+        <article class="modal-content">
+          <div class="modal-header">
+            <div class="title-container">
+              <h3>Add Patient</h3>
+            </div>
+            <button class="close-modal">
+              <i class="bx bx-x"></i>
+            </button>
+          </div>
+
+          <form action="" class="modal-body show-form" id="cliente-basic-form">
+            <div class="fullname-input-container">
+              <label>
+                Firstname: 
+                <input type="text" name="firstname" placeholder="firstname..." required/>
+              </label>
+              <label>
+                Lastname
+                <input type="text" name="lastname" placeholder="lastname..." required/>
+              </label>
+            </div>
+
+            <label>
+              Phone:
+              <input type="tel" name="telefono" pattern="[0-9]{4}-[0-9]{2}-[0-9]{4}" placeholder="ej: 1234-56-7890" maxlength="12" required>
+            </label>
+
+            <label>
+              Email:
+              <input type="email" name="email" placeholder="ej: juanperez@gmail.com" required>
+            </label>
+
+            <label>
+              ID: 
+              <input type="text" name="dni" maxlength="8" required>
+            </label>
+
+            <label>
+              Birthdate: 
+              <input type="date" name="fecha_nacimiento" required/>
+            </label>
+
+            <label>
+              Address:
+              <input type="text" name="domicilio" placeholder="ej: Imaginary Street N*73" required>
+            </label>
+
+            <label>
+              PAMI:
+              <select name="posee_pami">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <button>Next</button>
+
+            <p class="error" id="add-turno-error"></p>
+            <p class="succes" id="add-turno-succes"></p>
+          </form>
+
+          <form action="" class="modal-body" id="cliente-fichaGeneral-form">
+            <label>
+              Medical insurance:
+              <input type="text" name="obra-social" id="obra-social" placeholder="don't insert if the patient doesn't have">
+            </label>
+
+            <label>
+              Affiliated number:
+              <input type="number" name="n-afiliado" placeholder="don't insert if the patient doesn't have" min="0" pattern="[0-9]{1,}">
+            </label>
+
+            <label>
+              HTA:
+              <select name="hta">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Diabetes:
+              <select name="diabetes">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Allergy:
+              <input type="text" name="alergias" placeholder="don't insert if the patient doesn't have">
+            </label>
+
+            <label>
+              Renal problems:
+              <select name="probl-renales">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Cardiac problems:
+              <select name="probl-cardiacos">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label for="plan-trat">
+              Treatment plan:
+            </label>
+            <textarea name="plan-tratamiento" id="plan-trat"></textarea>
+
+            <label for="obs">
+              Observations:
+            </label>
+            <textarea name="observaciones" id="obs"></textarea>
+
+            <button>Next</button>
+          </form>
+
+          <form action="" class="modal-body" id="cliente-fichaPami-form">
+            <label>
+              Place:
+              <input type="text" name="lugar" required>
+            </label>
+
+            <label>
+              Date:
+              <input type="date" name="fecha" required>
+            </label>
+
+            <label>
+              Affiliated number:
+              <input type="number" name="n-beneficio" placeholder="" min="0" required>
+            </label>
+
+            <label>
+              Holder:
+              <select name="titular">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Relationship:
+              <input type="text" name="parentesco" placeholder="don't insert if the patient doesn't have">
+            </label>
+
+            <label>
+              Patient Locality:
+              <input type="text" name="loc-paciente" required>
+            </label>
+
+            <label>
+              Patient postal code:
+              <input type="text" name="cod-post-paciente" required>
+            </label>
+            
+            <label>
+              Professional:
+              <input type="text" name="profesional" required>
+            </label>
+
+            <label>
+              Provider Address:
+              <input type="text" name="domicilio-prestador" required>
+            </label>
+
+            <label>
+              Provider Locality:
+              <input type="text" name="loc-prestador" required>
+            </label>
+
+            
+            <label>
+              Provider code:
+              <input type="text" name="cod-prestador" required>
+            </label>
+
+            <label>
+              Family doctor:
+              <input type="text" name="medico-cabecera" id="" required>
+            </label>
+            
+            <label>
+              Provider landline phone:
+              <input type="text" name="tel-fijo-prestador" required>
+            </label>
+            <button>next</button>
+          </form>
+
+          <form action="" class="modal-body" id="cliente-anamnesis-form">
+            <label>
+              Illness:
+              <select name="sufre-enfermedad">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Medical Treatment:
+              <input type="text" name="trat-med" placeholder="don't insert if the patient doesn't have">
+            </label>
+
+            <label>
+              Medication:
+              <input type="text" name="medicacion" placeholder="don't insert if the patient doesn't have">
+            </label>
+
+            <label>
+              Medicament allergy:
+              <input type="text" name="alergias-drogas" placeholder="don't insert if the patient doesn't have">
+            </label>
+
+            <label>
+              Mouth brush per day:
+              <input type="number" name="cant-fuma" placeholder="" min="0" pattern="[0-9]{1,}" required>
+            </label>
+
+            <label>
+              Diabetes:
+              <select name="diabetes">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              HTA:
+              <select name="hta">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Cardiac problems:
+              <select name="probl-cardiacos">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Aspirina or Anticoagulant:
+              <select name="aspi-antcuag">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Operated:
+              <select name="operado">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <button>Next</button>
+          </form>
+
+          <form action="" class="modal-body" id="cliente-historial-odontologico-form">
+            <label for="mot-con">Consultation reason:</label>
+            <textarea name="motivo-consulta" id="mot-con"></textarea>
+
+            <label>
+              Ask to other Professional:
+              <select name="consulta-otro-prof">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Chew with difficulty:
+              <select name="dif-masticar">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Speak with difficulty:
+              <select name="dif-hablar">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Dental movement:
+              <select name="mov-dental">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+
+            <label>
+              Gum bleed:
+              <select name="sang-encias">
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+            
+            <label>
+              Mouth brush per day:
+              <input type="number" name="cant-cepillados" min="0" pattern="[0-9]{1,}" required>
+            </label>
+
+            <label>
+              Sugar moments:
+              <input type="text" name="azucar" required>
+            </label>
+
+            <label for="hist_odon_desc">
+              Description:
+            </label>
+            <textarea name="descripcion" id="hist_odon_desc"></textarea>
+
+            <button>Next</button>
+          </form>
+
+          <form action="" class="modal-body" id="cliente-odontograma-form">
+            <img src="img/Odontograma.png" alt="imagen de un odonrograma">
+
+            <label for="estado">
+              Patient bucal state:
+            </label>
+            <textarea name="estado-odontograma" id="estado"></textarea>
+
+            <label for="tratamiento">Treatment:</label>
+            <textarea name="tratamiento-odontograma" id="tratamiento"></textarea>
+
+            <button>Upload</button>
+          </form>
+
+          <p class="succes" id="paciente-succes-text"></p>
+          <p class="error" id="paciente-error-text"></p>
+        </article>
+      </dialog>
+    </main>
+    <script src="javascript/pacientes.js"></script>
+  </body>
+</html>
