@@ -113,17 +113,59 @@ def actualizar_odontograma(id_paciente,odontograma):
             return ('paciente no existe','pacienteNotExists',200)
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
-    
+""" 
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+            paciente_id INTEGER,
+            fecha DATE NOT NULL,
+            descripcion TEXT NOT NULL,
+"""
+def alta_historia_clinica(historia_clinica,paciente_id):
+    try:
+        connection = sqlite3.connect(DB_NAME)
+        cursor = connection.cursor()
+        query = "SELECT * FROM HistoriaClinica where paciente_id = ?"
+        cursor.execute(query, (paciente_id,))
+        valid = cursor.fetchall()
+        if not valid:
+            cursor.execute('insert into HistoriaClinica (paciente_id , fecha, descripcion) values(?,?,?)',(paciente_id,*historia_clinica))
+            connection.commit()
+            valid = cursor.fetchall()
+            return ['paciente cargado con Histora Clinica','dataUpload',200]
+        else: 
+            return 'paciente ya cargado'
+    except sqlite3.Error as e:
+        return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
+def actualizar_historia_clinica(historia_clinica, id_historia_clinica):
+    try:
+        connection = sqlite3.connect(DB_NAME)
+        cursor = connection.cursor()
+        query = "SELECT * FROM HistoriaClinica where id = ?"
+        cursor.execute(query, (id_historia_clinica,))
+        valid = cursor.fetchall()
+        if valid:
+            cursor.execute('update HistoriaClinica set fecha = ?, descripcion = ? where id = ?' , (*historia_clinica,id_historia_clinica))
+            connection.commit()
+            valid = cursor.fetchall()
+            return ['Histora Clinica actualizada','dataUpload',200]
+        else: 
+            return ('paciente no existe','pacienteNotExists',200)
+    except sqlite3.Error as e:
+        return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
-def alta_historia_clinica(datos_historia_clinica):
-    pass
-
-def actualizar_historia_clinica(datos_historia_clinica, id_historia_clinica):
-    pass
-
-def consulta_historia_clinica(id_paciente):
-    pass
+def consulta_historia_clinica(paciente_id):
+    try:
+        connection = sqlite3.connect(DB_NAME)
+        cursor = connection.cursor()
+        query = "SELECT * FROM HistoriaClinica where paciente_id = ?"
+        cursor.execute(query, (paciente_id,))
+        valid = cursor.fetchall()
+        if valid:
+            return ['Historia clinica del paciente encontrada', valid[0], 200]
+        else: 
+            return ('paciente no existe','pacienteNotExists',200)
+    except sqlite3.Error as e:
+        return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
 def eliminar_historia_clinica(id_historia_clinica):
     pass
