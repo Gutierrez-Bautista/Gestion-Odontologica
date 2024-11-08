@@ -207,7 +207,6 @@ clienteHistorialOdontologicoForm.addEventListener('submit', (evt) => {
   } else {
     cambiarFormulario(clienteHistorialOdontologicoForm, clienteOdontogramaForm)
   }
-  
 })
 
 clienteOdontogramaForm.addEventListener('submit', (evt) => {
@@ -316,7 +315,8 @@ clienteOdontogramaForm.addEventListener('submit', (evt) => {
   })
     .then(res => res.json())
     .then(response => {
-      if (response['message'][2] === 200) {
+      console.log(response)
+      if (response['status'] === 200) {
         succesText.textContent = modalMode === 'alta' ? 'Paciente cargado' : 'Datos actualizados'
         setTimeout(cerrarModalAgregar, 700)
       } else {
@@ -371,6 +371,7 @@ function modalInfoClientes(apellido, nombre, id, tel, email, edad, dni, domicili
 }
 
 async function crearBtnPaciente(infoPaciente) {
+  console.log(infoPaciente)
   const nomApe = infoPaciente[1].split(';')
   const tel = (infoPaciente[2] === null || infoPaciente[2] === 'null' || infoPaciente[2] === 'undefined') ? 'No cargado' : infoPaciente[2]
   const pami = infoPaciente[8] === 0 ? 'No' : 'Si'
@@ -616,10 +617,13 @@ async function actualizarGrillaPacientes() {
       }
 
       const data = response['message']
+      console.log('linea 620. data =', data)
       for (t of data) {
         fetch(`http://localhost:8000/api/pacientes/get?id_paciente=${t[1]}`)
           .then(res => res.json())
           .then(response => {
+            console.log(response)
+            console.log("linea 624. response['name']['basic'] = ", response['name']['basic'])
             crearBtnPaciente(response['name']['basic'])
           })
       }
@@ -646,6 +650,7 @@ formBuscar.addEventListener('submit', evt => {
       const data = response['name']
 
       data.forEach(element => {
+        console.log('linea 651. element = ', element)
         crearBtnPaciente(element)
       })
     })
@@ -706,6 +711,7 @@ modificarHistorialOdontologicoBtn.addEventListener('click', () => {
 // Historia Clinica
 // No esta implementado en el backend
 let focusedHistoriaClinica = null
+
 async function buscarHistoriaClinicaPaciente() {
   for (d of allInfoDivs) {
     d.classList.remove('show-info')
@@ -716,58 +722,157 @@ async function buscarHistoriaClinicaPaciente() {
 
   console.log(response)
 
-  /*
-  tablaHistoriaClinica.innerHTML = '<tr>
+  tablaHistoriaClinica.innerHTML = `<tr>
               <td>Fecha</td>
               <td colspan="3">Descripcion</td>
-            </tr>'
-  for (hist of response['message']) {
-    const row = document.createElement('tr')
-    row.innerHTML += `
-      <tr>
-        <td>hist[0]</td>
-        <td>hist[1]</td>
-      </tr>
-    `
-    const td = document.createElement('td')
+            </tr>`
+  const histClinIDs = []
+  console.log(typeof response['name'])
+  if (typeof response['name'] === 'object') {
+    for (hist of response['name']) {
+      console.log(hist)
+      histClinIDs.push(hist[0])
+      const row = document.createElement('tr')
+  
+      const tdFecha = document.createElement('td')
+      const tdDesc = document.createElement('td')
+      const td = document.createElement('td')
+  
+      const btnDel = document.createElement('button')
+  
+      tdFecha.innerHTML = hist[2]
+      tdDesc.innerHTML = hist[3]
+  
+      btnDel.innerHTML = "<i class='bx bxs-trash'></i>"
+      btnDel.classList.add('eliminar-historia-clinica-btn')
+  
+      td.appendChild(btnDel)
+  
+      row.appendChild(tdFecha)
+      row.appendChild(tdDesc)
+      row.appendChild(td)
+      
+      tablaHistoriaClinica.appendChild(row)
+    }
+  }
 
-    const btnAdd = document.createElement('button')
-    const btnDel = document.createElement('button')
+  const aux = document.querySelectorAll('.eliminar-historia-clinica-btn')
 
-    btnAdd.innerHTML = "<i class='bx bx-pencil'></i>"
-    btnAdd.classList.add('editar-historia-clinica-btn')
+  console.log(aux)
 
-    btnDel.innerHTML = "<i class='bx bxs-trash'></i>"
-    btnDel.classList.add('eliminar-historia-clinica-btn')
-
-    td.appendChild(btnAdd)
-    td.appendChild(btnDel)
-    row.appendChild(td)
-
-    btnAdd.addEventListener('click', () => {
-      console.log('enviar la modificacion')
-    })
-
-    btnDel.addEventListener('click' () => {
-      console.log('enviar para eliminar')
+  for (let i = 0; i < aux.length; i++) {
+    aux[i].addEventListener('click', () => {
+      console.log('btnEliminar')
+      console.log(aux[i])
+      console.log(histClinIDs[i])
+      const delData = new FormData()
+      delData.append('id-ficha', histClinIDs[i])
+      
+      console.log('linea 768')
+      fetch('http://localhost:8000/api/historia_clinica', {
+        method: 'DELETE',
+        body: delData
+      })
+        .then(res => res.json())
+        .then(res => {
+          console.log(res)
+          if (res['name'] === 'dataDelete') {
+            buscarHistoriaClinicaPaciente()
+          }
+        })
+      console.log('linea 777')
     })
   }
+
+  const trAdd = document.createElement('tr')
+
+  const tdAddBtn = document.createElement('td')
+  tdAddBtn.setAttribute('colspan', '4')
+  tdAddBtn.classList.add('add-row-btn')
+
+  const addBtn = document.createElement('button')
+  addBtn.classList.add('agregar-historia-clinica-btn')
+  const addI = document.createElement('i')
+  addI.classList.add('bx')
+  addI.classList.add('bx-plus')
+
+  addBtn.appendChild(addI)
+  tdAddBtn.appendChild(addBtn)
+  trAdd.appendChild(tdAddBtn)
   
-  tablaHistoriaClinica.innerHTML += '<tr>
-              <td colspan="4" class="add-row-btn">
-                <button class="agregar-historia-clinica-btn"><i class='bx bx-plus'></i></button>
-              </td>
-              <td class="add-row-form hide-td">
-                <input type="date">
-              </td>
-              <td class="add-row-form hide-td">
-                <input type="text">
-              </td>
-              <td class="add-row-form hide-td" colspan="2">
-                <button>send</button>
-              </td>
-            </tr>'
-  */
+  const trForm = document.createElement('tr')
+  const tdFormDate = document.createElement('td')
+  tdFormDate.classList.add('add-row-form')
+  tdFormDate.classList.add('hide-td')
+  const dateInput = document.createElement('input')
+  dateInput.setAttribute('type', 'date')
+
+  tdFormDate.appendChild(dateInput)
+  trForm.appendChild(tdFormDate)
+  
+  const tdFormDesc = document.createElement('td')
+  tdFormDesc.classList.add('add-row-form')
+  tdFormDesc.classList.add('hide-td')
+  const descInput = document.createElement('input')
+  descInput.setAttribute('type', 'text')
+
+  tdFormDesc.appendChild(descInput)
+  trForm.appendChild(tdFormDesc)
+
+  const tdFormSend = document.createElement('td')
+  tdFormSend.setAttribute('colspan', '2')
+  tdFormSend.classList.add('add-row-form')
+  tdFormSend.classList.add('hide-td')
+  const sendBtn = document.createElement('button')
+  sendBtn.textContent = 'send'
+
+  addBtn.addEventListener('click', () => {
+    sendBtn.textContent = 'enivar'
+    tdAddBtn.classList.add('hide-td')
+
+    tdFormDate.classList.remove('hide-td')
+    tdFormDesc.classList.remove('hide-td')
+    tdFormSend.classList.remove('hide-td')
+  })
+
+  sendBtn.addEventListener('click', () => {
+    if (dateInput.value === '' || descInput.value === '') {
+      alert('Completar ambos campos')
+      return
+    }
+
+    const addData = new FormData()
+
+    fechaFormato = darFormatoFecha(dateInput.value)
+
+    addData.append('id-paciente', focusedPacienteId)
+    addData.append('fecha', fechaFormato)
+    addData.append('descripcion', descInput.value)
+
+    fetch('http://localhost:8000/api/historia_clinica', {
+      method: 'POST',
+      body: addData
+    })
+      .then(res => res.json())
+      .then(response => {
+        console.log(response)
+        tdAddBtn.classList.remove('hide-td')
+        tdFormDate.classList.add('hide-td')
+        tdFormDesc.classList.add('hide-td')
+        tdFormSend.classList.add('hide-td')
+        buscarHistoriaClinicaPaciente()
+        })
+      .catch(err => {
+        console.log(err)
+        alert('No se pudo cargar la historia clinica')
+      })
+  })
+
+  tdFormSend.appendChild(sendBtn)
+  trForm.appendChild(tdFormSend)
+
+  tablaHistoriaClinica.appendChild(trAdd)
+  tablaHistoriaClinica.appendChild(trForm)
 }
 
 const tablaHistoriaClinica = document.querySelector('.lista-historia-clinica')
@@ -781,44 +886,8 @@ const formAddHistClin = document.querySelectorAll('.add-row-form')
 btnHistoriaClinica.addEventListener('click', buscarHistoriaClinicaPaciente)
 
 // agregar historia clinica
-btnAgregarHistClin.addEventListener('click', () => {
-  formAddHistClin[2].children[0].textContent = 'enivar'
-  btnAgregarHistClin.parentElement.classList.add('hide-td')
-  for (td of formAddHistClin) {
-    td.classList.remove('hide-td')
-  }
-})
+btnAgregarHistClin.addEventListener('click', () => {})
 
-formAddHistClin[2].addEventListener('click', () => {
-  if (formAddHistClin[0].children[0].value === '' || formAddHistClin[1].children[0].value === '') {
-    alert('Completar ambos campos')
-    return
-  }
-
-  const addData = new FormData()
-
-  fechaFormato = darFormatoFecha(formAddHistClin[0].children[0].value)
-
-  addData.append('id-paciente', focusedPacienteId)
-  addData.append('fecha', fechaFormato)
-  addData.append('descripcion', formAddHistClin[1].children[0].value)
-
-  fetch('http://localhost:8000/api/historia_clinica', {
-    method: 'POST',
-    body: addData
-  })
-  .then(res => res.json())
-  .then(response => {
-    console.log(response)
-    btnAgregarHistClin.parentElement.classList.remove('hide-td')
-    for (td of formAddHistClin) {
-      td.classList.add('hide-td')
-    }
-    })
-    .catch(err => {
-      console.log(err)
-      alert('No se pudo cargar la historia clinica')
-    })
-})
+formAddHistClin[2].addEventListener('click', () => {})
 
 // editar historia clinica

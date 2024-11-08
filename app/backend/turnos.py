@@ -40,6 +40,7 @@ def solicitar_info_turno_id_paciente (id_paciente):
     pass
 
 def agregar_info(nombre, fecha, hora, motivo, pami):
+    print(pami)
     """
     Agrega un nuevo turno a la base de datos.
     """

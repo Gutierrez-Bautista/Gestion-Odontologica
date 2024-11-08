@@ -125,14 +125,11 @@ def alta_historia_clinica(historia_clinica,paciente_id):
         cursor = connection.cursor()
         query = "SELECT * FROM HistoriaClinica where paciente_id = ?"
         cursor.execute(query, (paciente_id,))
-        valid = cursor.fetchall()
-        if not valid:
-            cursor.execute('insert into HistoriaClinica (paciente_id , fecha, descripcion) values(?,?,?)',(paciente_id,*historia_clinica))
-            connection.commit()
-            valid = cursor.fetchall()
-            return ['paciente cargado con Histora Clinica','dataUpload',200]
-        else: 
-            return 'paciente ya cargado'
+
+        cursor.execute('insert into HistoriaClinica (paciente_id , fecha, descripcion) values(?,?,?)',(paciente_id,*historia_clinica))
+        connection.commit()
+
+        return ['paciente cargado con Histora Clinica','dataUpload',200]
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
@@ -161,11 +158,20 @@ def consulta_historia_clinica(paciente_id):
         cursor.execute(query, (paciente_id,))
         valid = cursor.fetchall()
         if valid:
-            return ['Historia clinica del paciente encontrada', valid[0], 200]
+            return ['Historia clinica del paciente encontrada', valid, 200]
         else: 
             return ('paciente no existe','pacienteNotExists',200)
     except sqlite3.Error as e:
         return (f"Error al solicitar la información: {e}", "dataBaseError", 500)
 
 def eliminar_historia_clinica(id_historia_clinica):
-    pass
+    try:
+        connection = sqlite3.connect(DB_NAME)
+        cursor = connection.cursor()
+        query = "DELETE FROM HistoriaClinica where id = ?"
+        cursor.execute(query, (id_historia_clinica,))
+        connection.commit()
+
+        return ('paciente eliminado', 'dataDelete', 200)
+    except sqlite3.Error as e:
+        return (f"Error al solicitar la información: {e}", "dataBaseError", 500)

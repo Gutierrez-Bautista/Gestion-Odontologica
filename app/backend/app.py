@@ -35,7 +35,9 @@ def upload_turno ():
     hour = request.form.get("hour")
     minute = request.form.get('minute')
     motivo = request.form.get('motivo')
+    print(request.form)
     pami = request.form.get('pami')
+    # delete from turnos where paciente_id = 9
 
     res = turnos.agregar_info(name, date, hour + ':' + minute, motivo.lower(), pami)
 
@@ -236,10 +238,12 @@ def modificar_historial_odontologico():
 def get_historia_clinica ():
     id_paciente = request.args.get('id_paciente')
 
+    res = fichas_compartidas.consulta_historia_clinica(id_paciente)
+
     return jsonify({
-        "staus": 101,
-        "message": f"ID de paciente recivida: {id_paciente}",
-        "name": "testMessage"
+        "status": res[2],
+        "name": res[1],
+        "message": res[0]
     })
 
 @app.post('/api/historia_clinica')
@@ -249,12 +253,16 @@ def post_historia_clinica ():
     fecha = request.form.get('fecha')
     desc = request.form.get('descripcion')
 
-    data_historia_clinica = (id_paciente, fecha, desc)
+    data_historia_clinica = (fecha, desc)
+
+    res = fichas_compartidas.alta_historia_clinica(data_historia_clinica, id_paciente)
+
+    print(res)
 
     return jsonify({
-        "staus": 101,
-        "message": f"Data recived: {id_paciente}, {fecha}, {desc}",
-        "name": "testMessage"
+        "status": res[2],
+        "name": res[1],
+        "message": res[0]
     })
 
 @app.put('/api/historia_clinica')
@@ -263,20 +271,26 @@ def put_historia_clinica ():
     fecha = request.form.get('fecha')
     desc = request.form.get('descripcion')
 
+    data_historia_clinica = (fecha, desc)
+
+    res = fichas_compartidas.actualizar_historia_clinica(data_historia_clinica, id_ficha)
+
     return jsonify({
-        "staus": 101,
-        "message": f"data recived: {id_ficha}, {fecha}, {desc}",
-        "name": "testMessage"
+        "status": res[2],
+        "name": res[1],
+        "message": res[0]
     })
 
 @app.delete('/api/historia_clinica')
 def delete_historia_clinica ():
     id_ficha = request.form.get('id-ficha')
 
+    res = fichas_compartidas.eliminar_historia_clinica(id_ficha)
+
     return jsonify({
-        "staus": 101,
-        "message": f"ID ficha recived: {id_ficha}",
-        "name": "testMessage"
+        "status": res[2],
+        "name": res[1],
+        "message": res[0]
     })
 
 if __name__ == '__main__':
